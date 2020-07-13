@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- P5js stuff -->
+    <script language="javascript" type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+    <script language="javascript" type="text/javascript" src="sketch.js"></script>
+
+    <title>Interactive RRT</title>
+</head>
+
+<body>
+    <div class="jumbotron ">
+
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <strong> Tip: </strong> You can drag and drop on the canvas to add obstacles that the robot will avoid!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+
+        <h1 class="display-4">Mahmood's RRT Example</h1>
+        <p class="lead">This is a quick weekend implementation of the RRT algorithm (LaValle, 1998)</p>
+
+        <div id="sketch-holder">
+            <!-- Our sketch will go here! -->
+        </div>
+
+        <!--
+        <div class="btn-group btn-group-toggle" role="group" aria-label="First group" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="option1" checked> Active
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="option2"> Radio
+            </label>
+        </div>
+        -->
+
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <p> Add points: </p>
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                <button onclick="addPoint(1)" type="button" class="btn btn-primary"> 1 </button>
+                <button onclick="addPoint(10)" type="button" class="btn btn-primary"> 10 </button>
+                <button onclick="addPoint(100)" type="button" class="btn btn-primary"> 100 </button>
+            </div>
+        </div>
+
+        <footer class="card-footer text-muted">
+            LaValle, Steven M. (October 1998). <a
+                href="http://msl.cs.uiuc.edu/~lavalle/papers/Lav98c.pdf">"Rapidly-exploring random trees: A new tool for
+                path planning" (PDF).</a> Technical Report. Computer Science Department, Iowa State University (TR
+            98–11).
+        </footer>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+
+</body>
+
+</html>
