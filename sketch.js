@@ -43,9 +43,12 @@ class Node {
 }
 
 class Tree {
-  constructor(x, y) {
+  constructor(x, y, canvas_width, canvas_height, cellPointLimit) {
     this.root = new Node(x, y, null)
     this.root.color = 'orange'
+    this.boundary = new Rectangle(canvas_width / 2, canvas_height / 2, canvas_width / 2, canvas_height / 2)
+    this.cellPointLimit = cellPointLimit
+    this.qtree = new Quad(this.boundary, this.cellPointLimit)
   }
 
   getAllNodes() {
@@ -53,18 +56,19 @@ class Tree {
   }
 
   getNearbyNodes(x, y, radius) {
-    let range = new Rectangle(x, y, radius, radius)
-    return qtree.query(range)
+    let range = new Circle(x, y, radius)
+    return this.qtree.query(range)
   }
 
   findNearestNode(x, y) {
     // https://stackoverflow.com/questions/8864430/compare-javascript-array-of-objects-to-get-min-max
-    //return this.getAllNodes().reduce((prev, curr) => prev.dist(x, y) < curr.dist(x, y) ? prev : curr)
-    let radius = 50
-    for (let i = 1; i <= 5; i++) {
-      let nearbyNodes = this.getNearbyNodes(x, y, radius * i)
-      if (nearbyNodes.length)
+    let radius = 10
+    while (radius < min(this.boundary.w, this.boundary.h) * 2) {
+      radius *= 2
+      let nearbyNodes = this.getNearbyNodes(x, y, radius)
+      if (nearbyNodes.length) {
         return nearbyNodes.reduce((prev, curr) => prev.dist(x, y) < curr.dist(x, y) ? prev : curr)
+      }
     }
     return this.root
   }
@@ -74,9 +78,8 @@ class Tree {
       const moveDist = 20
       let x = Math.random() * 400
       let y = Math.random() * 400
-
-      // TEMP_NODE = new Node(x,y, null) // for visualization purposes
-      // TEMP_NODE.color = 'red'
+      TEMP_NODE = new Node(x, y, null) // for visualization purposes
+      TEMP_NODE.color = 'red'
 
       // Core of RRT algorithm, see paper for details
       let nearestNode = this.findNearestNode(x, y)
@@ -89,7 +92,7 @@ class Tree {
       // make sure the new node is not in any obstacle, if it is then we retry everything
       if (obstacles.every(o => !o.inObstacle(newNode.x, newNode.y))) {
         nearestNode.addChild(newNode)
-        qtree.insert(newNode);
+        this.qtree.insert(newNode);
         return newNode
       }
     }
@@ -142,13 +145,9 @@ const canvas_height = 400
 let TEMP_NODE = null // just an extra node we will draw in red for debugging purposes
 let target = new Node(350, 350, null)
 target.color = 'green'
+const cellPointLimit = 6
 
-let t = new Tree(100, 200)
-
-//Quad Tree initialization
-let cellPointLimit = 4
-let boundary = new Rectangle(canvas_width / 2, canvas_height / 2, canvas_width, canvas_height)
-let qtree = new Quad(boundary, cellPointLimit)
+let t = new Tree(100, 200, canvas_width, canvas_height, cellPointLimit) //Leaving initial loc at 100, 200 as is for later to be replaced by drop down
 
 let obstacles = []
 let clickLoc = null

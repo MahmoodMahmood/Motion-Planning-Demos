@@ -1,3 +1,14 @@
+class Circle {
+    constructor(x, y, r) {
+        this.x = x
+        this.y = y
+        this.r = r
+    }
+
+    contains(point) {
+        return (dist(this.x, this.y, point.x, point.y) < this.r)
+    }
+}
 class Rectangle {
     constructor(x, y, w, h) {
         this.x = x;
@@ -12,11 +23,21 @@ class Rectangle {
             node.y <= this.y + this.h);
     }
 
-    intersects(range) {
-        return !(range.x - range.w > this.x + this.w ||
-            range.x + range.w < this.x - this.w ||
-            range.y - range.h > this.y + this.h ||
-            range.y + range.h < this.y - this.h)
+    intersects(circle) { //rectangle-circle intersection
+        let testX = circle.x
+        let testY = circle.y
+
+        if (circle.x <= this.x - this.w)
+            testX = this.x - this.w
+        else if (circle.x > this.x + this.w)
+            testX = this.x + this.w
+
+        if (circle.y <= this.y - this.h)
+            testY = this.y - this.h
+        else if (circle.y > this.y + this.h)
+            testY = this.y + this.h
+
+        return ((circle.x - testX) ** 2 + (circle.y - testY) ** 2) <= (circle.r / 2) ** 2
     }
 }
 
@@ -50,25 +71,23 @@ class Quad {
     }
 
     insert(node) {
-        if (!this.boundary.contains(node)) {
+        if (!this.boundary.contains(node))
             return false;
-        }
         if (this.nodes.length < this.capacity && !this.divided) {
             this.nodes.push(node);
             return true;
         } else {
-            if (!this.divided) {
+            if (!this.divided)
                 this.subDivide();
-            }
-            if (this.northeast.insert(node)) {
+
+            if (this.northeast.insert(node))
                 return true;
-            } else if (this.northwest.insert(node)) {
+            else if (this.northwest.insert(node))
                 return true;
-            } else if (this.southeast.insert(node)) {
+            else if (this.southeast.insert(node))
                 return true;
-            } else if (this.southwest.insert(node)) {
-                return true;
-            }
+            else if (this.southwest.insert(node))
+                return true
         }
     }
     query(range, found) {
@@ -76,7 +95,7 @@ class Quad {
             found = [];
         }
         if (!this.boundary.intersects(range)) {
-            return found; //empty array
+            return found;
         }
         if (this.divided) {
             found = this.northeast.query(range, found);
@@ -84,31 +103,29 @@ class Quad {
             found = this.northwest.query(range, found);
             found = this.southeast.query(range, found);
         } else {
-            for (let p of this.nodes) {
-                if (range.contains(p)) {
-                    found.push(p);
-                }
-            }
+            found = found.concat(this.nodes.filter(function (node) {
+                return range.contains(node);
+            }))
         }
         return found;
     }
 
     //Can be used for debugging purposes
-    // show() {
-    //     stroke(255);
-    //     strokeWeight(1)
-    //     noFill();
-    //     rectMode(CENTER);
-    //     rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
-    //     if (this.divided) {
-    //         this.northeast.show();
-    //         this.northwest.show();
-    //         this.southeast.show();
-    //         this.southwest.show();
-    //     }
-    //     for (let p of this.nodes) {
-    //         strokeWeight(4)
-    //         node(p.x, p.y)
-    //     }
-    // }
+    show() {
+        stroke(255);
+        strokeWeight(1)
+        noFill();
+        rectMode(CENTER);
+        rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
+        if (this.divided) {
+            this.northeast.show();
+            this.northwest.show();
+            this.southeast.show();
+            this.southwest.show();
+        }
+        for (let p of this.nodes) {
+            strokeWeight(4)
+            node(p.x, p.y)
+        }
+    }
 }
