@@ -43,9 +43,8 @@ class Node {
 }
 
 class Tree {
-  constructor(x, y, canvas_width, canvas_height, cellPointLimit) {
-    this.root = new Node(x, y, null)
-    this.root.color = 'orange'
+  constructor(root, canvas_width, canvas_height, cellPointLimit) {
+    this.root = root
     this.boundary = new Rectangle(canvas_width / 2, canvas_height / 2, canvas_width / 2, canvas_height / 2)
     this.cellPointLimit = cellPointLimit
     this.qtree = new Quad(this.boundary, this.cellPointLimit)
@@ -78,8 +77,8 @@ class Tree {
       const moveDist = 20
       let x = Math.random() * 400
       let y = Math.random() * 400
-      TEMP_NODE = new Node(x, y, null) // for visualization purposes
-      TEMP_NODE.color = 'red'
+      // TEMP_NODE = new Node(x, y, null) // for visualization purposes
+      // TEMP_NODE.color = 'red'
 
       // Core of RRT algorithm, see paper for details
       let nearestNode = this.findNearestNode(x, y)
@@ -145,11 +144,16 @@ const canvas_height = 400
 let TEMP_NODE = null // just an extra node we will draw in red for debugging purposes
 let target = new Node(350, 350, null)
 target.color = 'green'
+let targetReposition = false // when true, use is clicking and dragging target node
+let rootReposition = false // when true, user is clicking and dragging root node
 const cellPointLimit = 6
 
-let t = new Tree(100, 200, canvas_width, canvas_height, cellPointLimit) //Leaving initial loc at 100, 200 as is for later to be replaced by drop down
+let root = new Node(100, 200, null)
+root.color = 'orange'
+let t = new Tree(root, canvas_width, canvas_height, cellPointLimit)
 
-let obstacles = []
+let obstacles = [] // list of obstacles to avoid
+let path = [] // path from root to target
 let clickLoc = null
 
 function setup() {
@@ -158,46 +162,82 @@ function setup() {
   obstacles = [new Obstacle(-100, -100, canvas_width, 5), // top wall
     new Obstacle(-100, -100, 5, canvas_height), // left wall
     new Obstacle(canvas_width + 100, canvas_height + 100, 5, canvas_height - 5), // bottom wall
-    new Obstacle(canvas_width + 100, canvas_height + 100, canvas_width - 5, 5)
-  ] // right wall
-
+    new Obstacle(canvas_width + 100, canvas_height + 100, canvas_width - 5, 5) // right wall
+  ] 
+  
+  // mouse click event handlers for canvas
+  canvas.mousePressed(canvasMousePressed)
+  canvas.mouseReleased(canvasMouseReleased)
+   
   // let path = t.findTarget(target, maxNodes=800, acceptable_range=10)
   // if (path) path.forEach(n => n.color = 'orange')
 }
 
 function draw() {
   background(220)
-  t.draw()
+  if (t) {
+    t.draw()
+  }
   target.draw()
+  root.draw()
   obstacles.forEach(o => o.draw())
 
   if (mouseIsPressed) {
-    rectMode(CORNERS)
-    noFill()
-    rect(clickLoc[0], clickLoc[1], mouseX, mouseY)
+    // move target node or root node if user is dragging it
+    if (targetReposition) {
+      target.x = mouseX
+      target.y = mouseY
+    } else if (rootReposition) {
+      root.x = mouseX
+      root.y = mouseY
+    } else if (clickLoc) {
+      rectMode(CORNERS)
+      noFill()
+      rect(clickLoc[0], clickLoc[1], mouseX, mouseY)
+    }
   }
 
   if (TEMP_NODE) {
     TEMP_NODE.draw()
   }
+  if (path) path.forEach(p => p.draw())
 }
 
-function mousePressed() {
-  clickLoc = [mouseX, mouseY]
+function canvasMousePressed() {
+  if (abs(target.x - mouseX) <= 15 && abs(target.y - mouseY) <= 15) {
+    targetReposition = true
+    obstacles.length = 4
+  } else if (abs(root.x - mouseX) <= 15 && abs(root.y - mouseY) <= 15) {
+    rootReposition = true
+    obstacles.length = 4
+  } else {
+    clickLoc = [mouseX, mouseY]
+  }
 
+  // reset RRT tree 
+  t = null
+  root.children = []
+  path = []
   // return false to prevent default
   return false
 }
 
-function mouseReleased() {
-  obstacles.push(new Obstacle(clickLoc[0], clickLoc[1], mouseX, mouseY))
+function canvasMouseReleased() {
+  if (!targetReposition && !rootReposition) {
+    obstacles.push(new Obstacle(clickLoc[0], clickLoc[1], mouseX, mouseY))
+  }
   clickLoc = null
+  targetReposition = false
+  rootReposition = false
 
   // return false to prevent default
   return false
 }
 
 function addPoint(pts) {
-  let path = t.findTarget(target, obstacles, maxNodes = pts, acceptable_range = 10)
+  if (!t) {
+    t = new Tree(root, canvas_width, canvas_height, cellPointLimit)
+  }
+  path = t.findTarget(target, obstacles, maxNodes = pts, acceptable_range = 10)
   if (path) path.forEach(n => n.color = 'orange')
 }
