@@ -1,35 +1,10 @@
-class Obstacle {
-  constructor(x1, y1, x2, y2) {
-    const minL = 20
-    this.x1 = x1
-    this.y1 = y1
-    // make sure width and height are at least minL units
-    this.x2 = abs(x2 - x1) > minL ? x2 : x1 + (x2 - x1 > 0 ? 1 : -1) * minL
-    this.y2 = abs(y2 - y1) > minL ? y2 : y1 + (y2 - y1 > 0 ? 1 : -1) * minL
-    this.color = 'black'
-  }
-
-  inObstacle(x, y) {
-    return ((x > this.x1 && x < this.x2) || (x > this.x2 && x < this.x1)) &&
-      ((y > this.y1 && y < this.y2) || (y > this.y2 && y < this.y1))
-  }
-
-  draw() {
-    strokeWeight(1)
-    stroke('black')
-    rectMode(CORNERS)
-    fill(this.color)
-    rect(this.x1, this.y1, this.x2, this.y2)
-  }
-}
-
 /*
  *  <Path optimization functions>
  */
 function rubberBandPass(path, obstacles, step_size, max_steps=10000) {
   let new_path = [path[0]]
   for (let i = 1; i < path.length - 1; i++) {
-    let robot = new PointRobot(new_path[new_path.length-1])
+    let robot = new_path[new_path.length-1].copy()
     let done = false
     for (let j = 0; !done && j < max_steps; j++) {
       robot.stepToward(path[i+1], step_size)
@@ -37,15 +12,11 @@ function rubberBandPass(path, obstacles, step_size, max_steps=10000) {
       if (robot.inCollision(obstacles)) {
         new_path.push(path[i])
         done = true 
-      } else if (path[i+1].dist(robot.x, robot.y) < 5) {
+      } else if (path[i+1].dist(robot) < 5) {
         // if we arrived at path[i+1] without a collision then we don't need path[i]
         done = true
       }
     }
-    // if (!done) {
-    //   // unable to reach next node for some reason, add path[i] to be safe
-    //   new_path.push(path[i])
-    // }
   }
   // always need to keep the last point
   new_path.push(path[path.length-1])
@@ -56,31 +27,41 @@ function optimizePath(path, obstacles, step_size) {
   if (!path) return []
   return rubberBandPass(path, obstacles, step_size)
 }
-
 /*
  *  </Path optimization functions>
  */
 
+const car_config = { L: 20,
+                     W: 10,
+                     color: 'blue',
+                     min_delta: -Math.PI/16,
+                     max_delta: Math.PI/16
+                   }
+
+const point_config = { color: 'blue'}
 
 const canvas_width = 400
 const canvas_height = 400
 const tree_step_size = 15
 const cell_point_limit = 6
 
-let TEMP_NODE = null // just an extra node we will draw in red for debugging purposes
-let target = new Node(350, 350, null)
-target.color = 'green'
+let target = new CarNode({x: 350, y: 350, theta: 0}, {...car_config}, null)
+// let target = new PointNode({x: 350, y: 350}, {...point_config}, null)
+target.config.color = 'green'
 let targetReposition = false // when true, user is clicking and dragging target node
 let rootReposition = false // when true, user is clicking and dragging root node
 
-let root = new Node(100, 200, null)
-root.color = 'orange'
+let root = new CarNode({x: 30, y: 50, theta: Math.PI/6}, {...car_config}, null)
+// let root = new PointNode({x: 100, y: 200}, {...point_config}, null)
+root.config.color = 'orange'
 let t = new Tree(root, canvas_width, canvas_height, cell_point_limit, tree_step_size)
 
 let obstacles = [] // list of obstacles to avoid
 let path = [] // path from root to target
 let optimized_path = [] // optimized path from root to target
 let clickLoc = null
+
+let TEMP_NODE = null
 
 function setup() {
   canvas = createCanvas(canvas_width, canvas_height)
@@ -122,10 +103,11 @@ function draw() {
       rect(clickLoc[0], clickLoc[1], mouseX, mouseY)
     }
   }
-
   if (TEMP_NODE) {
+    TEMP_NODE.config.color = 'red'
     TEMP_NODE.draw()
   }
+
   if (path) drawPath(path, point_color='orange', line_color='#CC7000', line_width=2)
   if (optimized_path) drawPath(optimized_path, point_color='purple', line_color='red', line_width=4)
 }
@@ -167,13 +149,13 @@ function addPoint(pts) {
     t = new Tree(root, canvas_width, canvas_height, cell_point_limit, tree_step_size)
   }
   path = t.findTarget(target, obstacles, maxNodes = pts, acceptable_range = 10)
-  if (path) path.forEach(n => n.color = 'orange')
+  if (path) path.forEach(n => n.config.color = 'orange')
 }
 
 function drawPath(path_to_draw, point_color, line_color, line_width) {
   for (let i = 0; i < path_to_draw.length; i++) {
     let p = path_to_draw[i]
-    p.color = point_color
+    p.config.color = point_color
     if (i > 0) {
       strokeWeight(line_width)
       stroke(line_color)
