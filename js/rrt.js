@@ -1,3 +1,4 @@
+let LATEST_NODE = null
 class Tree {
   constructor(root, canvas_width, canvas_height, cell_point_limit, step_size) {
     this.root = root
@@ -6,6 +7,7 @@ class Tree {
     this.qtree.insert(this.root)
     this.step_size = step_size
     this.count = 1
+    LATEST_NODE = root
   }
 
   getAllNodes() {
@@ -18,12 +20,12 @@ class Tree {
   }
 
   findNearestNode(state) {
+    return LATEST_NODE
     // https://stackoverflow.com/questions/8864430/compare-javascript-array-of-objects-to-get-min-max
     let radius = 10
     while (radius < min(this.boundary.w, this.boundary.h) * 2) {
       radius *= 2
       let nearbyNodes = this.getNearbyNodes(state.x, state.y, radius)
-      console.log("nearbyNodes.length: " + nearbyNodes.length)
       if (nearbyNodes.length > 10 || nearbyNodes.length == this.count) {
         return nearbyNodes.reduce((prev, curr) => prev.dist(state) < curr.dist(state) ? prev : curr)
       }
@@ -50,6 +52,7 @@ class Tree {
         nearest_node.addChild(new_node)
         this.qtree.insert(new_node);
         this.count++
+        LATEST_NODE = new_node
         return new_node
       }
     } 
