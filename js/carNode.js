@@ -59,15 +59,7 @@ class CarNode extends AbstractNode {
     const ks = 0.1 // softning constant
     let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
     let delta = (target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))
-    console.log("e: " + e)
-    // console.log("delta1: " + delta)
     delta = angleClamp(delta, this.config.min_delta, this.config.max_delta)
-    // console.log("delta2: " + delta)
-    // delta = mod2pi(delta)
-
-    // console.log("delta: " + delta)
-    // console.log("target: x:"  + target.x + ", y: " + target.y + ", theta: " + target.theta)
-    // console.log("x: " + this.x + ", y: " + this.y + ", theta: " + this.theta)
 
     this.x += (step_size * Math.cos(this.theta))
     this.y += (step_size * Math.sin(this.theta))
