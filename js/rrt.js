@@ -1,4 +1,3 @@
-let LATEST_NODE = null
 class Tree {
   constructor(root, canvas_width, canvas_height, cell_point_limit, step_size) {
     this.root = root
@@ -7,7 +6,6 @@ class Tree {
     this.qtree.insert(this.root)
     this.step_size = step_size
     this.count = 1
-    LATEST_NODE = root
   }
 
   getAllNodes() {
@@ -20,7 +18,6 @@ class Tree {
   }
 
   findNearestNode(state) {
-    return LATEST_NODE
     // https://stackoverflow.com/questions/8864430/compare-javascript-array-of-objects-to-get-min-max
     let radius = 10
     while (radius < min(this.boundary.w, this.boundary.h) * 2) {
@@ -36,8 +33,8 @@ class Tree {
   addNode(obstacles) {
     let tries = 0;
     while (++tries < 100) { // keep looping until we find a valid node to add
-      // let random_state = this.root.getRandomState({x_max: 400, y_max: 400}) 
-      let random_state = target
+      let random_state = this.root.getRandomState({x_max: 400, y_max: 400}) 
+      // let random_state = target
 
       // Core of RRT algorithm, see paper for details
       let nearest_node = this.findNearestNode(random_state)
@@ -52,7 +49,6 @@ class Tree {
         nearest_node.addChild(new_node)
         this.qtree.insert(new_node);
         this.count++
-        LATEST_NODE = new_node
         return new_node
       }
     } 
