@@ -110,6 +110,7 @@ class Quad {
         return found;
     }
 
+    /* NO LONGER SUPPORTED!
     //Can be used for debugging purposes
     show() {
         stroke(255);
@@ -128,4 +129,5 @@ class Quad {
             node(p.x, p.y)
         }
     }
+    */
 }
