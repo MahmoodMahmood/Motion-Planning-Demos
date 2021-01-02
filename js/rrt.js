@@ -23,6 +23,7 @@ class Tree {
     while (radius < min(this.boundary.w, this.boundary.h) * 2) {
       radius *= 2
       let nearbyNodes = this.getNearbyNodes(state.x, state.y, radius)
+      console.log("nearbyNodes.length: " + nearbyNodes.length)
       if (nearbyNodes.length > 10 || nearbyNodes.length == this.count) {
         return nearbyNodes.reduce((prev, curr) => prev.dist(state) < curr.dist(state) ? prev : curr)
       }
@@ -33,7 +34,8 @@ class Tree {
   addNode(obstacles) {
     let tries = 0;
     while (++tries < 100) { // keep looping until we find a valid node to add
-      let random_state = this.root.getRandomState({x_max: 400, y_max: 400}) 
+      // let random_state = this.root.getRandomState({x_max: 400, y_max: 400}) 
+      let random_state = target
 
       // Core of RRT algorithm, see paper for details
       let nearest_node = this.findNearestNode(random_state)

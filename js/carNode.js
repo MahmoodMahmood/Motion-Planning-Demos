@@ -5,8 +5,34 @@ function mod2pi(a) {
   return a
 }
 
-function fclamp(a, min_d, max_d) {
-  return ((a < min_d ? min_d : a) > max_d ? max_d : (a < min_d ? min_d : a))
+/*
+ * clamp an angle within a certain magnitude with wrap around considerations
+ * ex: if a = 5PI/6 and a_max = 11PI/12, a_min = -11PI/12, we return a_min
+ * explanation: 5PI/6 is closer to a_min after wrap around so we return a_min
+ */
+function angleClamp(a, a_min, a_max) {
+  let temp = mod2pi(a)
+  
+  if (temp > Math.PI) {
+    temp -= 2 * Math.PI
+  }
+
+  if (temp < a_max && temp > a_min) {
+    return a
+  } else if (temp > a_max) {
+    return a_max
+  } else if (temp < a_min) {
+    return a_min
+  }
+}
+
+function crossTrackError(x_start, y_start, x_dest, y_dest, theta_dest) {
+  let m = Math.tan(theta_dest) // slope of destination theta
+  let b = y_dest - x_dest * m // y intercept of line going through destination with the same theta
+
+  // distance between point and line with eqn: y = mx + b
+  // source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+  return Math.abs(b - m*x_start - y_start) / Math.sqrt(1 + m**2)
 }
 
 class CarNode extends AbstractNode {
@@ -20,16 +46,21 @@ class CarNode extends AbstractNode {
 
   dist(other) {
     if (other instanceof CarNode) {
-      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 1 * (mod2pi(other.theta) - mod2pi(this.theta)) ** 2)
+      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 0.1 * (mod2pi(other.theta) - mod2pi(this.theta)) ** 2)
     } else {
       return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
     }
   }
 
   stepToward(target, step_size) {
-    // steering wheel angle in frenet frame
-    let delta = mod2pi(Math.atan2(target.x, target.y) - this.theta)
-    delta = fclamp(delta, this.config.max_delta, mod2pi(this.config.min_delta))
+    // implementation of stanley controller
+    // source: https://dingyan89.medium.com/three-methods-of-vehicle-lateral-control-pure-pursuit-stanley-and-mpc-db8cc1d32081
+    const k = 1    // cross track error gain
+    const ks = 0.1 // softning constant
+    let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
+    let delta = target.theta + Math.atan(k * e / (ks + step_size))
+    delta = angleClamp(delta, this.config.min_delta, this.config.max_delta)
+    delta = mod2pi(delta)
 
     // console.log("delta: " + delta)
     // console.log("target: x:"  + target.x + ", y: " + target.y + ", theta: " + target.theta)
