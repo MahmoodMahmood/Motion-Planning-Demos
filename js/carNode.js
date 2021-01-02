@@ -68,8 +68,20 @@ class CarNode extends AbstractNode {
   }
 
   inCollision(obstacles) {
-    return obstacles.some(o => o.inObstacle(this.x, this.y));
-    // return false
+    // front right, front left, back right, back left corners in that order
+    let vertices = [{x: this.x + this.config.L * Math.cos(this.theta) - this.config.W/2*sin(this.theta), 
+                     y: this.y + this.config.L * Math.sin(this.theta) + this.config.W/2*cos(this.theta)},
+
+                    {x: this.x + this.config.L * Math.cos(this.theta) + this.config.W/2*sin(this.theta), 
+                     y: this.y + this.config.L * Math.sin(this.theta) - this.config.W/2*cos(this.theta)},
+                    
+                    {x: this.x - this.config.W/2*sin(this.theta), 
+                     y: this.y + this.config.W/2*cos(this.theta)},
+
+                    {x: this.x + this.config.W/2*sin(this.theta), 
+                     y: this.y - this.config.W/2*cos(this.theta)}]
+
+    return vertices.some(v => obstacles.some(o => o.inObstacle(v.x, v.y)));
   }
 
   copy() {
@@ -90,9 +102,6 @@ class CarNode extends AbstractNode {
     fill('black')
     circle(0, 0, 5)
     pop()
-    // front center of car
-    // fill('yellow')
-    // circle(this.x + this.config.L * Math.sin(this.theta), this.y - this.config.L * Math.cos(this.theta), 3)
   }
 
   drawRecursive() {
