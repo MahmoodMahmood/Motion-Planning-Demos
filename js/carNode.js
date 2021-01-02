@@ -32,7 +32,7 @@ function crossTrackError(x_start, y_start, x_dest, y_dest, theta_dest) {
 
   // distance between point and line with eqn: y = mx + b
   // source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-  return Math.abs(b - m*x_start - y_start) / Math.sqrt(1 + m**2)
+  return Math.abs(b - m*x_start - y_start) / Math.sqrt(1 + m**2) * (y_start > y_dest ? -1 : 1)
 }
 
 class CarNode extends AbstractNode {
@@ -46,7 +46,7 @@ class CarNode extends AbstractNode {
 
   dist(other) {
     if (other instanceof CarNode) {
-      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 0.1 * (mod2pi(other.theta) - mod2pi(this.theta)) ** 2)
+      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 0.5 * (mod2pi(other.theta) - mod2pi(this.theta)) ** 2)
     } else {
       return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
     }
@@ -55,12 +55,15 @@ class CarNode extends AbstractNode {
   stepToward(target, step_size) {
     // implementation of stanley controller
     // source: https://dingyan89.medium.com/three-methods-of-vehicle-lateral-control-pure-pursuit-stanley-and-mpc-db8cc1d32081
-    const k = 1    // cross track error gain
+    const k = 0.3    // cross track error gain
     const ks = 0.1 // softning constant
     let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
-    let delta = target.theta + Math.atan(k * e / (ks + step_size))
+    let delta = (target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))
+    console.log("e: " + e)
+    // console.log("delta1: " + delta)
     delta = angleClamp(delta, this.config.min_delta, this.config.max_delta)
-    delta = mod2pi(delta)
+    // console.log("delta2: " + delta)
+    // delta = mod2pi(delta)
 
     // console.log("delta: " + delta)
     // console.log("target: x:"  + target.x + ", y: " + target.y + ", theta: " + target.theta)

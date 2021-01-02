@@ -34,8 +34,8 @@ function optimizePath(path, obstacles, step_size) {
 const car_config = { L: 20,
                      W: 10,
                      color: 'blue',
-                     min_delta: -Math.PI/16,
-                     max_delta: Math.PI/16
+                     min_delta: -Math.PI/6,
+                     max_delta: Math.PI/6
                    }
 
 const point_config = { color: 'blue'}
@@ -48,18 +48,19 @@ const cell_point_limit = 6
 let target = new CarNode({x: 350, y: 350, theta: 0}, {...car_config}, null)
 // let target = new PointNode({x: 350, y: 350}, {...point_config}, null)
 target.config.color = 'green'
-let targetReposition = false // when true, user is clicking and dragging target node
-let rootReposition = false // when true, user is clicking and dragging root node
 
 let root = new CarNode({x: 30, y: 50, theta: Math.PI/6}, {...car_config}, null)
 // let root = new PointNode({x: 100, y: 200}, {...point_config}, null)
 root.config.color = 'orange'
+
 let t = new Tree(root, canvas_width, canvas_height, cell_point_limit, tree_step_size)
 
 let obstacles = [] // list of obstacles to avoid
 let path = [] // path from root to target
 let optimized_path = [] // optimized path from root to target
 let clickLoc = null
+let targetReposition = false // when true, user is clicking and dragging target node
+let rootReposition = false // when true, user is clicking and dragging root node
 
 let TEMP_NODE = null
 

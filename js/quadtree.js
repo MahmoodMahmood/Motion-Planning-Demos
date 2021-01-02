@@ -37,7 +37,7 @@ class Rectangle {
         else if (circle.y > this.y + this.h)
             testY = this.y + this.h
 
-        return ((circle.x - testX) ** 2 + (circle.y - testY) ** 2) <= (circle.r / 2) ** 2
+        return ((circle.x - testX) ** 2 + (circle.y - testY) ** 2) <= (circle.r) ** 2
     }
 }
 
