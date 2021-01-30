@@ -35,6 +35,11 @@ function crossTrackError(x_start, y_start, x_dest, y_dest, theta_dest) {
   return Math.abs(b - m*x_start - y_start) / Math.sqrt(1 + m**2) * (y_start > y_dest ? -1 : 1)
 }
 
+function angleDist(a1, a2) {
+  let phi = Math.abs(a2 - a1) % (2*Math.PI); // This is either the distance or (2PI - distance) 
+  return phi > Math.PI ? (2*Math.PI) - phi : phi;
+ }
+
 class CarNode extends AbstractNode {
   constructor(state, config, parent) {
     super(parent)
@@ -46,7 +51,7 @@ class CarNode extends AbstractNode {
 
   dist(other) {
     if (other instanceof CarNode) {
-      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 0.5 * (mod2pi(other.theta) - mod2pi(this.theta)) ** 2)
+      return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 3.0 * angleDist(other.theta, this.theta) ** 2)
     } else {
       return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
     }
