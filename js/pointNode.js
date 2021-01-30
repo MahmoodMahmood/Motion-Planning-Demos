@@ -30,7 +30,7 @@ class PointNode extends AbstractNode {
     strokeWeight(1)
     stroke('black')
     fill(this.config.color)
-    circle(this.x, this.y, 10)
+    circle(this.x, this.y, this.config.radius)
   }
 
   drawRecursive() {
