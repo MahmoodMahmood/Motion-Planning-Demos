@@ -66,8 +66,8 @@ function optimizePath(path, obstacles, step_size) {
  *  </Path optimization functions>
  */
 
-const car_config = { L: 20,
-                     W: 10,
+const car_config = { L: 30,
+                     W: 15,
                      color: 'blue',
                      min_delta: -Math.PI/6,
                      max_delta: Math.PI/6
@@ -79,11 +79,11 @@ const point_config = { color: 'blue',
 
 const canvas_width = 500
 const canvas_height = 500
-const tree_step_size = 20
+const tree_step_size = 10
 const cell_point_limit = 200
 
-let target = new CarNode({x: 400, y: 340, theta: 0}, {...car_config}, null)
-// let target = new PointNode({x: 400, y: 450}, {...point_config}, null)
+// let target = new CarNode({x: 400, y: 340, theta: 0}, {...car_config}, null)
+let target = new PointNode({x: 400, y: 450}, {...point_config}, null)
 target.config.color = 'green'
 
 let root = new CarNode({x: 30, y: 50, theta: Math.PI/6}, {...car_config}, null)

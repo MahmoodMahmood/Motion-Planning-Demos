@@ -30,14 +30,16 @@ function crossTrackError(x_start, y_start, x_dest, y_dest, theta_dest) {
   let m = Math.tan(theta_dest) // slope of destination theta
   let b = y_dest - x_dest * m // y intercept of line going through destination with the same theta
 
+  // sign of distance, yes I know there is probably a better way of doing this
+  let sgn = (x_start-0)*(y_dest-b) - (y_start-b)*(x_dest-0)
   // distance between point and line with eqn: y = mx + b
   // source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-  return Math.abs(b - m*x_start - y_start) / Math.sqrt(1 + m**2) * (y_start > y_dest ? -1 : 1)
+  return Math.abs(b + m*x_start - y_start) / Math.sqrt(1 + m**2) * (sgn>0 ? 1 : -1)
 }
 
 function angleDist(a1, a2) {
-  let phi = Math.abs(a2 - a1) % (2*Math.PI); // This is either the distance or (2PI - distance) 
-  return phi > Math.PI ? (2*Math.PI) - phi : phi;
+  let phi = Math.abs(a2 - a1) % (2*Math.PI);
+  return mod2pi(phi);
  }
 
 class CarNode extends AbstractNode {
@@ -63,9 +65,8 @@ class CarNode extends AbstractNode {
     const k = 0.3    // cross track error gain
     const ks = 0.1 // softning constant
     let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
-    let delta = (target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))
+    let delta = mod2pi(target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))
     delta = angleClamp(delta, this.config.min_delta, this.config.max_delta)
-
     this.x += (step_size * Math.cos(this.theta))
     this.y += (step_size * Math.sin(this.theta))
     this.theta += (step_size * Math.tan(delta) / this.config.L)

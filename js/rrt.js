@@ -33,10 +33,9 @@ class Tree {
   addNode(obstacles) {
     let tries = 0;
     while (++tries < 100) { // keep looping until we find a valid node to add
-      let random_state = this.root.getRandomState({x_max: canvas_width, y_max: canvas_height}) 
-      if (Math.random() < 0.05) {
-        random_state = target
-      }
+      let random_state = Math.random() < 0.0 ? 
+                         target : 
+                         this.root.getRandomState({x_max: canvas_width, y_max: canvas_height}) 
 
       // Core of RRT algorithm, see paper for details
       let nearest_node = this.findNearestNode(random_state)
