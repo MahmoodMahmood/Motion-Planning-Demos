@@ -1,6 +1,6 @@
 function mod2pi(a) {
-  while (a > 2*Math.PI || a < 0) {
-    a += a < 0 ? 2*Math.PI : -2*Math.PI
+  while (a > 2 * Math.PI || a < 0) {
+    a += a < 0 ? 2 * Math.PI : -2 * Math.PI
   }
   return a
 }
@@ -12,7 +12,7 @@ function mod2pi(a) {
  */
 function angleClamp(a, a_min, a_max) {
   let temp = mod2pi(a)
-  
+
   if (temp > Math.PI) {
     temp -= 2 * Math.PI
   }
@@ -31,16 +31,16 @@ function crossTrackError(x_start, y_start, x_dest, y_dest, theta_dest) {
   let b = y_dest - x_dest * m // y intercept of line going through destination with the same theta
 
   // sign of distance, yes I know there is probably a better way of doing this
-  let sgn = (x_start-0)*(y_dest-b) - (y_start-b)*(x_dest-0)
+  let sgn = (x_start - 0) * (y_dest - b) - (y_start - b) * (x_dest - 0)
   // distance between point and line with eqn: y = mx + b
   // source: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-  return Math.abs(b + m*x_start - y_start) / Math.sqrt(1 + m**2) * (sgn>0 ? 1 : -1)
+  return Math.abs(b + m * x_start - y_start) / Math.sqrt(1 + m ** 2) * (sgn > 0 ? 1 : -1)
 }
 
 function angleDist(a1, a2) {
-  let phi = Math.abs(a2 - a1) % (2*Math.PI);
+  let phi = Math.abs(a2 - a1) % (2 * Math.PI);
   return mod2pi(phi);
- }
+}
 
 class CarNode extends AbstractNode {
   constructor(state, config, parent) {
@@ -75,23 +75,31 @@ class CarNode extends AbstractNode {
 
   inCollision(obstacles) {
     // front right, front left, back right, back left corners in that order
-    let vertices = [{x: this.x + this.config.L * Math.cos(this.theta) - this.config.W/2*sin(this.theta), 
-                     y: this.y + this.config.L * Math.sin(this.theta) + this.config.W/2*cos(this.theta)},
+    let vertices = [{
+      x: this.x + this.config.L * Math.cos(this.theta) - this.config.W / 2 * sin(this.theta),
+      y: this.y + this.config.L * Math.sin(this.theta) + this.config.W / 2 * cos(this.theta)
+    },
 
-                    {x: this.x + this.config.L * Math.cos(this.theta) + this.config.W/2*sin(this.theta), 
-                     y: this.y + this.config.L * Math.sin(this.theta) - this.config.W/2*cos(this.theta)},
-                    
-                    {x: this.x - this.config.W/2*sin(this.theta), 
-                     y: this.y + this.config.W/2*cos(this.theta)},
+    {
+      x: this.x + this.config.L * Math.cos(this.theta) + this.config.W / 2 * sin(this.theta),
+      y: this.y + this.config.L * Math.sin(this.theta) - this.config.W / 2 * cos(this.theta)
+    },
 
-                    {x: this.x + this.config.W/2*sin(this.theta), 
-                     y: this.y - this.config.W/2*cos(this.theta)}]
+    {
+      x: this.x - this.config.W / 2 * sin(this.theta),
+      y: this.y + this.config.W / 2 * cos(this.theta)
+    },
+
+    {
+      x: this.x + this.config.W / 2 * sin(this.theta),
+      y: this.y - this.config.W / 2 * cos(this.theta)
+    }]
 
     return vertices.some(v => obstacles.some(o => o.inObstacle(v.x, v.y)));
   }
 
   copy() {
-    return new CarNode({x: this.x, y: this.y, theta: this.theta}, {...this.config}, this.parent)
+    return new CarNode({ x: this.x, y: this.y, theta: this.theta }, { ...this.config }, this.parent)
   }
 
   draw() {
@@ -101,10 +109,10 @@ class CarNode extends AbstractNode {
     fill(this.config.color)
     rectMode(CORNER)
     translate(this.x, this.y)
-    rotate(this.theta + Math.PI/2)
+    rotate(this.theta + Math.PI / 2)
     // our car has x and y at rear axle, rectMode(CORNER) assumes x and y are top left coordinates,
     // also theta is the angle from the horizon
-    rect(-this.config.W/2, -this.config.L*0.9, this.config.W, this.config.L)
+    rect(-this.config.W / 2, -this.config.L * 0.9, this.config.W, this.config.L)
     fill('black')
     circle(0, 0, 5)
     pop()

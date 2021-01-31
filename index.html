@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 
     <!-- P5js stuff -->
     <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js">
@@ -25,53 +28,73 @@
 </head>
 
 <body>
-    <div class="jumbotron ">
-
-        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-            <strong> Tip: </strong> You can drag and drop on the canvas to add obstacles that the robot will avoid!
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-            <strong> Tip: </strong> You can drag and drop the orange start node and the green target node!
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong> Tip: </strong> You can drag and drop on the canvas to add obstacles that the robot will avoid!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong> Tip: </strong> You can drag and drop the orange start node and the green target node!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
 
-        <h1 class="display-4">Mahmood and Zarak's RRT Example</h1>
-        <p class="lead">This is a quick weekend implementation of the RRT algorithm (LaValle, 1998)</p>
+    <h1 class="display-4 p-2">Mahmood and Zarak's RRT Example</h1>
+    <p class="lead p-2"> Welcome to our implementation of the RRT algorithm (LaValle, 1998)</p>
 
-        <div id="sketch-holder">
+    <div class="container-lg row">
+        <div id="sketch-holder" class="col">
             <!-- Our sketch will go here! -->
         </div>
-
-        <!--
-        <div class="btn-group btn-group-toggle" role="group" aria-label="First group" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="options" id="option1" checked> Active
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="options" id="option2"> Radio
-            </label>
+        <div class="col border bg-light">
+            <h1>Customizations:</h1>
+            <div class="p-3">
+                <div class="mb-3 form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                        onchange="USE_RRT=this.checked">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Use RRT</label>
+                </div>
+                <form id="step-length" class="mb-3 row" style="margin-top: 10px;">
+                    <div class="col-auto">
+                        <label type="number" for="amountRange" class="form-label">Step size: </label>
+                        <input type="range" name="amountRange" min="1" max="50" value="10"
+                            oninput="this.form.amountInput.value=this.value; changeStepSize(this.value);" />
+                    </div>
+                    <div class="col-auto">
+                        <input type="number" name="amountInput" min="1" max="50" value="10"
+                            class="form-control form-control-sm"
+                            oninput="this.form.amountRange.value=this.value; changeStepSize(this.value);" />
+                    </div>
+                </form>
+                <div class="input-group">
+                    <span class="input-group-text">Robot Type</span>
+                    <select class="form-select" onchange="changeRobot(this.value)">
+                        <option value="Point" selected>Point Robot</option>
+                        <option value="Car"> Car Robot </option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Target Type</span>
+                    <select class="form-select" onchange="changeTarget(this.value)">
+                        <option value="Point" selected>Point Robot</option>
+                        <option value="Car"> Car Robot </option>
+                    </select>
+                </div>
+            </div>
         </div>
-        -->
+    </div>
 
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                Add points:
-            </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button onclick="addPoint(1)" type="button" class="btn btn-primary"> 1 </button>
-                <button onclick="addPoint(10)" type="button" class="btn btn-primary"> 10 </button>
-                <button onclick="addPoint(100)" type="button" class="btn btn-primary"> 100 </button>
-                <button onclick="addPoint(1000)" type="button" class="btn btn-primary"> 1000 </button>
-            </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button onclick="optimize()" type="button" class="btn btn-primary"> Optimize! </button>
-            </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            Add points:
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button onclick="addPoint(1)" type="button" class="btn btn-primary"> 1 </button>
+            <button onclick="addPoint(10)" type="button" class="btn btn-primary"> 10 </button>
+            <button onclick="addPoint(100)" type="button" class="btn btn-primary"> 100 </button>
+            <button onclick="addPoint(1000)" type="button" class="btn btn-primary"> 1000 </button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button onclick="optimize()" type="button" class="btn btn-primary"> Optimize! </button>
         </div>
     </div>
 
@@ -86,13 +109,13 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-    </script>
+        </script>
 
 </body>
 

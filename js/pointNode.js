@@ -23,7 +23,7 @@ class PointNode extends AbstractNode {
   }
 
   copy() {
-    return new PointNode({x: this.x, y: this.y}, {...this.config}, this.parent)
+    return new PointNode({ x: this.x, y: this.y }, { ...this.config }, this.parent)
   }
 
   draw() {
@@ -42,7 +42,7 @@ class PointNode extends AbstractNode {
       c.drawRecursive()
     })
   }
-  
+
   getRandomState(range) {
     return {
       x: Math.random() * range.x_max,

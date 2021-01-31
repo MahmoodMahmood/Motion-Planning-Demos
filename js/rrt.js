@@ -33,9 +33,14 @@ class Tree {
   addNode(obstacles) {
     let tries = 0;
     while (++tries < 100) { // keep looping until we find a valid node to add
-      let random_state = Math.random() < 0.0 ? 
-                         target : 
-                         this.root.getRandomState({x_max: canvas_width, y_max: canvas_height}) 
+      let random_state = (Math.random() < 0.05 || !USE_RRT) ?
+        target :
+        this.root.getRandomState({ x_max: canvas_width, y_max: canvas_height })
+
+      // stupid hack to get carNode to work when target is a pointNode, fix later!
+      if (target.theta == null) {
+        target.theta = this.root.theta
+      }
 
       // Core of RRT algorithm, see paper for details
       let nearest_node = this.findNearestNode(random_state)
@@ -52,7 +57,7 @@ class Tree {
         this.count++
         return new_node
       }
-    } 
+    }
     alert("failed to add node!")
   }
 
