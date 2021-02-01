@@ -81,7 +81,7 @@
                     <span class="input-group-text">Target Type</span>
                     <select class="form-select" onchange="changeTarget(this.value)">
                         <option value="Point" selected>Point Robot</option>
-                        <option disabled value="Car"> Car Robot </option>
+                        <option value="Car"> Car Robot </option>
                     </select>
                 </div>
 
@@ -110,12 +110,12 @@
                             </i>
                         </div>
                         <div class="col-sm-3">
-                            <input type="range" name="amountRange" min="0.01" max="1.0" step="0.01" value="0.0"
+                            <input type="range" name="amountRange" min="0.0" max="1.0" step="0.01" value="0.0"
                                 id="tp-r"
                                 oninput="this.form.amountInput.value=this.value; changeTargetSamplingProb(this.value);" />
                         </div>
                         <div class="col-sm-2">
-                            <input type="number" name="amountInput" min="0.001" max="1.0" step="0.01" value="0.0"
+                            <input type="number" name="amountInput" min="0.0" max="1.0" step="0.01" value="0.0"
                                 id="tp-a" class="form-control form-control-sm"
                                 oninput="this.form.amountRange.value=this.value; changeTargetSamplingProb(this.value);" />
                         </div>

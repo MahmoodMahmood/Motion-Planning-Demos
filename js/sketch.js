@@ -84,11 +84,12 @@ const point_config = {
 const canvas_width = 500
 const canvas_height = 500
 const cell_point_limit = 200
-let global_config = {tree_step_size: 10,
-                     cross_track_error_gain: 0.2,
-                     tgt_prob: 0.0, // probability of sampling target in RRT
-                     show_sample: false // show TEMP_NODE
-                    }
+let global_config = {
+  tree_step_size: 10,
+  cross_track_error_gain: 0.2,
+  tgt_prob: 0.0, // probability of sampling target in RRT
+  show_sample: false // show TEMP_NODE
+}
 
 // let target = new CarNode({x: 400, y: 340, theta: 0}, {...car_config}, null)
 let target = new PointNode({ x: 400, y: 450 }, { ...point_config }, null)
@@ -135,11 +136,19 @@ function draw() {
   if (mouseIsPressed) {
     // move target node or root node if user is dragging it
     if (targetReposition) {
-      target.x = mouseX
-      target.y = mouseY
+      if (keyIsDown(CONTROL)) {
+        target.theta = atan2(mouseY, mouseX)
+      } else {
+        target.x = mouseX
+        target.y = mouseY
+      }
     } else if (rootReposition) {
-      root.x = mouseX
-      root.y = mouseY
+      if (keyIsDown(CONTROL)) {
+        root.theta = atan2(mouseY, mouseX)
+      } else {
+        root.x = mouseX
+        root.y = mouseY
+      }
     } else if (clickLoc) {
       rectMode(CORNERS)
       noFill()
