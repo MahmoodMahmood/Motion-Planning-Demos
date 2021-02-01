@@ -137,14 +137,14 @@ function draw() {
     // move target node or root node if user is dragging it
     if (targetReposition) {
       if (keyIsDown(CONTROL)) {
-        target.theta = atan2(mouseY, mouseX)
+        target.theta = atan2(mouseY - target.y, mouseX - target.x)
       } else {
         target.x = mouseX
         target.y = mouseY
       }
     } else if (rootReposition) {
       if (keyIsDown(CONTROL)) {
-        root.theta = atan2(mouseY, mouseX)
+        root.theta = atan2(mouseY - root.y, mouseX - root.x)
       } else {
         root.x = mouseX
         root.y = mouseY
