@@ -62,7 +62,7 @@ class CarNode extends AbstractNode {
   stepToward(target, step_size) {
     // implementation of stanley controller
     // source: https://dingyan89.medium.com/three-methods-of-vehicle-lateral-control-pure-pursuit-stanley-and-mpc-db8cc1d32081
-    const k = 0.3    // cross track error gain
+    const k = global_config.cross_track_error_gain    // cross track error gain
     const ks = 0.1 // softning constant
     let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
     let delta = mod2pi(target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))

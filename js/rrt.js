@@ -33,7 +33,7 @@ class Tree {
   addNode(obstacles) {
     let tries = 0;
     while (++tries < 100) { // keep looping until we find a valid node to add
-      let random_state = (Math.random() < 0.05 || !USE_RRT) ?
+      let random_state = (Math.random() < global_config.tgt_prob) ?
         target :
         this.root.getRandomState({ x_max: canvas_width, y_max: canvas_height })
 
@@ -47,7 +47,10 @@ class Tree {
       let new_node = nearest_node.copy()
       new_node.config.color = 'blue'
       new_node.stepToward(random_state, this.step_size)
-      // TEMP_NODE = new CarNode(random_state, {...new_node.config}, null)
+      // TEMP_NODE code could be better but meh
+      TEMP_NODE = new_node instanceof CarNode ?
+        new CarNode(random_state, { ...new_node.config }, null) :
+        new PointNode(random_state, { ...new_node.config }, null)
 
       // make sure the new node is not in any obstacle, if it is then we retry everything
       if (!new_node.inCollision(obstacles)) {

@@ -59,8 +59,10 @@ function skipToTarget(path, obstacles, step_size) {
 
 function optimizePath(path, obstacles, step_size) {
   if (!path) return []
-  // return rubberBandPass(path, obstacles, step_size)
-  return skipToTarget(path, obstacles, step_size)
+  if (path[0] instanceof PointNode)
+    return rubberBandPass(path, obstacles, step_size)
+  if (path[0] instanceof CarNode)
+    return skipToTarget(path, obstacles, step_size)
 }
 /*
  *  </Path optimization functions>
@@ -82,8 +84,11 @@ const point_config = {
 const canvas_width = 500
 const canvas_height = 500
 const cell_point_limit = 200
-let TREE_STEP_SIZE = 10
-let USE_RRT = true
+let global_config = {tree_step_size: 10,
+                     cross_track_error_gain: 0.2,
+                     tgt_prob: 0.0, // probability of sampling target in RRT
+                     show_sample: false // show TEMP_NODE
+                    }
 
 // let target = new CarNode({x: 400, y: 340, theta: 0}, {...car_config}, null)
 let target = new PointNode({ x: 400, y: 450 }, { ...point_config }, null)
@@ -93,7 +98,7 @@ target.config.color = 'green'
 let root = new PointNode({ x: 30, y: 50 }, { ...point_config }, null)
 root.config.color = 'orange'
 
-let t = new Tree(root, canvas_width, canvas_height, cell_point_limit, TREE_STEP_SIZE)
+let t = new Tree(root, canvas_width, canvas_height, cell_point_limit, global_config.tree_step_size)
 
 let obstacles = [] // list of obstacles to avoid
 let path = [] // path from root to target
@@ -141,7 +146,7 @@ function draw() {
       rect(clickLoc[0], clickLoc[1], mouseX, mouseY)
     }
   }
-  if (TEMP_NODE) {
+  if (TEMP_NODE && global_config.show_sample) {
     TEMP_NODE.config.color = 'red'
     TEMP_NODE.draw()
   }
@@ -187,7 +192,7 @@ function canvasMouseReleased() {
 
 function addPoint(pts) {
   if (!t) {
-    t = new Tree(root, canvas_width, canvas_height, cell_point_limit, TREE_STEP_SIZE)
+    t = new Tree(root, canvas_width, canvas_height, cell_point_limit, global_config.tree_step_size)
   }
   path = t.findTarget(target, obstacles, maxNodes = pts, acceptable_range = 10)
   if (path) path.forEach(n => n.config.color = 'orange')
@@ -209,24 +214,35 @@ function drawPath(path_to_draw, point_color, line_color, line_width, point_width
 
 function optimize() {
   if (optimized_path.length > 0) {
-    optimized_path = optimizePath(optimized_path, obstacles, TREE_STEP_SIZE)
+    optimized_path = optimizePath(optimized_path, obstacles, global_config.tree_step_size)
   } else if (path.length > 0) {
-    optimized_path = optimizePath(path, obstacles, TREE_STEP_SIZE)
+    optimized_path = optimizePath(path, obstacles, global_config.tree_step_size)
   }
 }
 
 function changeStepSize(step) {
   resetTree()
-  TREE_STEP_SIZE = step
+  global_config.tree_step_size = step
+}
+
+function changeTargetSamplingProb(prob) {
+  global_config.tgt_prob = prob
+}
+
+function changeCrossTrackError(updated_k) {
+  global_config.cross_track_error_gain = updated_k
 }
 
 function changeRobot(selection) {
   resetTree()
-  console.log(selection)
   if (selection == "Car") {
     root = new CarNode({ x: 30, y: 50, theta: Math.PI / 6 }, { ...car_config }, null)
+    document.getElementById("cteg-r").disabled = false
+    document.getElementById("cteg-a").disabled = false
   } else if (selection == "Point") {
     root = new PointNode({ x: 30, y: 50 }, { ...point_config }, null)
+    document.getElementById("cteg-r").disabled = true
+    document.getElementById("cteg-a").disabled = true
   } else {
     alert("ERROR: unexpected selection!")
   }
@@ -235,7 +251,6 @@ function changeRobot(selection) {
 
 function changeTarget(selection) {
   resetTree()
-  console.log(selection)
   if (selection == "Car") {
     target = new CarNode({ x: 400, y: 340, theta: 0 }, { ...car_config }, null)
   } else if (selection == "Point") {

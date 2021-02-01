@@ -6,12 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
 
     <!-- P5js stuff -->
     <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js">
@@ -30,7 +30,8 @@
 <body>
     <div>
         <div class="alert alert-primary alert-dismissible fade show m-4 d-inline-flex" role="alert">
-            <strong> Tip:&ensp; </strong> You can drag and drop on the canvas to add obstacles that the robot will avoid!
+            <strong> Tip:&ensp; </strong> You can drag and drop on the canvas to add obstacles that the robot will
+            avoid!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
@@ -41,34 +42,34 @@
         </div>
     </div>
 
-
-    <h1 class="display-4 p-2">Mahmood and Zarak's RRT Example</h1>
-    <p class="lead p-2"> Welcome to our implementation of the RRT algorithm (LaValle, 1998)</p>
+    <div class="jumbotron p-3">
+        <h1 class="display-4 p-2">Mahmood and Zarak's RRT Example</h1>
+        <p class="lead p-2"> Welcome to our implementation of the RRT algorithm (LaValle, 1998)</p>
+    </div>
 
     <div class="container-lg row">
-        <div id="sketch-holder" class="col">
-            <!-- Our sketch will go here! -->
+        <div class="col">
+            <div id="sketch-holder">
+                <!-- Our sketch will go here! -->
+            </div>
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    Add points:
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button onclick="addPoint(1)" type="button" class="btn btn-primary"> 1 </button>
+                    <button onclick="addPoint(10)" type="button" class="btn btn-primary"> 10 </button>
+                    <button onclick="addPoint(100)" type="button" class="btn btn-primary"> 100 </button>
+                    <button onclick="addPoint(1000)" type="button" class="btn btn-primary"> 1000 </button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button onclick="optimize()" type="button" class="btn btn-primary"> Optimize! </button>
+                </div>
+            </div>
         </div>
         <div class="col border bg-light">
             <h1>Customizations:</h1>
             <div class="p-3">
-                <div class="mb-3 form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
-                        onchange="USE_RRT=this.checked">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Use RRT</label>
-                </div>
-                <form id="step-length" class="mb-3 row" style="margin-top: 10px;">
-                    <div class="col-auto">
-                        <label type="number" for="amountRange" class="form-label">Step size: </label>
-                        <input type="range" name="amountRange" min="1" max="50" value="10"
-                            oninput="this.form.amountInput.value=this.value; changeStepSize(this.value);" />
-                    </div>
-                    <div class="col-auto">
-                        <input type="number" name="amountInput" min="1" max="50" value="10"
-                            class="form-control form-control-sm"
-                            oninput="this.form.amountRange.value=this.value; changeStepSize(this.value);" />
-                    </div>
-                </form>
                 <div class="input-group">
                     <span class="input-group-text">Robot Type</span>
                     <select class="form-select" onchange="changeRobot(this.value)">
@@ -80,33 +81,89 @@
                     <span class="input-group-text">Target Type</span>
                     <select class="form-select" onchange="changeTarget(this.value)">
                         <option value="Point" selected>Point Robot</option>
-                        <option value="Car"> Car Robot </option>
+                        <option disabled value="Car"> Car Robot </option>
                     </select>
+                </div>
+
+                <div class="container mt-5" id="sliders grid">
+                    <form id="step-length" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Step size: </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="1" max="50" value="10"
+                                oninput="this.form.amountInput.value=this.value; changeStepSize(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="1" max="50" value="10"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeStepSize(this.value);" />
+                        </div>
+                    </form>
+                    <form id="target-probability" class="row border g-0 p-0">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Target sampling prob: </label>
+                            <i class="material-icons" data-bs-container="body" data-bs-toggle="popover"
+                                data-bs-placement="top"
+                                data-bs-content="Probability of sampling the target at every iteration of the RRT algorithm">
+                                help
+                            </i>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="0.01" max="1.0" step="0.01" value="0.0"
+                                id="tp-r"
+                                oninput="this.form.amountInput.value=this.value; changeTargetSamplingProb(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="0.001" max="1.0" step="0.01" value="0.0"
+                                id="tp-a" class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeTargetSamplingProb(this.value);" />
+                        </div>
+                    </form>
+                    <form id="cross-track-error-gain" class="mb-4 row border g-0 p-0">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Cross track error gain: </label>
+                            <i class="material-icons" data-bs-container="body" data-bs-toggle="popover"
+                                data-bs-placement="top" data-bs-content="Cross track error gain in the Stanley lateral controller, 
+                            only applicable for the car robot, see [2] (pg24) for more details">
+                                help
+                            </i>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="0.001" max="1.0" step="0.001" value="0.2"
+                                disabled id="cteg-r"
+                                oninput="this.form.amountInput.value=this.value; changeCrossTrackError(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="0.001" max="1.0" step="0.001" value="0.2"
+                                disabled id="cteg-a" class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeCrossTrackError(this.value);" />
+                        </div>
+                    </form>
+                </div>
+
+                <div class="mb-3 form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="showSample"
+                        onchange="global_config.show_sample=this.checked">
+                    <label class="form-check-label" for="showSample"> Show randomly sampled point </label>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group mr-2" role="group" aria-label="First group">
-            Add points:
-        </div>
-        <div class="btn-group mr-2" role="group" aria-label="Second group">
-            <button onclick="addPoint(1)" type="button" class="btn btn-primary"> 1 </button>
-            <button onclick="addPoint(10)" type="button" class="btn btn-primary"> 10 </button>
-            <button onclick="addPoint(100)" type="button" class="btn btn-primary"> 100 </button>
-            <button onclick="addPoint(1000)" type="button" class="btn btn-primary"> 1000 </button>
-        </div>
-        <div class="btn-group mr-2" role="group" aria-label="Second group">
-            <button onclick="optimize()" type="button" class="btn btn-primary"> Optimize! </button>
-        </div>
-    </div>
-
+    <br>
+    <br>
     <footer class="card-footer text-muted">
-        LaValle, Steven M. (October 1998). <a
-            href="http://msl.cs.uiuc.edu/~lavalle/papers/Lav98c.pdf">"Rapidly-exploring random trees: A new tool for
-            path planning" (PDF).</a> Technical Report. Computer Science Department, Iowa State University (TR
+        [1] LaValle, Steven M. <a href="http://msl.cs.uiuc.edu/~lavalle/papers/Lav98c.pdf">"Rapidly-exploring random
+            trees:
+            A new tool for
+            path planning" (PDF).</a> Technical Report. Computer Science Department, Iowa State University (1998) (TR
         98–11).
+    </footer>
+    <footer class="card-footer text-muted">
+        [2] Thrun, Sebastian, et al. <a href="https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/rob.20147">"Stanley:
+            The
+            robot that won the DARPA Grand Challenge." (PDF) </a>Journal of field Robotics 23.9 (2006): 661-692.
     </footer>
 
     <!-- Optional JavaScript -->
@@ -114,12 +171,19 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
         </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-        </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-        </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new
+                bootstrap.Popover(popoverTriggerEl);
+        })
+    </script>
 
 </body>
 
