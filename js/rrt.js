@@ -17,14 +17,18 @@ class Tree {
     return this.qtree.query(range)
   }
 
-  findNearestNode(state) {
+  findNearestNode(state, use_dist_node_select=false) {
     // https://stackoverflow.com/questions/8864430/compare-javascript-array-of-objects-to-get-min-max
     let radius = 10
     while (radius < min(this.boundary.w, this.boundary.h) * 2) {
       radius *= 2
       let nearbyNodes = this.getNearbyNodes(state.x, state.y, radius)
       if (nearbyNodes.length > 10 || nearbyNodes.length == this.count) {
-        return nearbyNodes.reduce((prev, curr) => prev.dist(state) < curr.dist(state) ? prev : curr)
+        if (use_dist_node_select) {
+          return nearbyNodes.reduce((prev, curr) => prev.distNodeSelect(state) < curr.distNodeSelect(state) ? prev : curr)
+        } else {
+          return nearbyNodes.reduce((prev, curr) => prev.dist(state) < curr.dist(state) ? prev : curr)
+        }
       }
     }
     return this.root
@@ -43,7 +47,8 @@ class Tree {
       }
 
       // Core of RRT algorithm, see paper for details
-      let nearest_node = this.findNearestNode(random_state)
+      // If we have a special node selection distance function available, use it
+      let nearest_node = this.findNearestNode(random_state, this.root.distNodeSelect!=undefined)
       let new_node = nearest_node.copy()
       new_node.config.color = 'blue'
       new_node.stepToward(random_state, this.step_size)

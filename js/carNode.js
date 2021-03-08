@@ -51,6 +51,7 @@ class CarNode extends AbstractNode {
     this.config = config
   }
 
+  // standard distance function
   dist(other) {
     if (other instanceof CarNode) {
       return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2 + 3.0 * angleDist(other.theta, this.theta) ** 2)
@@ -59,7 +60,16 @@ class CarNode extends AbstractNode {
     }
   }
 
-  stepToward(target, step_size) {
+  // special distance function for selecting a node
+  distNodeSelect(other) {
+    if (other instanceof CarNode) {
+      return this.getStepDelta(other, 10)
+    } else {
+      return this.dist(other)
+    }
+  }
+
+  getStepDelta(target, step_size) {
     // implementation of stanley controller
     // source: https://dingyan89.medium.com/three-methods-of-vehicle-lateral-control-pure-pursuit-stanley-and-mpc-db8cc1d32081
     const k = global_config.cross_track_error_gain    // cross track error gain
@@ -67,6 +77,11 @@ class CarNode extends AbstractNode {
     let e = crossTrackError(this.x, this.y, target.x, target.y, target.theta)
     let delta = mod2pi(target.theta - this.theta) + Math.atan((k * e) / (ks + step_size))
     delta = angleClamp(delta, this.config.min_delta, this.config.max_delta)
+    return delta
+  }
+
+  stepToward(target, step_size) {
+    let delta = this.getStepDelta(target, step_size)
     this.x += (step_size * Math.cos(this.theta))
     this.y += (step_size * Math.sin(this.theta))
     this.theta += (step_size * Math.tan(delta) / this.config.L)
