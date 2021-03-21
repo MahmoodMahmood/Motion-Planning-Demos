@@ -6,8 +6,12 @@ class PointNode extends AbstractNode {
     this.config = config
   }
 
+  distSquared(other) {
+    return (other.x - this.x) ** 2 + (other.y - this.y) ** 2
+  }
+
   dist(other) {
-    return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
+    return Math.sqrt(this.distSquared(other))
   }
 
   stepToward(target, step_size) {
@@ -19,7 +23,7 @@ class PointNode extends AbstractNode {
   }
 
   inCollision(obstacles) {
-    return obstacles.some(o => o.inObstacle(this.x, this.y));
+    return obstacles.some(o => o.inObstacle(this.x, this.y))
   }
 
   copy() {

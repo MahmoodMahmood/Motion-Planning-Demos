@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <!-- P5js stuff -->
+    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js">
+    </script>
+    <script language="javascript" type="text/javascript" src="js/abstractNode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/carNode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/pointNode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/obstacle.js"></script>
+    <script language="javascript" type="text/javascript" src="js/potentialField.js"></script>
+    <script language="javascript" type="text/javascript" src="js/potentialFieldsSketch.js"></script>
+
+    <title>Interactive RRT</title>
+</head>
+
+<body>
+    <div>
+        <div class="alert alert-primary alert-dismissible fade show m-4 d-inline-flex" role="alert">
+            <strong> Tip:&ensp; </strong> You can drag and drop on the canvas to add obstacles that the robot will
+            avoid!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <div>
+        <div class="alert alert-primary alert-dismissible fade show m-4 d-inline-flex" role="alert">
+            <strong> Tip:&ensp; </strong> You can drag and drop the orange start node and the green target node!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div class="jumbotron p-3">
+        <h1 class="display-4 p-2">The Potential Fields Algorithm</h1>
+        <p class="lead p-2">Welcome to Mahmood's quick implementation of the potential fields algorithm (Latombe, 1992)</p>
+        <p class="lead p-2"> Hold space-bar to go down the gradient! </p>
+    </div>
+
+    <div class="container-lg row">
+        <div class="col">
+            <div id="sketch-holder">
+                <!-- Our sketch will go here! -->
+            </div>
+        </div>
+        <div class="col border bg-light">
+            <h1>Customizations:</h1>
+            <div class="p-3">
+                <p> no customizations available yet </p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <footer class="card-footer text-muted">
+        J. Barraquand, B. Langlois and J. -. Latombe, "Numerical potential field techniques for robot path planning," in
+        IEEE Transactions on Systems, Man, and Cybernetics, vol. 22, no. 2, pp. 224-241, March-April 1992, doi:
+        10.1109/21.148426.
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new
+                bootstrap.Popover(popoverTriggerEl);
+        })
+    </script>
+
+</body>
+
+</html>
