@@ -45,7 +45,7 @@ function draw() {
     if (keyIsDown(32)) {
         // console.log("+ f.getField(mouseX, mouseY))
         let force = f.getForce(root.x, root.y)
-        step_size = 10
+        step_size = 5
         root.x += force[0] * step_size
         root.y += force[1] * step_size
     }
