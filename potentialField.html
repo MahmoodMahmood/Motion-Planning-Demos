@@ -56,7 +56,50 @@
         <div class="col border bg-light">
             <h1>Customizations:</h1>
             <div class="p-3">
-                <p> no customizations available yet </p>
+                <div class="container mt-5" id="sliders grid">
+                    <form id="step-length" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Step size: </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="1" max="50" value="5"
+                                oninput="this.form.amountInput.value=this.value; changeStepSize(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="1" max="50" value="5"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeStepSize(this.value);" />
+                        </div>
+                    </form>
+                    <form id="k1" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Attraction constant (K1): </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="0.01" max="10" value="1"
+                                oninput="this.form.amountInput.value=this.value; changeK1(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="0.01" max="10" value="1"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeK1(this.value);" />
+                        </div>
+                    </form>
+                    <form id="k2" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Repulsion constant (K2): </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="1" max="100000" value="10000"
+                                oninput="this.form.amountInput.value=this.value; changeK2(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="1" max="100000" value="10000"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; changeK2(this.value);" />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

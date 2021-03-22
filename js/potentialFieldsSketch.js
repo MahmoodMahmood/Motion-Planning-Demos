@@ -1,3 +1,9 @@
+function robotStep() {
+    let force = f.getForce(root.x, root.y)
+    root.x += force[0] * global_config.step_size
+    root.y += force[1] * global_config.step_size
+}
+
 const canvas_width = 500
 const canvas_height = 500
 const point_config = {
@@ -10,6 +16,10 @@ let path = [] // path from root to target
 let clickLoc = null
 let targetReposition = false // when true, user is clicking and dragging target node
 let rootReposition = false // when true, user is clicking and dragging root node
+
+let global_config = {
+    step_size: 5
+}
 
 let target = new PointNode({ x: 400, y: 450 }, { ...point_config }, null)
 target.config.color = 'green'
@@ -43,11 +53,7 @@ function draw() {
     obstacles.forEach(o => o.draw())
 
     if (keyIsDown(32)) {
-        // console.log("+ f.getField(mouseX, mouseY))
-        let force = f.getForce(root.x, root.y)
-        step_size = 5
-        root.x += force[0] * step_size
-        root.y += force[1] * step_size
+        robotStep()
     }
     if (mouseIsPressed) {
         // move target node or root node if user is dragging it
@@ -95,4 +101,16 @@ function canvasMouseReleased() {
 
     // return false to prevent default
     return false
+}
+
+function changeStepSize(new_val) {
+    global_config.step_size = new_val
+}
+
+function changeK1(new_val) {
+    f.k1 = new_val
+}
+
+function changeK2(new_val) {
+    f.k2 = new_val
 }

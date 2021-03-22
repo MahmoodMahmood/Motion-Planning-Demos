@@ -2,7 +2,7 @@ function strength_to_color(strength, min_range, max_range) {
     strength = strength > max_range ? max_range : strength
     strength = strength < min_range ? min_range : strength
     let fraction = (strength - min_range) / max_range
-    fraction = Math.round(fraction * 20) / 20
+    fraction = Math.round(fraction * 40) / 40
 
     colorMode(HSB)
     let c = color((1 - fraction) * 240 + 20, 100, 100)
@@ -16,7 +16,7 @@ class PotentialField {
         this.obstacles = obstacles
         this.target = target
         this.k1 = 1
-        this.k2 = 100 ** 2
+        this.k2 = 10000
         this.bg_cache = null
         this.cur_hash = 0
     }
