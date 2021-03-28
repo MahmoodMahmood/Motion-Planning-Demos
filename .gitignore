@@ -1,0 +1,4 @@
+# all this stuff is here for autocomplete purposes, actual website uses CDNs to get the libraries
+three.js
+typings*
+jsconfig.json

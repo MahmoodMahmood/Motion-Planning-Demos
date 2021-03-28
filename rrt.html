@@ -14,8 +14,10 @@
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
     <!-- P5js stuff -->
-    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js">
-    </script>
+    <script language="javascript" type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+
+    <!-- Simulation Libraries -->
     <script language="javascript" type="text/javascript" src="js/p5/common/abstractNode.js"></script>
     <script language="javascript" type="text/javascript" src="js/p5/common/carNode.js"></script>
     <script language="javascript" type="text/javascript" src="js/p5/common/pointNode.js"></script>
@@ -110,8 +112,7 @@
                             </i>
                         </div>
                         <div class="col-sm-3">
-                            <input type="range" name="amountRange" min="0.0" max="1.0" step="0.01" value="0.0"
-                                id="tp-r"
+                            <input type="range" name="amountRange" min="0.0" max="1.0" step="0.01" value="0.0" id="tp-r"
                                 oninput="this.form.amountInput.value=this.value; changeTargetSamplingProb(this.value);" />
                         </div>
                         <div class="col-sm-2">
