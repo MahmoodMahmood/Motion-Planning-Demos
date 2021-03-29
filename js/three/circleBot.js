@@ -1,7 +1,7 @@
 class CircleBot {
     constructor(x, y, theta) {
-        const radius = 0.15 // meters
-        const height = 0.15 // meters
+        const radius = 0.2 // meters
+        const height = 0.2 // meters
         const distance_above_ground = 0.05 // meters
 
         this.x = x
@@ -25,6 +25,10 @@ class CircleBot {
         triangle_geometry.setAttribute('position', new THREE.BufferAttribute(triangle_vertices, 3))
         const triangle_material = new THREE.MeshBasicMaterial({ color: 0x2873c9 })
         this.triangle = new THREE.Mesh(triangle_geometry, triangle_material)
+        
+        this.triangle.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), this.theta)
+        this.cylinder.position.set(this.x, this.y, this.cylinder.position.z)
+        this.triangle.position.set(this.x, this.y, this.triangle.position.z)
     }
 
     // add or subtract delta to current orientation (theta)
