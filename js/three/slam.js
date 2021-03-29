@@ -3,30 +3,13 @@ const height = 500
 const scene = new THREE.Scene()
 
 // environment
-let renderer, camera
+let renderer, camera, up_direction
 
 // lights
-let spotLight, lightHelper, shadowCameraHelper
+let spotLight, lightHelper
 
 // objects
 let bot
-
-function createSurface() {
-    const loader = new THREE.TextureLoader();
-    const groundTexture = loader.load('assets/pavement_texture.jpg');
-    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-    groundTexture.repeat.set(500, 500);
-    groundTexture.anisotropy = 16;
-    groundTexture.encoding = THREE.sRGBEncoding;
-
-    const material = new THREE.MeshLambertMaterial({ map: groundTexture });
-    // const material = new THREE.MeshPhongMaterial({ color: 0x808080, dithering: true })
-    const geometry = new THREE.PlaneGeometry(2000, 2000)
-    let mesh = new THREE.Mesh(geometry, material)
-    mesh.position.set(0, 0, 0)
-    mesh.receiveShadow = true
-    return mesh
-}
 
 function createMainSpotlight() {
     spotLight = new THREE.SpotLight(0xffffff, 1)
@@ -47,7 +30,7 @@ function createMainSpotlight() {
 }
 
 function loadRoom(scene) {
-    const loader = new THREE.GLTFLoader().setPath('assets/rocks');
+    const loader = new THREE.GLTFLoader().setPath('https://raw.githubusercontent.com/MahmoodMahmood/Motion-Planning-Demos/master/assets/room/');
 
     // Load a glTF resource
     loader.load(
@@ -55,12 +38,12 @@ function loadRoom(scene) {
         'scene.gltf',
         // called when the resource is loaded
         function (gltf) {
+            if (!gltf.scene.up.equals(new THREE.Vector3(0,1,0))) {
+                alert("SCENE HAS AN UNEXPECTED UP DIRECTION")
+            }
+            gltf.scene.scale.multiplyScalar(0.3)
+            gltf.scene.receiveShadow = true
             scene.add(gltf.scene);
-            gltf.animations; // Array<THREE.AnimationClip>
-            gltf.scene; // THREE.Group
-            gltf.scenes; // Array<THREE.Group>
-            gltf.cameras; // Array<THREE.Camera>6
-            gltf.asset; // Object
         },
         // called while loading is progressing
         function (xhr) {
@@ -74,12 +57,27 @@ function loadRoom(scene) {
     );
 }
 
-function createMainDirectionLight() {
-    scene.add(new THREE.AmbientLight(0x666666));
+function createMainSpotlight() {
+    spotLight = new THREE.SpotLight(0xffffff, 1)
+    spotLight.position.set(0, 3, 0)
+    spotLight.angle = Math.PI / 4
+    spotLight.penumbra = 0.1
+    spotLight.decay = 0
+    spotLight.distance = 10
 
+    spotLight.castShadow = true
+    spotLight.shadow.mapSize.width = 512
+    spotLight.shadow.mapSize.height = 512
+    spotLight.shadow.camera.near = 0.1
+    spotLight.shadow.camera.far = 0.2
+    spotLight.shadow.focus = 1
+
+    return spotLight
+}
+
+function createMainDirectionLight() {
     const light = new THREE.DirectionalLight(0xdfebff, 1);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
+    light.position.set(0, 100, 0);
 
     light.castShadow = true;
 
@@ -107,29 +105,38 @@ function init() {
 
     // camera setup
     camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
-    camera.position.set(0, 0, 5) // top down view
+    camera.position.set(0, 2, 8)
 
     loadRoom(scene)
 
-    // create sky-like background
-    scene.background = new THREE.Color(0xcce0ff);
-    scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+    // // create sky-like background
+    // scene.background = new THREE.Color(0xcce0ff);
+    // scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
 
     // camera controls
     const controls = new THREE.OrbitControls(camera, renderer.domElement)
     controls.addEventListener('change', render)
 
-    // create bot
-    bot = new CircleBot(0, 0, 0)
-
-    // add shapes
-    scene.add(bot.cylinder)
-    scene.add(bot.triangle)
-    scene.add(createSurface())
 
     // add lights
     scene.add(new THREE.AmbientLight(0x666666))
     scene.add(createMainDirectionLight())
+    spotLight = createMainSpotlight()
+    scene.add(spotLight)
+
+
+    // create bot
+    bot = new CircleBot(2, 2, 0)
+    scene.add(bot.cylinder)
+    scene.add(bot.triangle)
+
+    // HELPERS:
+
+    lightHelper = new THREE.SpotLightHelper(spotLight)
+    scene.add(lightHelper)
+
+    shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
+    scene.add(shadowCameraHelper)
 
     // axis helper, (x,y,z) => (red,green,blue)
     const axesHelper = new THREE.AxesHelper(5)
