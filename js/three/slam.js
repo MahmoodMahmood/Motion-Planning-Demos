@@ -38,7 +38,7 @@ function loadRoom(scene) {
         'scene.gltf',
         // called when the resource is loaded
         function (gltf) {
-            if (!gltf.scene.up.equals(new THREE.Vector3(0,1,0))) {
+            if (!gltf.scene.up.equals(new THREE.Vector3(0, 1, 0))) {
                 alert("SCENE HAS AN UNEXPECTED UP DIRECTION")
             }
             gltf.scene.scale.multiplyScalar(0.3)
@@ -107,6 +107,7 @@ function init() {
     camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
     camera.position.set(0, 2, 8)
 
+    // Load the external room asset
     loadRoom(scene)
 
     // // create sky-like background
@@ -149,14 +150,19 @@ function render() {
 
 function animate() {
     requestAnimationFrame(animate)
-    if (pressedKeys[38]) // up arrow
-        bot.move(0.004)
+    if (pressedKeys[38]) { // up arrow
+        bot.move(0.006)
+        if (bot.collisionCheck(scene.children)) bot.move(-0.004)
+    }
 
     if (pressedKeys[37]) // left arrow
-        bot.rotate(0.004)
+        bot.rotate(0.03)
 
     if (pressedKeys[39]) // right arrow
-        bot.rotate(-0.004)
+        bot.rotate(-0.03)
+
+    // bot.updateHeight(-0.0008)
+    // if (bot.collisionCheck(scene.children)) bot.updateHeight(0.0008)
 
     renderer.render(scene, camera)
 }
