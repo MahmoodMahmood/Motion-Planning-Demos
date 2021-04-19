@@ -1,9 +1,9 @@
-const width = 500
-const height = 500
+const width = 900
+const height = 900
 const scene = new THREE.Scene()
 
 // environment
-let renderer, camera, up_direction
+let renderer, camera, up_direction, lines
 
 // lights
 let spotLight, lightHelper
@@ -41,7 +41,7 @@ function loadRoom(scene) {
             if (!gltf.scene.up.equals(new THREE.Vector3(0, 1, 0))) {
                 alert("SCENE HAS AN UNEXPECTED UP DIRECTION")
             }
-            gltf.scene.scale.multiplyScalar(0.3)
+            // gltf.scene.scale.multiplyScalar(0.3)
             gltf.scene.receiveShadow = true
             scene.add(gltf.scene);
         },
@@ -110,9 +110,9 @@ function init() {
     // Load the external room asset
     loadRoom(scene)
 
-    // // create sky-like background
-    // scene.background = new THREE.Color(0xcce0ff);
-    // scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
+    // create sky-like background
+    scene.background = new THREE.Color(0xcce0ff);
+    scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
 
     // camera controls
     const controls = new THREE.OrbitControls(camera, renderer.domElement)
@@ -125,23 +125,22 @@ function init() {
     spotLight = createMainSpotlight()
     scene.add(spotLight)
 
-
     // create bot
-    bot = new CircleBot(2, 2, 0)
+    bot = new CircleBot(3, 5, 0)
     scene.add(bot.cylinder)
     scene.add(bot.triangle)
 
     // HELPERS:
 
-    lightHelper = new THREE.SpotLightHelper(spotLight)
-    scene.add(lightHelper)
+    // lightHelper = new THREE.SpotLightHelper(spotLight)
+    // scene.add(lightHelper)
 
-    shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
-    scene.add(shadowCameraHelper)
+    // shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
+    // scene.add(shadowCameraHelper)
 
-    // axis helper, (x,y,z) => (red,green,blue)
-    const axesHelper = new THREE.AxesHelper(5)
-    scene.add(axesHelper)
+    // // axis helper, (x,y,z) => (red,green,blue)
+    // const axesHelper = new THREE.AxesHelper(5)
+    // scene.add(axesHelper)
 }
 
 function render() {
@@ -150,9 +149,15 @@ function render() {
 
 function animate() {
     requestAnimationFrame(animate)
+    if (scene.children.length < 6) return
+    if (lines === undefined) {
+        lines = bot.generateLines()
+        lines.forEach(l => scene.add(l))
+    }
+    bot.updateLines(lines)
     if (pressedKeys[38]) { // up arrow
-        bot.move(0.006)
-        if (bot.collisionCheck(scene.children)) bot.move(-0.004)
+        bot.move(0.01)
+        if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.move(-0.01)
     }
 
     if (pressedKeys[37]) // left arrow
@@ -161,9 +166,9 @@ function animate() {
     if (pressedKeys[39]) // right arrow
         bot.rotate(-0.03)
 
-    // bot.updateHeight(-0.0008)
-    // if (bot.collisionCheck(scene.children)) bot.updateHeight(0.0008)
-
+    bot.updateHeight(-0.008)
+    
+    if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.updateHeight(0.008)
     renderer.render(scene, camera)
 }
 
@@ -171,5 +176,10 @@ function animate() {
 let pressedKeys = {};
 window.onkeyup = function (e) { pressedKeys[e.keyCode] = false; }
 window.onkeydown = function (e) { pressedKeys[e.keyCode] = true; }
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
 init()
 animate()
