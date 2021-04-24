@@ -147,37 +147,45 @@ function render() {
     renderer.render(scene, camera)
 }
 
-function animate() {
+let start_time, last_time
+function animate(cur_time) {
     requestAnimationFrame(animate)
+    if (!start_time) start_time = cur_time
+    if (!last_time) lastTime = cur_time
+    total_elapsed_time = cur_time - start_time
+    let dt = cur_time - last_time
+    last_time = cur_time
+
     if (scene.children.length < 6) return
     if (lines === undefined) {
         lines = bot.generateLines()
         lines.forEach(l => scene.add(l))
     }
     bot.updateLines(lines)
-    if (pressedKeys[38]) { // up arrow
-        bot.move(0.01)
-        if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.move(-0.01)
+    if (pressed_keys[38]) { // up arrow
+        bot.move(0.001*dt)
+        if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.move(-0.001*dt)
     }
 
-    if (pressedKeys[37]) // left arrow
-        bot.rotate(0.03)
+    if (pressed_keys[37]) // left arrow
+        bot.rotate(0.003*dt)
 
-    if (pressedKeys[39]) // right arrow
-        bot.rotate(-0.03)
+    if (pressed_keys[39]) // right arrow
+        bot.rotate(-0.003*dt)
 
-    bot.updateHeight(-0.008)
-    
-    if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.updateHeight(0.008)
+    bot.updateHeight(-0.0008*dt)
+
+    if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.updateHeight(0.0008*dt)
     renderer.render(scene, camera)
+
 }
 
 // pressed keys dictionary
-let pressedKeys = {};
-window.onkeyup = function (e) { pressedKeys[e.keyCode] = false; }
-window.onkeydown = function (e) { pressedKeys[e.keyCode] = true; }
-window.addEventListener("keydown", function(e) {
-    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+let pressed_keys = {};
+window.onkeyup = function (e) { pressed_keys[e.keyCode] = false; }
+window.onkeydown = function (e) { pressed_keys[e.keyCode] = true; }
+window.addEventListener("keydown", function (e) {
+    if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
         e.preventDefault();
     }
 }, false);
