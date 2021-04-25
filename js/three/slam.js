@@ -6,28 +6,10 @@ const scene = new THREE.Scene()
 let renderer, camera, up_direction
 
 // lights
-let spotLight, lightHelper
+let spotLight
 
 // objects
-let bot
-
-function createMainSpotlight() {
-    spotLight = new THREE.SpotLight(0xffffff, 1)
-    spotLight.position.set(0, 0, 5)
-    spotLight.angle = Math.PI / 4
-    spotLight.penumbra = 0.1
-    spotLight.decay = 0
-    spotLight.distance = 200
-
-    spotLight.castShadow = true
-    spotLight.shadow.mapSize.width = 512
-    spotLight.shadow.mapSize.height = 512
-    spotLight.shadow.camera.near = 1
-    spotLight.shadow.camera.far = 5
-    spotLight.shadow.focus = 1
-
-    return spotLight
-}
+let bot, room
 
 function loadRoom(scene) {
     const loader = new THREE.GLTFLoader().setPath('https://raw.githubusercontent.com/MahmoodMahmood/Motion-Planning-Demos/master/assets/room/');
@@ -43,6 +25,7 @@ function loadRoom(scene) {
             }
             // gltf.scene.scale.multiplyScalar(0.3)
             gltf.scene.receiveShadow = true
+            room = gltf.scene.children[0].children[0].children[0].children
             scene.add(gltf.scene);
         },
         // called while loading is progressing
@@ -130,14 +113,7 @@ function init() {
     scene.add(bot.cylinder)
     scene.add(bot.triangle)
 
-    // HELPERS:
-
-    // lightHelper = new THREE.SpotLightHelper(spotLight)
-    // scene.add(lightHelper)
-
-    // shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
-    // scene.add(shadowCameraHelper)
-
+    // // HELPERS:
     // // axis helper, (x,y,z) => (red,green,blue)
     // const axesHelper = new THREE.AxesHelper(5)
     // scene.add(axesHelper)
@@ -156,10 +132,10 @@ function animate(cur_time) {
     let dt = cur_time - last_time
     last_time = cur_time
 
-    if (scene.children.length < 6) return
+    if (!room) return
     if (pressed_keys[38]) { // up arrow
         bot.move(0.001*dt)
-        if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.move(-0.001*dt)
+        if (bot.collisionCheck(room)) bot.move(-0.001*dt)
     }
 
     if (pressed_keys[37]) // left arrow
@@ -170,7 +146,7 @@ function animate(cur_time) {
 
     bot.updateHeight(-0.0008*dt)
 
-    if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.updateHeight(0.0008*dt)
+    if (bot.collisionCheck(room)) bot.updateHeight(0.0008*dt)
     renderer.render(scene, camera)
 
 }
