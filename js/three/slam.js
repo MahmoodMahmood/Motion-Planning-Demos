@@ -3,7 +3,7 @@ const height = 900
 const scene = new THREE.Scene()
 
 // environment
-let renderer, camera, up_direction, lines
+let renderer, camera, up_direction
 
 // lights
 let spotLight, lightHelper
@@ -157,11 +157,6 @@ function animate(cur_time) {
     last_time = cur_time
 
     if (scene.children.length < 6) return
-    if (lines === undefined) {
-        lines = bot.generateLines()
-        lines.forEach(l => scene.add(l))
-    }
-    bot.updateLines(lines)
     if (pressed_keys[38]) { // up arrow
         bot.move(0.001*dt)
         if (bot.collisionCheck(scene.children[5].children[0].children[0].children[0].children)) bot.move(-0.001*dt)

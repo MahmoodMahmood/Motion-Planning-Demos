@@ -72,33 +72,4 @@ class CircleBot {
         }
         return false
     }
-
-    updateLines(lines) {
-        for (let i = 0; i < this.cylinder.geometry.attributes.position.count; i++) {
-            let local_vertex = this.cylinder.geometry.attributes.position.array.slice(i * 3, i * 3 + 3)
-            let global_vertex = new THREE.Vector3(...local_vertex).add(this.cylinder.position)
-            let direction_vector = new THREE.Vector3(...local_vertex).normalize()
-            let temp = global_vertex.clone()
-            temp.add(direction_vector.clone().multiplyScalar(100))
-            const points = [global_vertex, temp];
-            const geometry = new THREE.BufferGeometry().setFromPoints( points );
-            lines[i].geometry = geometry
-        }
-    }
-
-    generateLines() {
-        lines = [] 
-        for (let i = 0; i < this.cylinder.geometry.attributes.position.count; i++) {
-            let local_vertex = this.cylinder.geometry.attributes.position.array.slice(i * 3, i * 3 + 3)
-            let global_vertex = new THREE.Vector3(...local_vertex).add(this.cylinder.position)
-            let direction_vector = new THREE.Vector3(...local_vertex).normalize()
-            const material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-            let temp = global_vertex.clone()
-            temp.add(direction_vector.clone().multiplyScalar(100))
-            const points = [global_vertex, temp];
-            const geometry = new THREE.BufferGeometry().setFromPoints( points );
-            lines.push(new THREE.Line( geometry, material ))
-        }
-        return lines
-    }
 }
