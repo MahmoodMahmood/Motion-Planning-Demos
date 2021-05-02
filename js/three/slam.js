@@ -88,7 +88,7 @@ function init() {
 
     // camera setup
     camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
-    camera.position.set(0, 2, 8)
+    camera.position.set(12, 8, 12)
 
     // Load the external room asset
     loadRoom(scene)
@@ -130,7 +130,7 @@ function animate(cur_time) {
     if (!start_time) start_time = cur_time
     if (!last_time) lastTime = cur_time
     total_elapsed_time = cur_time - start_time
-    let dt = cur_time - last_time
+    let dt = Math.min(cur_time - last_time, 100)
     last_time = cur_time
 
     if (!room) return
@@ -150,7 +150,7 @@ function animate(cur_time) {
     if (bot.collisionCheck(room)) bot.updateHeight(0.0008*dt)
     renderer.render(scene, camera)
 
-    if (cur_time > 9000 && counter%10==0) {
+    if (cur_time > 7000 && counter%10==0) {
         bot.lidar.castRays(room)
         if (bot.lidar.points) scene.add(bot.lidar.points)
         bot.lidar.rotate(0.03*dt)

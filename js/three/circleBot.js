@@ -2,7 +2,7 @@ class CircleBot {
     constructor(x, z, theta) {
         const radius = 0.2 // meters
         const robot_height = 0.15 // meters
-        const distance_above_ground = 3 // meters
+        const distance_above_ground = 0.5 // meters
 
         this.x = x
         this.y = distance_above_ground
@@ -14,7 +14,7 @@ class CircleBot {
 
         this.create_cylinder(radius, robot_height)
         this.create_triangle(radius, robot_height)
-        this.lidar = new Lidar(new THREE.Vector3(this.x, this.y, this.z), null, 16, 16, 10)
+        this.lidar = new Lidar(new THREE.Vector3(this.x, this.y, this.z), null)
     }
 
     create_cylinder(radius, robot_height) {
@@ -72,7 +72,7 @@ class CircleBot {
             let local_vertex = this.cylinder.geometry.attributes.position.array.slice(i * 3, i * 3 + 3)
             let global_vertex = new THREE.Vector3(...local_vertex).add(this.cylinder.position)
             let direction_vector = new THREE.Vector3(...local_vertex).normalize()
-            let raycaster = new THREE.Raycaster(global_vertex, direction_vector, 0, 0.1)
+            let raycaster = new THREE.Raycaster(global_vertex, direction_vector, 0, 0.2)
             const intersects = raycaster.intersectObjects(collidableMeshList);
             if (intersects.length > 0) {
                 return true
