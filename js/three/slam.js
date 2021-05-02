@@ -124,6 +124,7 @@ function render() {
 }
 
 let start_time, last_time
+let counter = 0
 function animate(cur_time) {
     requestAnimationFrame(animate)
     if (!start_time) start_time = cur_time
@@ -149,6 +150,12 @@ function animate(cur_time) {
     if (bot.collisionCheck(room)) bot.updateHeight(0.0008*dt)
     renderer.render(scene, camera)
 
+    if (cur_time > 9000 && counter%10==0) {
+        bot.lidar.castRays(room)
+        if (bot.lidar.points) scene.add(bot.lidar.points)
+        bot.lidar.rotate(0.03*dt)
+    }
+    counter++
 }
 
 // pressed keys dictionary
@@ -160,5 +167,6 @@ window.addEventListener("keydown", function (e) {
         e.preventDefault();
     }
 }, false);
+
 init()
 animate()
