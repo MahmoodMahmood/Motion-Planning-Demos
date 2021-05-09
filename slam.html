@@ -6,6 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Webpage icon -->
+    <link rel="icon" href="assets/favicon.ico">
+    
     <!-- Google icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -17,6 +20,10 @@
     <script src="https://unpkg.com/three@0.127/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.127/examples/js/controls/OrbitControls.js"></script>
     <script src="https://unpkg.com/three@0.127/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- P5js stuff -->
+    <script language="javascript" type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
 
     <!-- Simulation Libraries (main renderer invoked at the end of the <body> tag) -->
     <script language="javascript" type="text/javascript" src="js/three/slam/circleBot.js"></script>
@@ -36,11 +43,22 @@
                 <!-- Our sketch will go here! -->
             </canvas>
         </div>
-        <div class="col border bg-light">
-            <h1>Customizations:</h1>
-            <div class="p-3">
-                No customizations available yet
-            </div>
+        <div class="col-lg border bg-light">
+            <div id="point-renderer-sketch-holder"></div>
+            <form id="step-length" class="row border g-0 p-0" style="margin-top: 10px;">
+                <div class="col-sm-5">
+                    <label type="number" for="amountRange" class="form-label"> Map height: </label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="range" name="amountRange" min="-3" max="12" value="-1" step="0.5"
+                        oninput="this.form.amountInput.value=this.value; changePointRendererHeight(this.value);" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="number" name="amountInput" min="-3" max="12" value="-1" step="0.5"
+                        class="form-control form-control-sm"
+                        oninput="this.form.amountRange.value=this.value; changePointRendererHeight(this.value);" />
+                </div>
+            </form>
         </div>
     </div>
 
@@ -68,6 +86,7 @@
     </script>
 
     <!-- Invoke threejs renderer -->
+    <script language="javascript" type="text/javascript" src="js/p5/slam/pointRenderer.js"></script>
     <script language="javascript" type="text/javascript" src="js/three/slam/slam.js"></script>
 </body>
 

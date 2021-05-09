@@ -11,6 +11,13 @@ let spotLight
 // objects
 let bot, room
 
+// latest points from lidar
+let pr
+
+function changePointRendererHeight(height) {
+    pr.changeBucket(height)
+}
+
 function loadRoom(scene) {
     const loader = new THREE.GLTFLoader().setPath('https://raw.githubusercontent.com/MahmoodMahmood/Motion-Planning-Demos/master/assets/room/');
 
@@ -152,7 +159,10 @@ function animate(cur_time) {
 
     if (cur_time > 7000 && counter%10==0) {
         bot.lidar.castRays(room)
-        if (bot.lidar.points) scene.add(bot.lidar.points)
+        if (bot.lidar.points) {
+            scene.add(bot.lidar.points)
+            pr.addThreeJSPoints(bot.lidar.points)
+        }
         bot.lidar.rotate(0.06*dt)
     }
     counter++
@@ -170,3 +180,4 @@ window.addEventListener("keydown", function (e) {
 
 init()
 animate()
+pr = new pointRenderer()
