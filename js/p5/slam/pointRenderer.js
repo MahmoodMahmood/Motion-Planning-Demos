@@ -17,7 +17,7 @@ function draw() {
 class pointRenderer {
     constructor() {
         this.vertical_bucket_size = 0.5
-        this.current_bucket = -1
+        this.current_bucket = -1.5
         this.render_buffer = 1
         this.x_range = [0, 0]
         this.z_range = [0, 0]

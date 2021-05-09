@@ -8,7 +8,7 @@
 
     <!-- Webpage icon -->
     <link rel="icon" href="assets/favicon.ico">
-    
+
     <!-- Google icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -50,11 +50,11 @@
                     <label type="number" for="amountRange" class="form-label"> Map height: </label>
                 </div>
                 <div class="col-sm-3">
-                    <input type="range" name="amountRange" min="-3" max="12" value="-1" step="0.5"
+                    <input type="range" name="amountRange" min="-3" max="12" value="-1.5" step="0.5"
                         oninput="this.form.amountInput.value=this.value; changePointRendererHeight(this.value);" />
                 </div>
                 <div class="col-sm-2">
-                    <input type="number" name="amountInput" min="-3" max="12" value="-1" step="0.5"
+                    <input type="number" name="amountInput" min="-3" max="12" value="-1.5" step="0.5"
                         class="form-control form-control-sm"
                         oninput="this.form.amountRange.value=this.value; changePointRendererHeight(this.value);" />
                 </div>
