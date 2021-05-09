@@ -40,19 +40,19 @@ function loadRoom(scene) {
     );
 }
 
-function createMainSpotlight() {
+function createMainSpotlight(x,y,z) {
     spotLight = new THREE.SpotLight(0xffffff, 1)
-    spotLight.position.set(0, 3, 0)
-    spotLight.angle = Math.PI / 4
+    spotLight.position.set(x, y, z)
+    spotLight.angle = Math.PI / 6
     spotLight.penumbra = 0.1
     spotLight.decay = 0
-    spotLight.distance = 10
+    spotLight.distance = 40
 
     spotLight.castShadow = true
-    spotLight.shadow.mapSize.width = 512
-    spotLight.shadow.mapSize.height = 512
+    spotLight.shadow.mapSize.width = 1024
+    spotLight.shadow.mapSize.height = 1024
     spotLight.shadow.camera.near = 0.1
-    spotLight.shadow.camera.far = 0.2
+    spotLight.shadow.camera.far = 10
     spotLight.shadow.focus = 1
 
     return spotLight
@@ -105,8 +105,8 @@ function init() {
     // add lights
     scene.add(new THREE.AmbientLight(0x666666))
     scene.add(createMainDirectionLight())
-    spotLight = createMainSpotlight()
-    scene.add(spotLight)
+    scene.add(createMainSpotlight(0, 15, -20))
+    scene.add(createMainSpotlight(0, 15, 20))
 
     // create bot
     bot = new CircleBot(3, 5, 0)
@@ -153,7 +153,7 @@ function animate(cur_time) {
     if (cur_time > 7000 && counter%10==0) {
         bot.lidar.castRays(room)
         if (bot.lidar.points) scene.add(bot.lidar.points)
-        bot.lidar.rotate(0.03*dt)
+        bot.lidar.rotate(0.06*dt)
     }
     counter++
 }

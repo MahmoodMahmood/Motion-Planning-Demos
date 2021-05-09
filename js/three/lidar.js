@@ -7,7 +7,7 @@ function hsv2rgb(h,s,v)
 }
 
 class Lidar {
-    constructor(position, rotation_matrix, n_phi=24, n_theta=8, range=5, min_phi=Math.PI/3, max_phi=Math.PI, min_theta=0, max_theta=Math.PI/6) {
+    constructor(position, rotation_matrix, n_phi=24, n_theta=8, range=5, min_phi=Math.PI/3, max_phi=Math.PI, min_theta=0, max_theta=Math.PI) {
         this.position = position
         this.rotation_matrix = rotation_matrix
         this.n_phi = n_phi
