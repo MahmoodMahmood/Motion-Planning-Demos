@@ -68,11 +68,12 @@ class CircleBot {
     }
 
     collisionCheck(collidableMeshList) {
+        const collision_buffer = 0.1
         for (let i = 0; i < this.cylinder.geometry.attributes.position.count; i++) {
             let local_vertex = this.cylinder.geometry.attributes.position.array.slice(i * 3, i * 3 + 3)
             let global_vertex = new THREE.Vector3(...local_vertex).add(this.cylinder.position)
             let direction_vector = new THREE.Vector3(...local_vertex).normalize()
-            let raycaster = new THREE.Raycaster(global_vertex, direction_vector, 0, 0.2)
+            let raycaster = new THREE.Raycaster(global_vertex, direction_vector, 0, 0.1)
             const intersects = raycaster.intersectObjects(collidableMeshList);
             if (intersects.length > 0) {
                 return true
