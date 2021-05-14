@@ -88,6 +88,13 @@
     <!-- Invoke threejs renderer -->
     <script language="javascript" type="text/javascript" src="js/p5/slam/pointRenderer.js"></script>
     <script language="javascript" type="text/javascript" src="js/three/slam/slam.js"></script>
+    <script language="javascript" type="text/javascript" src="squarer.js"></script>
+    <script>
+        Module.onRuntimeInitialized = async _ => {
+            let swag = Module.cwrap('squarer', 'number', ['number']);
+            console.log(swag(5));
+        };
+    </script>
 </body>
 
 </html>
