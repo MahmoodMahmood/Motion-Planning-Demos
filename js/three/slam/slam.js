@@ -14,6 +14,9 @@ let bot, room
 // latest points from lidar
 let pr
 
+// holds wrapper for the C++ occupancy grid class
+let grid_wrapper
+
 function changePointRendererHeight(height) {
     pr.changeBucket(height)
 }
@@ -124,6 +127,14 @@ function init() {
     // // axis helper, (x,y,z) => (red,green,blue)
     // const axesHelper = new THREE.AxesHelper(5)
     // scene.add(axesHelper)
+    
+    // Prepare the initialization of the occupancy grid module and its wrapper
+    Module.onRuntimeInitialized = async _ => {
+        let swag = Module.cwrap('squarer', 'number', ['number']);
+        console.log("5 squared is " + swag(5) + " according to WASM");
+        
+        grid_wrapper = new occupancyGridWrapper(Module);
+    }
 }
 
 function render() {
@@ -164,6 +175,7 @@ function animate(cur_time) {
             pr.addThreeJSPoints(bot.lidar.points)
         }
         bot.lidar.rotate(0.06*dt)
+        if (grid_wrapper) grid_wrapper.updatePoints(bot.lidar.points)
     }
     counter++
 }
