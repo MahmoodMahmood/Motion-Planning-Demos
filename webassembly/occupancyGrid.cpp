@@ -73,9 +73,3 @@ extern "C" OccupancyGrid<float> *initGridFloat(float x_min, float x_max, float z
 {
     return new OccupancyGrid<float>(x_min, x_max, z_min, z_max, cell_size);
 }
-
-EMSCRIPTEN_KEEPALIVE
-extern "C" int squarer(int x)
-{
-    return x * x;
-}

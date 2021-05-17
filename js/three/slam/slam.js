@@ -127,14 +127,6 @@ function init() {
     // // axis helper, (x,y,z) => (red,green,blue)
     // const axesHelper = new THREE.AxesHelper(5)
     // scene.add(axesHelper)
-    
-    // Prepare the initialization of the occupancy grid module and its wrapper
-    Module.onRuntimeInitialized = async _ => {
-        let swag = Module.cwrap('squarer', 'number', ['number']);
-        console.log("5 squared is " + swag(5) + " according to WASM");
-        
-        grid_wrapper = new occupancyGridWrapper(Module);
-    }
 }
 
 function render() {
@@ -193,3 +185,10 @@ window.addEventListener("keydown", function (e) {
 init()
 animate()
 pr = new pointRenderer()
+
+// TODO: move this somewhere nicer
+// TODO: this doesnt work from here for some reason, used to work from the script tag
+// Prepare the initialization of the occupancy grid module and its wrapper
+Module.onRuntimeInitialized = async _ => {
+    grid_wrapper = new occupancyGridWrapper(Module);
+}

@@ -1493,7 +1493,7 @@ function createExportWrapper(name, fixedasm) {
   };
 }
 
-var wasmBinaryFile = 'squarer.wasm';
+var wasmBinaryFile = 'occupancyGrid.wasm';
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
@@ -4797,9 +4797,6 @@ var _updateOccupancyGridFloat = Module["_updateOccupancyGridFloat"] = createExpo
 
 /** @type {function(...*):?} */
 var _initGridFloat = Module["_initGridFloat"] = createExportWrapper("initGridFloat");
-
-/** @type {function(...*):?} */
-var _squarer = Module["_squarer"] = createExportWrapper("squarer");
 
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
