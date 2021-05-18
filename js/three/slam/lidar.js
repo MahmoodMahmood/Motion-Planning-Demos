@@ -21,12 +21,8 @@ class Lidar {
     }
 
     castRays(collidableMeshList) {
-        let vertices = new Float32Array(this.n_phi * this.n_theta * 3)
-        let colors = new Float32Array(this.n_phi * this.n_theta * 3)
-        for (let i = 0; i < this.n_phi * this.n_theta * 3; i++) {
-            vertices[i] = 0
-            colors[i] = 0
-        }
+        let vertices = []
+        let colors = []
 
         for (let i = 0; i < this.n_phi; i++) {
             for (let j = 0; j < this.n_theta; j++) {
@@ -38,22 +34,18 @@ class Lidar {
                 const index = (i*this.n_phi + j) * 3
                 if (intersects.length > 0) { // add lidar hit to hits array
                     const pt = intersects[0].point
-                    vertices[index] = pt.x
-                    vertices[index + 1] = pt.y
-                    vertices[index + 2] = pt.z
+                    vertices.push(pt.x, pt.y, pt.z)
                     
                     const h = Math.min(270, Math.max(50, 270-pt.y*70))
                     let [r, g, b] = hsv2rgb(h, 1, 1)
-                    colors[index] = r
-                    colors[index + 1] = g
-                    colors[index + 2] = b
+                    colors.push(r, g, b)
                 }
             }
         }
-
+        
         const geometry = new THREE.BufferGeometry()
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.setAttribute('position', new THREE.BufferAttribute(Float32Array.from(vertices), 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(Float32Array.from(colors), 3));
         // const material = new THREE.PointsMaterial({size: 0.1, color: new THREE.Color(1,0,0)});
         const material = new THREE.PointsMaterial({size: 0.1, vertexColors: true})
         this.points = new THREE.Points(geometry, material);

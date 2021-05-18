@@ -29,7 +29,7 @@ public:
 
     void updateOccupancyGrid(std::vector<Point<T>> point_cloud){
         for (auto &pt : point_cloud) {
-            std::cout << "x: " << pt.x << ", y: " << pt.y << ", z: " << pt.z << std::endl;
+            // std::cout << "x: " << pt.x << ", y: " << pt.y << ", z: " << pt.z << std::endl;
         }
     }
 
@@ -41,13 +41,12 @@ private:
 template <typename T>
 std::vector<Point<T>> pointBufferToPointsVector(T *new_points, size_t num_pts)
 {
-    std::vector<Point<T>> res(num_pts, {0.f});
-    for (int i = 0; i < num_pts; i++)
+    std::vector<Point<T>> res(num_pts/3, {0.f});
+    for (int i = 0; i < num_pts; i+=3)
     {
-        res[i].x = new_points[0];
-        res[i].y = new_points[1];
-        res[i].z = new_points[2];
-        std::cout << "x: " << res[i].x << ", y: " << res[i].y << ", z: " << res[i].z << std::endl;
+        res[i/3].x = new_points[i+0];
+        res[i/3].y = new_points[i+1];
+        res[i/3].z = new_points[i+2];
     }
     return res;
 }

@@ -13,13 +13,18 @@ class occupancyGridWrapper {
     }
 
     updatePoints(points) {
-        let arr = points.geometry.attributes.position.array
-        console.log(arr)
-        this.updateGrid(this.occupancyGrid, arr, arr.length)
-        // for (let i = 0; i < arr.length; i+=3) {
-        //     const x = arr[i]
-        //     const y = arr[i+1]
-        //     const z = arr[i+2]
-        // }
+        const arr = points.geometry.attributes.position.array
+
+        // Get data byte size, allocate memory on Emscripten heap, and get pointer
+        const nDataBytes = arr.length * arr.BYTES_PER_ELEMENT;
+        const dataPtr = Module._malloc(nDataBytes);
+
+        // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
+        let dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+        dataHeap.set(new Uint8Array(arr.buffer));
+
+        this.updateGrid(this.occupancyGrid, dataHeap.byteOffset, arr.length)
+        
+        Module._free(dataHeap.byteOffset);
     }
 }

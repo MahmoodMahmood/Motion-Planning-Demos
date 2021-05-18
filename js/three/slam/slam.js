@@ -187,7 +187,6 @@ animate()
 pr = new pointRenderer()
 
 // TODO: move this somewhere nicer
-// TODO: this doesnt work from here for some reason, used to work from the script tag
 // Prepare the initialization of the occupancy grid module and its wrapper
 Module.onRuntimeInitialized = async _ => {
     grid_wrapper = new occupancyGridWrapper(Module);
