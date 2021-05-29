@@ -12,6 +12,7 @@ class occupancyGridWrapper {
         this.updateGrid = Module.cwrap('updateOccupancyGridFloat', null, ['number', 'number', 'number'])
     }
 
+    // source: https://bl.ocks.org/jonathanlurie/e4aaa37e2d9c317ce44eae5f6011495d
     updatePoints(points) {
         const arr = points.geometry.attributes.position.array
 
