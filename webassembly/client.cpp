@@ -5,7 +5,7 @@
 #include <emscripten.h>
 #include <stdint.h>
 
-#include "occupancyGrid/occupancy_grid.h"
+#include "occupancy_grid/occupancy_grid.h"
 
 template <typename T>
 std::vector<mapping::Point<T>> pointBufferToPointsVector(T *new_points, size_t num_pts)
@@ -30,10 +30,12 @@ std::vector<mapping::Point<T>> pointBufferToPointsVector(T *new_points, size_t n
  * @param num_pts    number of new points detected
  */
 EMSCRIPTEN_KEEPALIVE
-extern "C" void updateOccupancyGridFloat(mapping::OccupancyGrid<float> *grid, float *new_points, int32_t num_pts)
+extern "C" void updateOccupancyGridFloat(mapping::OccupancyGrid<float> *grid, float *new_points, int32_t num_pts, 
+    float x_cur, float y_cur, float z_cur)
 {
     std::vector<mapping::Point<float>> ptsVec = pointBufferToPointsVector<float>(new_points, num_pts);
-    grid->updateOccupancyGrid(ptsVec);
+    mapping::Point<float> cur_pose = { x_cur, y_cur, z_cur };
+    grid->updateOccupancyGrid(ptsVec, cur_pose);
 };
 
 EMSCRIPTEN_KEEPALIVE

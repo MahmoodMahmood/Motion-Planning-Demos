@@ -19,10 +19,29 @@ OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T z_min, T z_max, T cell_size)
 }
 
 template <class T>
-void OccupancyGrid<T>::updateOccupancyGrid(std::vector<Point<T>> point_cloud){
+void OccupancyGrid<T>::updateOccupancyGrid(std::vector<Point<T>> point_cloud, Point<T>cur_pose)
+{
     for (auto &pt : point_cloud) {
         // std::cout << "x: " << pt.x << ", y: " << pt.y << ", z: " << pt.z << std::endl;
     }
 }
 
+template <class T>
+bool OccupancyGrid<T>::pointInRange(Point<T> &p)
+{
+    return p.x > x_min && p.x < x_max && p.z > z_min && p.z < z_max;
+}
+
+template <class T>
+void filterPoints(std::vector<Point<T>> &point_cloud)
+{
+    point_cloud.erase(
+        std::remove_if(
+            std::begin(point_cloud), 
+            std::end(point_cloud), 
+            [](Point<T> p){ return pointInRange(p); }
+        ),
+        std::end(point_cloud)
+    );
+}
 } // namespace mapping

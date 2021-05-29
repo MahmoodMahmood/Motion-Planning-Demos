@@ -18,11 +18,13 @@ class OccupancyGrid
 {
 public:
     OccupancyGrid(T x_min, T x_max, T z_min, T z_max, T cell_size);
-    void updateOccupancyGrid(std::vector<Point<T>> point_cloud);
+    void updateOccupancyGrid(std::vector<Point<T>> point_cloud, Point<T>cur_pose);
 
 private:
     std::vector<std::vector<T>> grid;
     T x_min, x_max, z_min, z_max, cell_size;
+    bool pointInRange(Point<T> &p);
+    void filterPoints(std::vector<Point<T>> &point_cloud);
 };
 
 } // namespace mapping
