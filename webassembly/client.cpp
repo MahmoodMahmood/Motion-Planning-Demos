@@ -5,7 +5,7 @@
 #include <emscripten.h>
 #include <stdint.h>
 
-#include "occupancyGrid/occupancyGrid.h"
+#include "occupancyGrid/occupancy_grid.h"
 
 template <typename T>
 std::vector<mapping::Point<T>> pointBufferToPointsVector(T *new_points, size_t num_pts)

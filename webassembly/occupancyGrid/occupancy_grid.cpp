@@ -1,4 +1,4 @@
-#include "occupancyGrid.h"
+#include "occupancy_grid.h"
 #include <cmath>
 #include <iostream>
 #include <vector>

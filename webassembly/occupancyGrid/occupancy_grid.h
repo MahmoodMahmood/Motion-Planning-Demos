@@ -30,6 +30,6 @@ private:
 // NOTE: adding the cpp file include here is not ideal but the standard solution
 // of adding 'template class ClassName<type>;` to the cpp file did not solve the 
 // linker errors for me, not actually sure why
-#include "occupancyGrid.cpp"
+#include "occupancy_grid.cpp"
 
 #endif // MPDEMOS_WASM_OCCUPANCY_GRID_H_
