@@ -2,7 +2,6 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-
 #include <stdint.h>
 
 namespace mapping {

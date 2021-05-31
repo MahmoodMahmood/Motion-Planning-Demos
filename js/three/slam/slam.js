@@ -144,15 +144,15 @@ function animate(cur_time) {
     last_time = cur_time
 
     if (!room) return
-    if (pressed_keys[38]) { // up arrow
+    if (pressed_keys[38] || pressed_keys[87]) { // up arrow / W key
         bot.move(0.001*dt)
         if (bot.collisionCheck(room)) bot.move(-0.001*dt)
     }
 
-    if (pressed_keys[37]) // left arrow
+    if (pressed_keys[37] || pressed_keys[65]) // left arrow / A key
         bot.rotate(0.003*dt)
 
-    if (pressed_keys[39]) // right arrow
+    if (pressed_keys[39] || pressed_keys[68]) // right arrow / D key
         bot.rotate(-0.003*dt)
 
     bot.updateHeight(-0.0008*dt)
