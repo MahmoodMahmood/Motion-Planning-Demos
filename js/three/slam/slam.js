@@ -22,7 +22,8 @@ function changePointRendererHeight(height) {
 }
 
 function loadRoom(scene) {
-    const loader = new THREE.GLTFLoader().setPath('https://raw.githubusercontent.com/MahmoodMahmood/Motion-Planning-Demos/master/assets/room/');
+    const loader = new THREE.GLTFLoader().setPath(
+        'https://raw.githubusercontent.com/MahmoodMahmood/Motion-Planning-Demos/master/assets/room/');
 
     // Load a glTF resource
     loader.load(
@@ -96,6 +97,7 @@ function init() {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
+
     // camera setup
     camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
     camera.position.set(12, 8, 12)
@@ -135,14 +137,29 @@ function render() {
 
 let start_time, last_time
 let counter = 0
-function animate(cur_time) {
-    requestAnimationFrame(animate)
+function get_dt(cur_time) {
     if (!start_time) start_time = cur_time
     if (!last_time) lastTime = cur_time
     total_elapsed_time = cur_time - start_time
     let dt = Math.min(cur_time - last_time, 100)
     last_time = cur_time
+    return dt
+}
 
+function handleLidar(cur_time, dt) {
+    if (cur_time > 7000 && counter%10==0) {
+        bot.lidar.castRays(room)
+        if (bot.lidar.points) {
+            scene.add(bot.lidar.points)
+            pr.addThreeJSPoints(bot.lidar.points)
+        }
+        bot.lidar.rotate(0.06*dt)
+        if (grid_wrapper) grid_wrapper.updatePoints(bot.lidar.points.geometry.attributes.position.array, bot.lidar.position)
+    }
+    counter++
+}
+
+function handleClicks(dt) {
     if (!room) return
     if (pressed_keys[38] || pressed_keys[87]) { // up arrow / W key
         bot.move(0.001*dt)
@@ -158,32 +175,31 @@ function animate(cur_time) {
     bot.updateHeight(-0.0008*dt)
 
     if (bot.collisionCheck(room)) bot.updateHeight(0.0008*dt)
-    renderer.render(scene, camera)
+}
 
-    if (cur_time > 7000 && counter%10==0) {
-        bot.lidar.castRays(room)
-        if (bot.lidar.points) {
-            scene.add(bot.lidar.points)
-            pr.addThreeJSPoints(bot.lidar.points)
+function animate(cur_time) {
+    requestAnimationFrame(animate)
+    let dt = get_dt(cur_time)
+    handleClicks(dt)
+    handleLidar(cur_time, dt)
+    render()
+}
+
+function init_pressed_keys_dict(pressed_keys) {
+    window.onkeyup = function (e) { pressed_keys[e.keyCode] = false; }
+    window.onkeydown = function (e) { pressed_keys[e.keyCode] = true; }
+    window.addEventListener("keydown", function (e) {
+        if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
+            e.preventDefault();
         }
-        bot.lidar.rotate(0.06*dt)
-        if (grid_wrapper) grid_wrapper.updatePoints(bot.lidar.points.geometry.attributes.position.array, bot.lidar.position)
-    }
-    counter++
+    }, false);
 }
 
 // pressed keys dictionary
 let pressed_keys = {};
-window.onkeyup = function (e) { pressed_keys[e.keyCode] = false; }
-window.onkeydown = function (e) { pressed_keys[e.keyCode] = true; }
-window.addEventListener("keydown", function (e) {
-    if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
-        e.preventDefault();
-    }
-}, false);
-
 init()
 animate()
+init_pressed_keys_dict(pressed_keys)
 pr = new pointRenderer()
 
 // TODO: move this somewhere nicer
