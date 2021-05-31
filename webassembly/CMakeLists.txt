@@ -17,7 +17,7 @@ enable_testing()
 # add new unit tests here:
 add_executable(
   tests 
-  occupancy_grid/test/occupancy_grid_test.cpp 
+  occupancy_grid/occupancy_grid_test.cpp 
 )
 
 target_link_libraries(tests gtest_main)
