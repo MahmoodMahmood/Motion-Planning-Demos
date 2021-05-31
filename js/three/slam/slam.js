@@ -200,7 +200,10 @@ let pressed_keys = {};
 init()
 animate()
 init_pressed_keys_dict(pressed_keys)
-pr = new pointRenderer()
+pr = new PointRenderer()
+prSketch = new p5(pr.getSketchMaker, 'point-renderer-sketch-holder')
+gr = new GridRenderer()
+grSketch = new p5(gr.getSketchMaker, 'grid-renderer-sketch-holder')
 
 // TODO: move this somewhere nicer
 // Prepare the initialization of the occupancy grid module and its wrapper

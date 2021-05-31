@@ -28,6 +28,8 @@
     <!-- Simulation Libraries (main renderer invoked at the end of the <body> tag) -->
     <script language="javascript" type="text/javascript" src="js/three/slam/circle_bot.js"></script>
     <script language="javascript" type="text/javascript" src="js/three/slam/lidar.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/slam/point_renderer.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/slam/grid_renderer.js"></script>
 
     <title>SLAM Demo</title>
 </head>
@@ -40,7 +42,7 @@
     <div class="container-lg row">
         <div class="col">
             <canvas id="artifactCanvas" myattr="myattr">
-                <!-- Our sketch will go here! -->
+                <!-- Our THREE.js sketch will go here! -->
             </canvas>
         </div>
         <div class="col-lg border bg-light">
@@ -59,6 +61,7 @@
                         oninput="this.form.amountRange.value=this.value; changePointRendererHeight(this.value);" />
                 </div>
             </form>
+            <div id="grid-renderer-sketch-holder"></div>
         </div>
     </div>
 
@@ -87,7 +90,6 @@
 
     <!-- Invoke threejs renderer -->
     <script language="javascript" type="text/javascript" src="webassembly/occupancy_grid.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/slam/point_renderer.js"></script>
     <script language="javascript" type="text/javascript" src="js/three/slam/occupancy_grid_wrapper.js"></script>
     <script language="javascript" type="text/javascript" src="js/three/slam/slam.js"></script>
 </body>

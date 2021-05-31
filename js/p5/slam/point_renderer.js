@@ -1,26 +1,11 @@
-const canvas_width = 300
-const canvas_height = 300
-
-function setup() {
-    canvas = createCanvas(canvas_width, canvas_height)
-    canvas.parent('point-renderer-sketch-holder');
-}
-
-function draw() {
-    background(0)
-    if (pr) {
-        pr.draw()
-    }
-    updatePixels()
-}
-
-class pointRenderer {
+class PointRenderer {
     constructor() {
         this.vertical_bucket_size = 0.5
         this.current_bucket = -1.5
         this.render_buffer = 1
         this.x_range = [0, 0]
         this.z_range = [0, 0]
+        this.clear_on_next = true
         this.points_dict = {}
     }
 
@@ -58,25 +43,47 @@ class pointRenderer {
         }
     }
 
-    draw() {
+    clear_canvas(p, width, height) {
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < height; j++) {
+                p.set(i, j, p.color(0,0,0))
+            }
+        }
+        this.clear_on_next = false
+    }
+
+    draw(p, width, height) {
+        if (this.clear_on_next) this.clear_canvas(p, width, height)
         const cur_points = this.points_dict[this.current_bucket]
         const x_width = this.x_range[1] - this.x_range[0]
         const z_width = this.z_range[1] - this.z_range[0]
         if (cur_points) {
             for (let i = 0; i < cur_points.length; i++) {
-                const x = ((cur_points[i][0] - this.x_range[0]) / x_width) * canvas_width
-                const z = ((cur_points[i][2] - this.z_range[0]) / z_width) * canvas_height
-                set(x, z, color('white'))
+                const x = ((cur_points[i][0] - this.x_range[0]) / x_width) * width
+                const z = ((cur_points[i][2] - this.z_range[0]) / z_width) * height
+                p.set(x, z, p.color('white'))
             }
         }
     }
 
     changeBucket(new_bucket) {
         this.current_bucket = new_bucket
-        for (let i = 0; i < canvas_width; i++) {
-            for (let j = 0; j < canvas_height; j++) {
-                set(i, j, color(0,0,0))
+        this.clear_on_next = true
+    }
+    
+    getSketchMaker(p) {
+        const canvas_width = 300
+        const canvas_height = 300
+        p.setup = function() {
+            p.createCanvas(canvas_width, canvas_height)
+        }
+
+        p.draw = function() {
+            p.background(0)
+            if (pr) {
+                pr.draw(p, canvas_width, canvas_height)
             }
+            p.updatePixels()
         }
     }
 }
