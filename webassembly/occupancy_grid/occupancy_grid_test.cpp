@@ -7,10 +7,7 @@ TEST(OccupancyGrid, TestConstructor)
     mapping::OccupancyGrid<float> og(-5,5,-5,5,1);
     auto grid = og.getGrid();
 
-    EXPECT_EQ(grid.size(), 10);
-    for (int i = 0; i < grid.size(); i++) {
-        EXPECT_EQ(grid[i].size(), 10);
-    }
+    EXPECT_EQ(grid.size(), 10*10);
 }
 
 TEST(OccupancyGrid, TestFilterPoints)
