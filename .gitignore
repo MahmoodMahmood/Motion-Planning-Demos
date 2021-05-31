@@ -4,3 +4,4 @@ typings*
 jsconfig.json
 .vscode/settings.json
 mpdemos_env
+webassembly/build*

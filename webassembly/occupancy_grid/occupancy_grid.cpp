@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include <emscripten.h>
 #include <stdint.h>
 
 namespace mapping {
@@ -44,4 +43,7 @@ void filterPoints(std::vector<Point<T>> &point_cloud)
         std::end(point_cloud)
     );
 }
+
+// template class OccupancyGrid<float>;
+
 } // namespace mapping

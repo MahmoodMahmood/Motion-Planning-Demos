@@ -22,3 +22,12 @@ Create a python 3.8 virtual environment and activate
 ### Step 3:
 Compile the web assembly client using emcc
 > `emcc -std=c++17 webassembly/client.cpp -o webassembly/occupancy_grid.js -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' -s EXPORTED_FUNCTIONS='["_free"]'`
+
+### Step 4:
+Web assembly requires the usage of a web server, if you are using VSCode then you can use the associated `launch.json` to launch a debugging session (keyboard shortcut is simply `F5`).
+
+If you are not using VSCode then you can run a webserver using python then navigate to `0.0.0.0:8000/index.html`:
+>`python -m http.server`
+
+### Step 5 (optional):
+If you are working on a module that interacts with C++ or if you are working on C++ code then you should also make sure to run the unit tests using `./webassembly/run_tests.sh`.

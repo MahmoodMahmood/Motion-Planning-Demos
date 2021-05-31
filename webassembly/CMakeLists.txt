@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(webassembly)
 
-# GoogleTest requires at least C++11
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -15,14 +14,12 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+# add new unit tests here:
 add_executable(
-  client_test
-  test/client_test.cpp
-)
-target_link_libraries(
-  client_test
-  gtest_main
+  tests 
+  occupancy_grid/test/occupancy_grid_test.cpp 
 )
 
+target_link_libraries(tests gtest_main)
 include(GoogleTest)
-gtest_discover_tests(client_test)
+gtest_discover_tests(tests)
