@@ -39,7 +39,13 @@ extern "C" void updateOccupancyGridFloat(mapping::OccupancyGrid<float> *grid, fl
 };
 
 EMSCRIPTEN_KEEPALIVE
-extern "C" mapping::OccupancyGrid<float> *initGridFloat(float x_min, float x_max, float z_min, float z_max, float cell_size)
+extern "C" mapping::OccupancyGrid<float> *initGridFloat(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max, float cell_size)
 {
-    return new mapping::OccupancyGrid<float>(x_min, x_max, z_min, z_max, cell_size);
+    return new mapping::OccupancyGrid<float>(x_min, x_max, y_min, y_max, z_min, z_max, cell_size);
+}
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" void updateYRanges(mapping::OccupancyGrid<float> *grid, float y_min, float y_max)
+{
+    grid->updateYRanges(y_min, y_max);
 }

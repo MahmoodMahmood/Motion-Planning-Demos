@@ -71,9 +71,9 @@ void OccupancyGrid<T>::print()
 }
 
 template <class T>
-void OccupancyGrid<T>::set(int x, int y, T val)
+void OccupancyGrid<T>::set(int x, int z, T val)
 {
-    grid[x + y*nrows] = val;
+    grid[x + z*nrows] = val;
 }
 
 template <class T>
@@ -86,6 +86,13 @@ std::optional<std::pair<int, int>> OccupancyGrid<T>::getContainingCell(const Poi
         std::floor(nrows*(pt.z - z_min)/(z_max - z_min))
     };
     return std::make_optional(p);
+}
+
+template <class T>
+void OccupancyGrid<T>::updateYRanges(T y_min, T y_max)
+{
+    this->y_min = y_min;
+    this->y_max = y_max;
 }
 
 } // namespace mapping

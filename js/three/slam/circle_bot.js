@@ -7,6 +7,7 @@ class CircleBot {
         this.x = x
         this.y = distance_above_ground
         this.z = z
+        this.height = robot_height
         this.theta = theta
 
         this.speed = 0

@@ -154,7 +154,7 @@ function handleLidar(cur_time, dt) {
             pr.addThreeJSPoints(bot.lidar.points)
         }
         bot.lidar.rotate(0.06*dt)
-        if (grid_wrapper) grid_wrapper.updatePoints(bot.lidar.points.geometry.attributes.position.array, bot.lidar.position)
+        if (grid_wrapper) grid_wrapper.updatePoints(bot.lidar.points.geometry.attributes.position.array, bot.lidar.position, bot.height)
     }
     counter++
 }

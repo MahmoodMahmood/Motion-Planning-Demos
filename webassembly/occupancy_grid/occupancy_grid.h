@@ -24,6 +24,7 @@ public:
     T get(int x, int z);
     void print();
     std::optional<std::pair<int, int>> getContainingCell(const Point<T> &pt); 
+    void updateYRanges(T y_min, T y_max);
 
 private:
     std::vector<T> grid; // 1D representation of 2D grid, starting from top left

@@ -10,6 +10,7 @@ class occupancyGridWrapper {
         this.occupancyGrid = initializer(x_min, x_max, z_min, z_max, grid_size)
 
         this.updateGrid = Module.cwrap('updateOccupancyGridFloat', null, ['number', 'number', 'number', 'number', 'number', 'number'])
+        this.updateYRanges = Module.cwrap('updateYRanges', null, ['number', 'number', 'number'])
     }
 
     /**
@@ -18,7 +19,7 @@ class occupancyGridWrapper {
      * @param {Float32Array} points 
      * @param {Vector3} cur_pose 
      */
-    updatePoints(points, cur_pose) {
+    updatePoints(points, cur_pose, bot_height) {
         // source: https://bl.ocks.org/jonathanlurie/e4aaa37e2d9c317ce44eae5f6011495d
         // Get data byte size, allocate memory on Emscripten heap, and get pointer
         const nDataBytes = points.length * points.BYTES_PER_ELEMENT;
@@ -32,5 +33,8 @@ class occupancyGridWrapper {
             cur_pose.x, cur_pose.y, cur_pose.z)
 
         Module._free(dataHeap.byteOffset);
+
+        // update y_min and y_max according 
+        this.updateYRanges(this.occupancyGrid, (cur_pose.y - bot_height/2), (cur_pose.y + bot_height/2)) 
     }
 }
