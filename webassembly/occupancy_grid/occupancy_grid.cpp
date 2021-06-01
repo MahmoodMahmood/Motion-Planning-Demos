@@ -6,8 +6,8 @@
 
 namespace mapping {
 template <class T>
-OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T z_min, T z_max, T cell_size)
-    : x_min{x_min}, x_max{x_max}, z_min{z_min}, z_max{z_max}, cell_size{cell_size}
+OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max, T cell_size)
+    : x_min{x_min}, x_max{x_max}, y_min{y_min}, y_max{y_max}, z_min{z_min}, z_max{z_max}, cell_size{cell_size}
 {
     nrows = std::ceil((x_max - x_min) / cell_size);
     ncols = std::ceil((z_max - z_min) / cell_size);
@@ -23,7 +23,13 @@ void OccupancyGrid<T>::updateOccupancyGrid(const std::vector<Point<T>> point_clo
 }
 
 template <class T>
-bool OccupancyGrid<T>::pointInRange(const Point<T> &p)
+bool OccupancyGrid<T>::pointInYRange(const Point<T> &p)
+{
+    return p.y > y_min && p.y < y_max;
+}
+
+template <class T>
+bool OccupancyGrid<T>::pointInXZRange(const Point<T> &p)
 {
     return p.x > x_min && p.x < x_max && p.z > z_min && p.z < z_max;
 }
@@ -48,17 +54,17 @@ const std::vector<T> OccupancyGrid<T>::getGrid()
 }
 
 template <class T>
-T OccupancyGrid<T>::get(int x, int y)
+T OccupancyGrid<T>::get(int x, int z)
 {
-    return grid[x + y*nrows];
+    return grid[x + z*nrows];
 }
 
 template <class T>
 void OccupancyGrid<T>::print()
 {
-    for (int y = 0; y < nrows; y++) {
+    for (int z = 0; z < nrows; z++) {
         for (int x = 0; x < ncols; x++) {
-            std::cout << get(x, y) << " ";
+            std::cout << get(x, z) << " ";
         } 
         std::cout << std::endl;
     }
@@ -68,6 +74,18 @@ template <class T>
 void OccupancyGrid<T>::set(int x, int y, T val)
 {
     grid[x + y*nrows] = val;
+}
+
+template <class T>
+std::optional<std::pair<int, int>> OccupancyGrid<T>::getContainingCell(const Point<T> &pt)
+{
+    if (!pointInXZRange(pt)) return std::nullopt;
+    
+    std::pair<int, int> p{
+        std::floor(ncols*(pt.x - x_min)/(x_max - x_min)),
+        std::floor(nrows*(pt.z - z_min)/(z_max - z_min))
+    };
+    return std::make_optional(p);
 }
 
 } // namespace mapping
