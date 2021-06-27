@@ -1,13 +1,15 @@
 class occupancyGridWrapper {
     // We need the wasm "Module" instance to construct our object
     constructor(Module) {
-        let initializer = Module.cwrap('initGridFloat', 'number', ['number', 'number', 'number', 'number', 'number'])
+        let initializer = Module.cwrap('initGridFloat', 'number', ['number', 'number', 'number', 'number', 'number', 'number', 'number'])
         this.x_min = -16
         this.x_max = 16
+        this.y_min = -3
+        this.y_max = 3
         this.z_min = -16
         this.z_max = 16
         this.cell_size = 0.1
-        this.occupancyGrid = initializer(this.x_min, this.x_max, this.z_min, this.z_max, this.cell_size)
+        this.occupancyGrid = initializer(this.x_min, this.x_max, this.y_min, this.y_max, this.z_min, this.z_max, this.cell_size)
 
         this.updateGrid = Module.cwrap('updateOccupancyGridFloat', null, ['number', 'number', 'number', 'number', 'number', 'number'])
         this.updateYRanges = Module.cwrap('updateYRanges', null, ['number', 'number', 'number'])
@@ -61,7 +63,7 @@ class occupancyGridWrapper {
             result.push(new_row)
             debug_str += "\n"
         }
-        console.log(debug_str + "\n\n\n\n")
+        // console.log(debug_str + "\n\n\n\n")
 
         Module._free(dataHeap.byteOffset);
 

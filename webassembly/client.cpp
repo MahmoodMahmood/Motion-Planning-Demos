@@ -38,6 +38,17 @@ extern "C" void updateOccupancyGridFloat(mapping::OccupancyGrid<float> *grid, fl
     grid->updateOccupancyGrid(ptsVec, cur_pose);
 };
 
+/**
+ * @brief initialized a float occupancy grid given min, max and resolution parameters
+ * 
+ * @param x_min
+ * @param x_max  
+ * @param y_min  
+ * @param y_max
+ * @param z_min
+ * @param z_max
+ * @param cell_size the width and height of each cell
+ */
 EMSCRIPTEN_KEEPALIVE
 extern "C" mapping::OccupancyGrid<float> *initGridFloat(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max, float cell_size)
 {
