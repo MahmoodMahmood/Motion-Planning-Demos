@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "preLaunchTask": "compile emcc",
             "name": "Launch slam.html",
             "type": "pwa-chrome",
             "request": "launch",

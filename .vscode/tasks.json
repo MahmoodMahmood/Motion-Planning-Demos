@@ -1,0 +1,12 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "compile emcc",
+        "command": "emcc",
+        "args": ["${workspaceFolder}/webassembly/client.cpp",  "-std=c++17",  
+            "-o", "${workspaceFolder}/webassembly/occupancy_grid.js", 
+            "-s", "EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'",  
+            "-s", "EXPORTED_FUNCTIONS='[\"_free\"]'"],
+        "type": "shell"
+    }]
+}
