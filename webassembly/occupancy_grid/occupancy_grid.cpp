@@ -95,4 +95,16 @@ void OccupancyGrid<T>::updateYRanges(T y_min, T y_max)
     this->y_max = y_max;
 }
 
+template <class T>
+T OccupancyGrid<T>::getNRows()
+{
+    return nrows;
+}
+
+template <class T>
+T OccupancyGrid<T>::getNCols()
+{
+    return ncols;
+}
+
 } // namespace mapping

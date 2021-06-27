@@ -49,3 +49,12 @@ extern "C" void updateYRanges(mapping::OccupancyGrid<float> *grid, float y_min, 
 {
     grid->updateYRanges(y_min, y_max);
 }
+
+EMSCRIPTEN_KEEPALIVE
+extern "C" void get1DGrid(mapping::OccupancyGrid<float> *grid, float *output)
+{
+    auto v = grid->getGrid();
+    for (int i = 0; i < v.size(); i++) {
+        output[i] = v[i];
+    }
+}

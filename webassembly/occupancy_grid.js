@@ -1508,7 +1508,8 @@ function createExportWrapper(name, fixedasm) {
   };
 }
 
-  var wasmBinaryFile = 'occupancy_grid.wasm';
+var wasmBinaryFile;
+  wasmBinaryFile = 'occupancy_grid.wasm';
   if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile);
   }
@@ -1891,6 +1892,9 @@ var _initGridFloat = Module["_initGridFloat"] = createExportWrapper("initGridFlo
 
 /** @type {function(...*):?} */
 var _updateYRanges = Module["_updateYRanges"] = createExportWrapper("updateYRanges");
+
+/** @type {function(...*):?} */
+var _get1DGrid = Module["_get1DGrid"] = createExportWrapper("get1DGrid");
 
 /** @type {function(...*):?} */
 var _fflush = Module["_fflush"] = createExportWrapper("fflush");

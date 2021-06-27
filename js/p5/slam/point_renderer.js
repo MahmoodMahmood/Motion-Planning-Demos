@@ -43,17 +43,17 @@ class PointRenderer {
         }
     }
 
-    clear_canvas(p, width, height) {
+    clear_canvas(p5_canvas, width, height) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
-                p.set(i, j, p.color(0,0,0))
+                p5_canvas.set(i, j, p5_canvas.color(0,0,0))
             }
         }
         this.clear_on_next = false
     }
 
-    draw(p, width, height) {
-        if (this.clear_on_next) this.clear_canvas(p, width, height)
+    draw(p5_canvas, width, height) {
+        if (this.clear_on_next) this.clear_canvas(p5_canvas, width, height)
         const cur_points = this.points_dict[this.current_bucket]
         const x_width = this.x_range[1] - this.x_range[0]
         const z_width = this.z_range[1] - this.z_range[0]
@@ -61,7 +61,7 @@ class PointRenderer {
             for (let i = 0; i < cur_points.length; i++) {
                 const x = ((cur_points[i][0] - this.x_range[0]) / x_width) * width
                 const z = ((cur_points[i][2] - this.z_range[0]) / z_width) * height
-                p.set(x, z, p.color('white'))
+                p5_canvas.set(x, z, p5_canvas.color('white'))
             }
         }
     }
@@ -71,19 +71,19 @@ class PointRenderer {
         this.clear_on_next = true
     }
     
-    getSketchMaker(p) {
+    getSketchMaker(p5_canvas) {
         const canvas_width = 300
         const canvas_height = 300
-        p.setup = function() {
-            p.createCanvas(canvas_width, canvas_height)
+        p5_canvas.setup = function() {
+            p5_canvas.createCanvas(canvas_width, canvas_height)
         }
 
-        p.draw = function() {
-            p.background(0)
+        p5_canvas.draw = function() {
+            p5_canvas.background(0)
             if (pr) {
-                pr.draw(p, canvas_width, canvas_height)
+                pr.draw(p5_canvas, canvas_width, canvas_height)
             }
-            p.updatePixels()
+            p5_canvas.updatePixels()
         }
     }
 }
