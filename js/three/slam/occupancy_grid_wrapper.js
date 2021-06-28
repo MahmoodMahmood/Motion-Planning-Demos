@@ -46,7 +46,7 @@ class occupancyGridWrapper {
         // Get data byte size, allocate memory on Emscripten heap, and get pointer
         const n_rows = this.getNRows()
         const n_cols = this.getNCols()
-        const nDataBytes = n_rows * n_cols;
+        const nDataBytes = n_rows * n_cols * 32; // 32 is the size of a float in C++
         const dataPtr = Module._malloc(nDataBytes);
 
         // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)  
