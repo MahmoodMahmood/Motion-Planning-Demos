@@ -5,6 +5,10 @@
 #include <stdint.h>
 
 namespace mapping {
+
+std::vector<std::pair<int, int>> plotLineLow(int x0, int z0, int x1, int z1);
+std::vector<std::pair<int, int>> plotLineHigh(int x0, int z0, int x1, int z1);
+
 template <class T>
 OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max, T cell_size)
     : x_min{x_min}, x_max{x_max}, y_min{y_min}, y_max{y_max}, z_min{z_min}, z_max{z_max}, cell_size{cell_size}
@@ -105,6 +109,76 @@ template <class T>
 T OccupancyGrid<T>::getNCols()
 {
     return ncols;
+}
+
+template <class T>
+std::vector<std::pair<int, int>> OccupancyGrid<T>::bresenhamLines(const Point<T> &src, const Point<T> &dst)
+{
+    if (abs(dst.z - src.z) < abs(dst.x - src.x)) {
+        if (src.x > dst.x) {
+            return plotLineLow(dst.x, dst.z, src.x, src.z);
+        } else {
+            return plotLineLow(src.x, src.z, dst.x, dst.z);
+        }
+    } else {
+        if (src.z > dst.z) {
+            return plotLineHigh(dst.x, dst.z, src.x, src.z);
+        } else {
+            return plotLineHigh(src.x, src.z, dst.x, dst.z);
+        }
+    }
+}
+
+std::vector<std::pair<int, int>> plotLineLow(int x0, int z0, int x1, int z1)
+{
+    std::vector<std::pair<int, int>> result;
+    int dx = x1 - x0;
+    int dz = z1 - z0;
+    int zi = 1;
+    if (dz < 0) {
+        zi = -1;
+        dz = -dz;
+    }
+    int D = (2 * dz) - dx;
+    int z = z0;
+
+    // for x from x0 to x1
+    for (int x = x0; x < x1; x++) {
+        result.push_back({x, z});
+        if (D > 0) {
+            z = z + zi;
+            D = D + (2 * (dz - dx));
+        } else {
+            D = D + 2*dz;
+        }
+    }
+    return result;
+}
+
+std::vector<std::pair<int, int>> plotLineHigh(int x0, int z0, int x1, int z1)
+{
+    std::vector<std::pair<int, int>> result;
+    int dx = x1 - x0;
+    int dz = z1 - z0;
+    int xi = 1;
+    if (dx < 0) {
+        xi = -1;
+        dx = -dx;
+    }
+    int D = (2 * dx) - dz;
+    int x = x0;
+
+    // for x from x0 to x1
+    for (int z = z0; z < z1; z++) {
+        result.push_back({x, z});
+        if (D > 0) {
+            x = x + xi;
+            D = D + (2 * (dx - dz));
+        } else {
+            D = D + 2*dx;
+        }
+    }
+    return result;
 }
 
 } // namespace mapping
