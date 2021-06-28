@@ -46,26 +46,20 @@ class occupancyGridWrapper {
         // Get data byte size, allocate memory on Emscripten heap, and get pointer
         const n_rows = this.getNRows()
         const n_cols = this.getNCols()
-        const nDataBytes = n_rows * n_cols * 32; // 32 is the size of a float in C++
+        const nDataBytes = n_rows * n_cols * Float32Array.BYTES_PER_ELEMENT;
         const dataPtr = Module._malloc(nDataBytes);
 
-        // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)  
-        let dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
-        this.get1DGrid(this.occupancyGrid, dataHeap.byteOffset);
-        let debug_str = ""
+        this.get1DGrid(this.occupancyGrid, dataPtr);
         let result = []
         for (let i = 0; i < n_rows; i++) {
             let new_row = []
             for (let j = 0; j < n_cols; j++) {
-                new_row.push(dataHeap[dataHeap.byteOffset+i*n_cols+j])
-                debug_str += parseFloat(dataHeap[dataHeap.byteOffset+i*n_cols+j]).toString() + " "
+                new_row.push(HEAPF32[(dataPtr/Float32Array.BYTES_PER_ELEMENT)+i*n_cols+j])
             }
             result.push(new_row)
-            debug_str += "\n"
         }
-        // console.log(debug_str + "\n\n\n\n")
 
-        Module._free(dataHeap.byteOffset);
+        Module._free(dataPtr);
 
         return result;
     }
