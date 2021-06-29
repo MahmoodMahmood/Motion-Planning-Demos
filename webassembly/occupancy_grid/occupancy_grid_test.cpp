@@ -66,3 +66,19 @@ TEST(OccupancyGrid, TestGetContainingCell)
     res = og.getContainingCell({0.0, 1.1, 10});
     EXPECT_FALSE(res.has_value());
 }
+
+TEST(OccupancyGrid, TestUpdateOccupancyGrid)
+{
+    mapping::OccupancyGrid<float> og(
+        -3, // x_min
+        3,  // x_max
+        0,  // y_min
+        1.5,// y_max
+        -3, // z_min
+        3,  // z_max
+        0.5   // grid size
+    );
+    
+    og.updateOccupancyGrid({{2, 0, 1}}, {-2, 0, -2});
+    og.print();
+}

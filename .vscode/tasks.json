@@ -8,5 +8,11 @@
             "-s", "EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'",  
             "-s", "EXPORTED_FUNCTIONS='[\"_free\"]'"],
         "type": "shell"
+    },
+    {
+        "label": "test",
+        "command": "./webassembly/run_tests.sh",
+        "args": [],
+        "type": "shell"
     }]
 }

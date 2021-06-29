@@ -22,7 +22,11 @@ template <class T>
 void OccupancyGrid<T>::updateOccupancyGrid(const std::vector<Point<T>> point_cloud, const Point<T>cur_pose)
 {
     for (auto &pt : point_cloud) {
-        // std::cout << "x: " << pt.x << ", y: " << pt.y << ", z: " << pt.z << std::endl;
+        auto intersection_indices = bresenhamLines(cur_pose, pt);
+        for (auto &indices : intersection_indices) {
+            std::cout << "x: " << indices.first << ". z: " << indices.second << std::endl;
+            set(indices.first, indices.second, 9.9);
+        }
     }
 }
 
@@ -114,19 +118,28 @@ T OccupancyGrid<T>::getNCols()
 template <class T>
 std::vector<std::pair<int, int>> OccupancyGrid<T>::bresenhamLines(const Point<T> &src, const Point<T> &dst)
 {
-    if (abs(dst.z - src.z) < abs(dst.x - src.x)) {
-        if (src.x > dst.x) {
-            return plotLineLow(dst.x, dst.z, src.x, src.z);
+    auto src_loc = getContainingCell(src);
+    auto dst_loc = getContainingCell(dst);
+    if (src_loc && dst_loc) {
+        int x0 = src_loc->first;
+        int z0 = src_loc->second;
+        int x1 = dst_loc->first;
+        int z1 = dst_loc->second;
+        if (abs(z1 - z0) < abs(x1 - x0)) {
+            if (x0 > x1) {
+                return plotLineLow(x1, z1, x0, z0);
+            } else {
+                return plotLineLow(x0, z0, x1, z1);
+            }
         } else {
-            return plotLineLow(src.x, src.z, dst.x, dst.z);
-        }
-    } else {
-        if (src.z > dst.z) {
-            return plotLineHigh(dst.x, dst.z, src.x, src.z);
-        } else {
-            return plotLineHigh(src.x, src.z, dst.x, dst.z);
+            if (z0 > z1) {
+                return plotLineHigh(x1, z1, x0, z0);
+            } else {
+                return plotLineHigh(x0, z0, x1, z1);
+            }
         }
     }
+    return {};
 }
 
 std::vector<std::pair<int, int>> plotLineLow(int x0, int z0, int x1, int z1)
