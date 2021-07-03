@@ -6,6 +6,7 @@
 
 namespace mapping {
 
+// forward declarations
 std::vector<std::pair<int, int>> plotLineLow(int x0, int z0, int x1, int z1);
 std::vector<std::pair<int, int>> plotLineHigh(int x0, int z0, int x1, int z1);
 
@@ -19,13 +20,13 @@ OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T y_min, T y_max, T z_min, T z
 }
 
 template <class T>
-void OccupancyGrid<T>::updateOccupancyGrid(const std::vector<Point<T>> point_cloud, const Point<T>cur_pose)
+void OccupancyGrid<T>::updateOccupancyGrid(std::vector<Point<T>> point_cloud, const Point<T>cur_pose)
 {
+    filterPoints(point_cloud);
     for (auto &pt : point_cloud) {
         auto intersection_indices = bresenhamLines(cur_pose, pt);
         for (auto &indices : intersection_indices) {
-            std::cout << "x: " << indices.first << ". z: " << indices.second << std::endl;
-            set(indices.first, indices.second, 9.9);
+            set(indices.first, indices.second, 0.9);
         }
     }
 }
@@ -43,13 +44,13 @@ bool OccupancyGrid<T>::pointInXZRange(const Point<T> &p)
 }
 
 template <class T>
-void filterPoints(const std::vector<Point<T>> &point_cloud)
+void OccupancyGrid<T>::filterPoints(std::vector<Point<T>> point_cloud)
 {
     point_cloud.erase(
         std::remove_if(
             std::begin(point_cloud), 
             std::end(point_cloud), 
-            [](Point<T> p){ return pointInRange(p); }
+            [this](Point<T> p){ return pointInXZRange(p) && pointInYRange(p); }
         ),
         std::end(point_cloud)
     );

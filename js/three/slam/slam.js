@@ -156,7 +156,7 @@ function handleLidar(cur_time, dt) {
         bot.lidar.rotate(0.06*dt)
         if (grid_wrapper) {
             grid_wrapper.updatePoints(bot.lidar.points.geometry.attributes.position.array, bot.lidar.position, bot.height)
-            gr.updateGrid(grid_wrapper.get2DGrid())
+            gr.updateGridRenderer(grid_wrapper.get2DGrid())
         }
     }
     counter++
@@ -203,13 +203,17 @@ let pressed_keys = {};
 init()
 animate()
 init_pressed_keys_dict(pressed_keys)
-pr = new PointRenderer()
-prSketch = new p5(pr.getSketchMaker, 'point-renderer-sketch-holder')
-gr = new GridRenderer()
-grSketch = new p5(gr.getSketchMaker, 'grid-renderer-sketch-holder')
 
 // TODO: move this somewhere nicer
 // Prepare the initialization of the occupancy grid module and its wrapper
 Module.onRuntimeInitialized = async _ => {
     grid_wrapper = new occupancyGridWrapper(Module);
+    pr = new PointRenderer()
+    prSketch = new p5(pr.getSketchMaker, 'point-renderer-sketch-holder')
+    gr = new GridRenderer(
+        grid_wrapper.cell_size, 
+        (grid_wrapper.x_max-grid_wrapper.x_min)/grid_wrapper.cell_size, 
+        (grid_wrapper.z_max-grid_wrapper.z_min)/grid_wrapper.cell_size
+    )
+    grSketch = new p5(gr.getSketchMaker, 'grid-renderer-sketch-holder')
 }

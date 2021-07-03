@@ -8,7 +8,7 @@ class occupancyGridWrapper {
         this.y_max = 3
         this.z_min = -16
         this.z_max = 16
-        this.cell_size = 0.1
+        this.cell_size = 0.5
         this.occupancyGrid = initializer(this.x_min, this.x_max, this.y_min, this.y_max, this.z_min, this.z_max, this.cell_size)
 
         this.updateGrid = Module.cwrap('updateOccupancyGridFloat', null, ['number', 'number', 'number', 'number', 'number', 'number'])
