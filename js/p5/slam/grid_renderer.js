@@ -17,7 +17,7 @@ class GridRenderer {
                 for (let j = 0; j < canvas_height; j++) {
                     let x_idx = Math.floor((i / canvas_width) * this.num_x)
                     let z_idx = Math.floor((j / canvas_height) * this.num_z)
-                    p5_canvas.set(i, j, this.grid[x_idx][z_idx]*255 )
+                    p5_canvas.set(i, j, this.grid[x_idx][z_idx]*255)
                 }
             }
             p5_canvas.updatePixels()

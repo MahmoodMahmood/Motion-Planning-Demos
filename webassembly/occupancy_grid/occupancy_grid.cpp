@@ -22,11 +22,12 @@ OccupancyGrid<T>::OccupancyGrid(T x_min, T x_max, T y_min, T y_max, T z_min, T z
 template <class T>
 void OccupancyGrid<T>::updateOccupancyGrid(std::vector<Point<T>> point_cloud, const Point<T>cur_pose)
 {
-    filterPoints(point_cloud);
     for (auto &pt : point_cloud) {
-        auto intersection_indices = bresenhamLines(cur_pose, pt);
-        for (auto &indices : intersection_indices) {
-            set(indices.first, indices.second, 0.9);
+        if (pointInXZRange(pt) && pointInYRange(pt)) {
+            auto intersection_indices = bresenhamLines(cur_pose, pt);
+            for (auto &indices : intersection_indices) {
+                set(indices.first, indices.second, 0.9);
+            }
         }
     }
 }
@@ -41,19 +42,6 @@ template <class T>
 bool OccupancyGrid<T>::pointInXZRange(const Point<T> &p)
 {
     return p.x > x_min && p.x < x_max && p.z > z_min && p.z < z_max;
-}
-
-template <class T>
-void OccupancyGrid<T>::filterPoints(std::vector<Point<T>> point_cloud)
-{
-    point_cloud.erase(
-        std::remove_if(
-            std::begin(point_cloud), 
-            std::end(point_cloud), 
-            [this](Point<T> p){ return pointInXZRange(p) && pointInYRange(p); }
-        ),
-        std::end(point_cloud)
-    );
 }
 
 template <class T>

@@ -34,7 +34,6 @@ private:
     void set(int x, int z, T val);
     bool pointInYRange(const Point<T> &p);
     bool pointInXZRange(const Point<T> &p);
-    void filterPoints(std::vector<Point<T>> point_cloud);
     std::vector<std::pair<int, int>> bresenhamLines(const Point<T> &src, const Point<T> &dst);
 };
 
