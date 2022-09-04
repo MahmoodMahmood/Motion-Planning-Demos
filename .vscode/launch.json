@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch tsp.html",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:8080",
+            "file": "${workspaceFolder}/tsp.html",
+        },
+        {
             "preLaunchTask": "compile emcc",
             "name": "Launch slam.html",
             "type": "pwa-chrome",
