@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Webpage icon -->
+    <link rel="icon" href="assets/favicon.ico">
+
+    <!-- Google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <!-- P5js stuff -->
+    <script language="javascript" type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+
+    <!-- Simulation Libraries -->
+    <script language="javascript" type="text/javascript" src="js/p5/common/abstract_tree_node.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/common/point_node.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/tsp/graph.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/tsp/tsp_sketch.js"></script>
+
+    <title>Interactive RRT</title>
+</head>
+
+<body>
+    <div class="jumbotron p-3">
+        <h1 class="display-4 p-2"> Travelling Salesman Problem </h1>
+        <p class="lead p-2"> Work in progress... </p>
+    </div>
+
+    <div class="container-lg row">
+        <div class="col">
+            <div id="sketch-holder">
+                <!-- Our sketch will go here! -->
+            </div>
+
+        </div>
+        <div class="col border bg-light">
+            <h1>Customizations:</h1>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new
+                bootstrap.Popover(popoverTriggerEl);
+        })
+    </script>
+
+</body>
+
+</html>

@@ -42,7 +42,7 @@ function angleDist(a1, a2) {
   return mod2pi(phi);
 }
 
-class CarNode extends AbstractNode {
+class CarNode extends AbstractTreeNode {
   constructor(state, config, parent) {
     super(parent)
     this.x = state.x

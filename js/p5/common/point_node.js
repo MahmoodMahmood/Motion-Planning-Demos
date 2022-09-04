@@ -1,4 +1,4 @@
-class PointNode extends AbstractNode {
+class PointNode extends AbstractTreeNode {
   constructor(state, config, parent) {
     super(parent)
     this.x = state.x

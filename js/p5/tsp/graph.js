@@ -1,0 +1,7 @@
+class Graph {
+  constructor() {
+  }
+
+  draw() {
+  }
+}

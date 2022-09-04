@@ -1,7 +1,7 @@
-class AbstractNode {
+class AbstractTreeNode {
   constructor(parent) {
-    if (new.target === AbstractNode) {
-      throw new TypeError("Cannot construct AbstractNode instances directly");
+    if (new.target === AbstractTreeNode) {
+      throw new TypeError("Cannot construct AbstractTreeNode instances directly");
     }
     this.children = []
     this.parent = parent
