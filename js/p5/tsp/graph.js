@@ -1,7 +1,0 @@
-class Graph {
-  constructor() {
-  }
-
-  draw() {
-  }
-}
