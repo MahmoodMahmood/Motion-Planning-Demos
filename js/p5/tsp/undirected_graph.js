@@ -64,6 +64,27 @@ function drawNode(node, config) {
 }
 
 //
+// Other Utils
+//
+function generateNRandomNums(N, max) {
+  let result = []
+  while (result.length < Math.min(N, max)) {
+    const num = Math.floor(Math.random() * max)
+    if (!(num in result)) {
+      result.push(num)
+    }
+  }
+  return result
+}
+
+function pickNRandomElements(arr, N) {
+  if (arr.length == 0) return []
+  if (arr.length == 1) return Math.min(1,N)
+  const indices_to_pick = generateNRandomNums(N, arr.length)
+  return indices_to_pick.map(index => arr[index])
+}
+
+//
 // Classes
 //
 class UndirectedGraphNode {
@@ -72,7 +93,9 @@ class UndirectedGraphNode {
     this.x = Math.random() * canvas_width
     this.y = Math.random() * canvas_height
     this.neighbors = []
-    neighbors.forEach(node => this.addNeighbor(node))
+    if (neighbors.length > 0) {
+      neighbors.forEach(node => this.addNeighbor(node))
+    }
   }
 
   // Only need to call this on one of the nodes
@@ -91,8 +114,9 @@ class UndirectedGraphNode {
 class UndirectedGraph {
   constructor() {
     this.nodes = []
-    for (let i = 0; i < 6; i++) {
-      this.nodes.push(new UndirectedGraphNode(i, this.nodes))
+    for (let i = 0; i < 8; i++) {
+      const num_neighbors = Math.max(1, Math.ceil(Math.random() * 2))
+      this.nodes.push(new UndirectedGraphNode(i, pickNRandomElements(this.nodes, num_neighbors)))
     }
   }
 
