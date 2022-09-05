@@ -70,7 +70,7 @@ function generateNRandomNums(N, max) {
   let result = []
   while (result.length < Math.min(N, max)) {
     const num = Math.floor(Math.random() * max)
-    if (!(num in result)) {
+    if (!result.includes(num)) {
       result.push(num)
     }
   }
@@ -84,6 +84,21 @@ function pickNRandomElements(arr, N) {
   return indices_to_pick.map(index => arr[index])
 }
 
+function isGraphDisconnected(graph) {
+  let visited_nodes = new Set()
+  let cur_nodes = [graph.nodes[0]]
+  while (cur_nodes.length > 0) {
+    let node = cur_nodes.pop()
+    for (neighbor of node.neighbors) {
+      if (!visited_nodes.has(neighbor.id) && !cur_nodes.includes(neighbor)) {
+        cur_nodes.push(neighbor)
+      }
+    }
+    visited_nodes.add(node.id)
+  }
+  return graph.nodes.length == visited_nodes.size
+}
+
 //
 // Classes
 //
@@ -92,7 +107,7 @@ class UndirectedGraphNode {
     this.id = id
     this.x = Math.random() * canvas_width
     this.y = Math.random() * canvas_height
-    this.neighbors = []
+    this.neighbors = new Set()
     if (neighbors.length > 0) {
       neighbors.forEach(node => this.addNeighbor(node))
     }
@@ -101,14 +116,8 @@ class UndirectedGraphNode {
   // Only need to call this on one of the nodes
   addNeighbor(node) {
     if (node.id == this.id) return;
-    // Gross implementation, bleh
-    if (!(node in this.neighbors)) {
-      this.neighbors.push(node)
-    }
-    
-    if (!(this in node.neighbors)) {
-      node.neighbors.push(this)
-    }
+    this.neighbors.add(node)
+    node.neighbors.add(this)
   }
 }
 
