@@ -120,7 +120,7 @@ class UndirectedGraph {
     }
 
     this.nodes.forEach(node => {
-      const num_neighbors = Math.max(1, Math.ceil(Math.random() * avg_edges_per_node)) / 2
+      const num_neighbors = Math.max(1, Math.ceil(Math.random() * avg_edges_per_node))
       pickNRandomElements(this.nodes, num_neighbors).forEach(other_node => node.addNeighbor(other_node))
     })
   }

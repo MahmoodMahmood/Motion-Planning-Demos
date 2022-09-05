@@ -26,7 +26,8 @@ function updateNumNodes(new_num_nodes) {
   document.getElementById("edges-range").max = max_edges_per_node
   document.getElementById("edges-input").max = max_edges_per_node
   
-  updateNumEdgesPerNode(max_edges_per_node)
+  const edges_per_node = Math.min(num_edges_per_node, max_edges_per_node)
+  updateNumEdgesPerNode(edges_per_node)
 }
 
 function updateNumEdgesPerNode(new_num_edges_per_nodes) {
