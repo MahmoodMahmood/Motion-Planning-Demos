@@ -74,6 +74,9 @@
                                 oninput="this.form.amountRange.value=this.value; updateNumEdgesPerNode(this.value);" />
                         </div>
                     </form>
+                    <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden" >
+                        Warning: your graph is not fully connected!
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,6 +99,9 @@
             return new
                 bootstrap.Popover(popoverTriggerEl);
         })
+    </script>
+    <script>
+        document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
     </script>
 
 </body>

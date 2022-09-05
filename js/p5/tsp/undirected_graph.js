@@ -84,7 +84,7 @@ function pickNRandomElements(arr, N) {
   return indices_to_pick.map(index => arr[index])
 }
 
-function isGraphDisconnected(graph) {
+function isGraphFullyConnected(graph) {
   let visited_nodes = new Set()
   let cur_nodes = [graph.nodes[0]]
   while (cur_nodes.length > 0) {

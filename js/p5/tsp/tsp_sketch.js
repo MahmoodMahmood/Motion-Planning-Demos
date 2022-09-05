@@ -35,4 +35,5 @@ function updateNumEdgesPerNode(new_num_edges_per_nodes) {
   document.getElementById("edges-range").value = num_edges_per_node
   document.getElementById("edges-input").value = num_edges_per_node
   resetGraph()
+  document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
 }
