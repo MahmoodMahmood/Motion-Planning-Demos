@@ -100,6 +100,7 @@ class UndirectedGraphNode {
 
   // Only need to call this on one of the nodes
   addNeighbor(node) {
+    if (node.id == this.id) return;
     // Gross implementation, bleh
     if (!(node in this.neighbors)) {
       this.neighbors.push(node)
@@ -112,12 +113,16 @@ class UndirectedGraphNode {
 }
 
 class UndirectedGraph {
-  constructor() {
+  constructor(num_node, avg_edges_per_node) {
     this.nodes = []
-    for (let i = 0; i < 8; i++) {
-      const num_neighbors = Math.max(1, Math.ceil(Math.random() * 2))
-      this.nodes.push(new UndirectedGraphNode(i, pickNRandomElements(this.nodes, num_neighbors)))
+    for (let i = 0; i < num_node; i++) {
+      this.nodes.push(new UndirectedGraphNode(i, []))
     }
+
+    this.nodes.forEach(node => {
+      const num_neighbors = Math.max(1, Math.ceil(Math.random() * avg_edges_per_node)) / 2
+      pickNRandomElements(this.nodes, num_neighbors).forEach(other_node => node.addNeighbor(other_node))
+    })
   }
 
   draw() {

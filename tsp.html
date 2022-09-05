@@ -44,6 +44,38 @@
         </div>
         <div class="col border bg-light">
             <h1>Customizations:</h1>
+            <div class="p-0">
+                <div class="container mt-5" id="sliders grid">
+                    <form id="num-nodes" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="range" name="amountRange" min="3" max="20" value="10"
+                                oninput="this.form.amountInput.value=this.value; updateNumNodes(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" name="amountInput" min="3" max="20" value="10"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
+                        </div>
+                    </form>
+                    <form id="num-edges" class="row border g-0 p-0" style="margin-top: 10px;">
+                        <div class="col-sm-5">
+                            <label type="number" for="amountRange" class="form-label"> Average number of edges per node: </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input id="edges-range" type="range" name="amountRange" min="1" max="9" value="2"
+                                oninput="this.form.amountInput.value=this.value; updateNumEdgesPerNode(this.value);" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input id="edges-input" type="number" name="amountInput" min="1" max="9" value="2"
+                                class="form-control form-control-sm"
+                                oninput="this.form.amountRange.value=this.value; updateNumEdgesPerNode(this.value);" />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
