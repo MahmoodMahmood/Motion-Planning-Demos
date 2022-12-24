@@ -23,6 +23,7 @@
     <!-- Simulation Libraries -->
     <script language="javascript" type="text/javascript" src="js/p5/common/abstract_tree_node.js"></script>
     <script language="javascript" type="text/javascript" src="js/p5/common/point_node.js"></script>
+    <script language="javascript" type="text/javascript" src="js/p5/common/heap.js"></script>
     <script language="javascript" type="text/javascript" src="js/p5/tsp/undirected_graph.js"></script>
     <script language="javascript" type="text/javascript" src="js/p5/tsp/tsp_sketch.js"></script>
 
@@ -40,7 +41,9 @@
             <div id="sketch-holder">
                 <!-- Our sketch will go here! -->
             </div>
-
+            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                <button onclick="findRandomShortestPath(1)" type="button" class="btn btn-primary"> Find Random Shortest Path </button>
+            </div>
         </div>
         <div class="col border bg-light">
             <h1>Customizations:</h1>

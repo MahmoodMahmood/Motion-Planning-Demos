@@ -37,3 +37,7 @@ function updateNumEdgesPerNode(new_num_edges_per_nodes) {
   resetGraph()
   document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
 }
+
+function findRandomShortestPath() {
+  const random_path = shortestPathDijkstra(graph.nodes[0], graph.nodes[graph.nodes.length-1])
+}
