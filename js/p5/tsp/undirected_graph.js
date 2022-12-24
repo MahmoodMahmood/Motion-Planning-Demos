@@ -41,7 +41,7 @@ function drawEdge(node1, node2) {
   const angle = Math.atan2(node2.y-node1.y, node2.x-node1.x)
   
   // Prevents double drawing of distance text, only keep the right side up text
-  if (angle > Math.PI/2 || angle < -Math.PI/2) return
+  if (!draw_text || angle > Math.PI/2 || angle < -Math.PI/2) return
   const dist = calcDist(node1, node2)
   const midx = (node1.x + node2.x)/2
   const midy = (node1.y + node2.y)/2
@@ -134,7 +134,6 @@ function shortestPathDijkstra(node1, node2) {
     // console.log(cur_node_dist_obj)
     if (cur_node_dist_obj.node.id == node2.id) {
       // found target node
-      console.log(cur_node_dist_obj)
       return cur_node_dist_obj.getPath()
     }
     for (const neighbor of cur_node_dist_obj.node.neighbors) {
