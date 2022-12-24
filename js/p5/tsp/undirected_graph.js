@@ -100,7 +100,6 @@ function isGraphFullyConnected(graph) {
   return graph.nodes.length == visited_nodes.size
 }
 
-
 function shortestPathDijkstra(node1, node2) {
   class NodeDistObj {
     constructor(node, dist, pred) {
@@ -155,6 +154,20 @@ function shortestPathDijkstra(node1, node2) {
   return None
 }
 
+// https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
+// returns true if the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
+function intersects(a,b,c,d,p,q,r,s) {
+  var det, gamma, lambda;
+  det = (c - a) * (s - q) - (r - p) * (d - b);
+  if (det === 0) {
+    return false;
+  } else {
+    lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+    gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+    return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+  }
+}
+
 //
 // Classes
 //
@@ -171,26 +184,40 @@ class UndirectedGraphNode {
 
   // Only need to call this on one of the nodes
   addNeighbor(node) {
-    if (node.id == this.id) return;
     this.neighbors.add(node)
     node.neighbors.add(this)
   }
 }
 
 class UndirectedGraph {
-  constructor(num_node, avg_edges_per_node) {
+  constructor(num_node) {
+    this.attempted_number_of_edges = 20;
     this.nodes = []
     for (let i = 0; i < num_node; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
 
     this.nodes.forEach(node => {
-      const num_neighbors = Math.max(1, Math.ceil(Math.random() * avg_edges_per_node))
-      pickNRandomElements(this.nodes, num_neighbors).forEach(other_node => node.addNeighbor(other_node))
+      const num_neighbors = Math.max(1, Math.ceil(Math.random() * this.attempted_number_of_edges))
+      pickNRandomElements(this.nodes, num_neighbors).forEach(other_node => {
+        if (node.id != other_node.id && !this.intersectsAnyEdge(node.x, node.y, other_node.x, other_node.y)) {
+          node.addNeighbor(other_node)
+        } 
+      })
     })
   }
 
   draw() {
     this.nodes.forEach(node => drawNode(node, point_config))
+  }
+
+  // Very inefficient, can be way optimized
+  intersectsAnyEdge(x1, y1, x2, y2) {
+    for (const node of this.nodes) {
+      for (const neighbor of node.neighbors) {
+        if (intersects(x1, y1, x2, y2, node.x, node.y, neighbor.x, neighbor.y)) return true
+      }
+    }
+    return false
   }
 }

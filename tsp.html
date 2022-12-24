@@ -63,20 +63,6 @@
                                 oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
                         </div>
                     </form>
-                    <form id="num-edges" class="row border g-0 p-0" style="margin-top: 10px;">
-                        <div class="col-sm-5">
-                            <label type="number" for="amountRange" class="form-label"> Average number of edges per node: </label>
-                        </div>
-                        <div class="col-sm-3">
-                            <input id="edges-range" type="range" name="amountRange" min="1" max="9" value="2"
-                                oninput="this.form.amountInput.value=this.value; updateNumEdgesPerNode(this.value);" />
-                        </div>
-                        <div class="col-sm-2">
-                            <input id="edges-input" type="number" name="amountInput" min="1" max="9" value="2"
-                                class="form-control form-control-sm"
-                                oninput="this.form.amountRange.value=this.value; updateNumEdgesPerNode(this.value);" />
-                        </div>
-                    </form>
                     <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden" >
                         Warning: your graph is not fully connected!
                     </div>
