@@ -122,7 +122,6 @@ function shortestPathDijkstra(node1, node2) {
 
   while (!pq.empty()) {
     const cur_node_dist_obj = pq.pop()
-    // console.log(cur_node_dist_obj)
     if (cur_node_dist_obj.node.id == node2.id) {
       // found target node
       return cur_node_dist_obj.getPath()
@@ -138,7 +137,10 @@ function shortestPathDijkstra(node1, node2) {
         // Seen this neighbor before, check if we need to update the shortest path to it
         if (visited_dict[neighbor.id].dist > cur_dist) {
           // New path is shorter need to update existing entry in pq
-          pq.edit(visited_dict[neighbor.id], dist_obj => {dist_obj.dist = cur_dist})
+          pq.edit(visited_dict[neighbor.id], dist_obj => {
+            dist_obj.dist = cur_dist
+            dist_obj.pred = cur_node_dist_obj
+          })
         }
       }
     }
@@ -164,10 +166,10 @@ function intersects(a,b,c,d,p,q,r,s) {
 // Classes
 //
 class UndirectedGraphNode {
-  constructor(id, neighbors) {
+  constructor(id, neighbors, x, y) {
     this.id = id
-    this.x = Math.random() * canvas_width
-    this.y = Math.random() * canvas_height
+    this.x = x != undefined ? x : Math.random() * canvas_width
+    this.y = y != undefined ? y : Math.random() * canvas_height
     this.neighbors = new Set()
     this.draw_config = {
       color: 'blue',

@@ -1,4 +1,4 @@
-const draw_text = false
+const draw_text = true
 const canvas_width = 500
 const canvas_height = 500
 let selected_node = null
@@ -34,6 +34,7 @@ function canvasMousePressed() {
     }
     selected_node = nearest_node
     selected_node.draw_config.stroke = 3
+    console.log(nearest_node)
 
     if (prev_node != null) findShortestPath(prev_node, selected_node)
   }
@@ -65,4 +66,15 @@ function findShortestPath(node1, node2) {
   // reset selected node for future selections
   if (selected_node) selected_node.draw_config.stroke = 1
   selected_node = null
+  
+  
+
+
+
+  // TODO: remove
+  let dist = 0
+  for (let i = 0; i < path.length-1; i++) {
+    dist+=calcDist(path[i], path[i+1])
+  }
+  console.log(dist)
 }
