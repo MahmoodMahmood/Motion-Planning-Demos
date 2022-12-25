@@ -63,6 +63,6 @@ function findShortestPath(node1, node2) {
   // set highlighted_path so that the edges are bold
   highlighted_path = path
   // reset selected node for future selections
-  selected_node.draw_config.stroke = 1
+  if (selected_node) selected_node.draw_config.stroke = 1
   selected_node = null
 }
