@@ -191,20 +191,18 @@ class UndirectedGraphNode {
 
 class UndirectedGraph {
   constructor(num_node) {
-    this.attempted_number_of_edges = 20;
+    const attempted_number_of_edges = 10*num_node;
     this.nodes = []
     for (let i = 0; i < num_node; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
 
-    this.nodes.forEach(node => {
-      const num_neighbors = Math.max(1, Math.ceil(Math.random() * this.attempted_number_of_edges))
-      pickNRandomElements(this.nodes, num_neighbors).forEach(other_node => {
-        if (node.id != other_node.id && !this.intersectsAnyEdge(node.x, node.y, other_node.x, other_node.y)) {
-          node.addNeighbor(other_node)
-        } 
-      })
-    })
+    for (let i = 0; i < attempted_number_of_edges; i++) {
+      const [node1, node2] = pickNRandomElements(this.nodes, 2)
+      if (!this.intersectsAnyEdge(node1.x, node1.y, node2.x, node2.y)) {
+        node1.addNeighbor(node2)
+      }
+    }
   }
 
   draw() {
