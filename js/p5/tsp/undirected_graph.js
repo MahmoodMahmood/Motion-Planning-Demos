@@ -1,13 +1,4 @@
 //
-// Configs
-
-//
-const point_config = {
-  color: 'blue',
-  radius: 10
-}
-
-//
 // Math utils
 //
 let distance_cache = {}
@@ -36,6 +27,7 @@ function calcDist(node1, node2) {
 // Draw utils
 //
 function drawEdge(node1, node2) {
+  strokeWeight(1)
   line(node1.x, node1.y, node2.x, node2.y)
 
   const angle = Math.atan2(node2.y-node1.y, node2.x-node1.x)
@@ -56,11 +48,11 @@ function drawEdge(node1, node2) {
   pop()
 }
 
-function drawNode(node, config) {
-  strokeWeight(1)
+function drawNode(node) {
+  strokeWeight(node.draw_config.stroke)
   stroke('black')
-  fill(config.color)
-  circle(node.x, node.y, config.radius)
+  fill(node.draw_config.color)
+  circle(node.x, node.y, node.draw_config.radius)
   node.neighbors.forEach(neighbor => drawEdge(node, neighbor))
 }
 
@@ -177,6 +169,11 @@ class UndirectedGraphNode {
     this.x = Math.random() * canvas_width
     this.y = Math.random() * canvas_height
     this.neighbors = new Set()
+    this.draw_config = {
+      color: 'blue',
+      radius: 10,
+      stroke: 1
+    }
     if (neighbors.length > 0) {
       neighbors.forEach(node => this.addNeighbor(node))
     }
@@ -206,7 +203,7 @@ class UndirectedGraph {
   }
 
   draw() {
-    this.nodes.forEach(node => drawNode(node, point_config))
+    this.nodes.forEach(node => drawNode(node))
   }
 
   // Very inefficient, can be way optimized
@@ -217,5 +214,13 @@ class UndirectedGraph {
       }
     }
     return false
+  }
+
+  // Could be optimized with quadtrees later
+  getNearestNode(x,y) {
+    function nodeSqDist(node) {
+      return (node.x-x)**2 + (node.y-y)**2
+    }
+    return this.nodes.reduce((a, b) => nodeSqDist(a) < nodeSqDist(b) ? a : b)
   }
 }
