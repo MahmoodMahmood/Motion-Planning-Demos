@@ -26,8 +26,8 @@ function calcDist(node1, node2) {
 //
 // Draw utils
 //
-function drawEdge(node1, node2) {
-  strokeWeight(1)
+function drawEdge(node1, node2, stroke=1) {
+  strokeWeight(stroke)
   line(node1.x, node1.y, node2.x, node2.y)
 
   const angle = Math.atan2(node2.y-node1.y, node2.x-node1.x)
@@ -143,7 +143,7 @@ function shortestPathDijkstra(node1, node2) {
       }
     }
   }
-  return None
+  return null
 }
 
 // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
