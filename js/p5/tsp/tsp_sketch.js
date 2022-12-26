@@ -16,7 +16,7 @@ function setup() {
 }
 
 function draw() {
-  background(220)
+  background(160)
   graph.draw()
   drawHighlightedPath(highlighted_path)
 }
