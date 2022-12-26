@@ -18,9 +18,7 @@ function setup() {
 function draw() {
   background(220)
   graph.draw()
-  for (let i = 0; i < highlighted_path.length - 1; i++) {
-    drawEdge(highlighted_path[i], highlighted_path[i+1], 3)
-  }
+  drawHighlightedPath(highlighted_path)
 }
 
 function canvasMousePressed() {
@@ -34,10 +32,14 @@ function canvasMousePressed() {
     }
     selected_node = nearest_node
     selected_node.draw_config.stroke = 3
-    console.log(nearest_node)
 
     if (prev_node != null) findShortestPath(prev_node, selected_node)
   }
+}
+
+function resetSelectedNode() {
+  if (selected_node) selected_node.draw_config.stroke = 1
+  selected_node = null
 }
 
 function resetGraph() {
@@ -52,28 +54,21 @@ function updateNumNodes(new_num_nodes) {
 }
 
 function findShortestPath(node1, node2) {
-  // reset node colors
-  graph.nodes.forEach(node => node.draw_config.color = "blue")
   // find shortest path
-  const path = shortestPathDijkstra(node1, node2)
-  // highlight graph nodes
-  path.forEach(node => node.draw_config.color = "green")
-  // highlight the start differently because why not
-  path[0].draw_config.color = "red"
-  // set highlighted_path so that the edges are bold
-  highlighted_path = path
+  highlighted_path = shortestPathDijkstra(node1, node2)
+
   // reset selected node for future selections
-  if (selected_node) selected_node.draw_config.stroke = 1
-  selected_node = null
-  
-  
+  resetSelectedNode()
+}
 
-
+function solveTSP(solver_class) {
+  let solver = new solver_class(graph)
+  highlighted_path = solver.solve()
 
   // TODO: remove
   let dist = 0
-  for (let i = 0; i < path.length-1; i++) {
-    dist+=calcDist(path[i], path[i+1])
+  for (let i = 0; i < highlighted_path.length-1; i++) {
+    dist+=calcDist(highlighted_path[i], highlighted_path[i+1])
   }
   console.log(dist)
 }

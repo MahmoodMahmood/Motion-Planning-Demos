@@ -1,5 +1,5 @@
-function drawEdge(node1, node2, stroke=1) {
-  strokeWeight(stroke)
+function drawEdge(node1, node2, stroke_weight=1) {
+  strokeWeight(stroke_weight)
   line(node1.x, node1.y, node2.x, node2.y)
 
   const angle = Math.atan2(node2.y-node1.y, node2.x-node1.x)
@@ -26,4 +26,15 @@ function drawNode(node) {
   fill(node.draw_config.color)
   circle(node.x, node.y, node.draw_config.radius)
   node.neighbors.forEach(neighbor => drawEdge(node, neighbor))
+}
+
+function drawHighlightedPath(path) {
+  if (path.length == 0) {
+    return
+  }
+
+  // bold the current selected edge
+  for (let i = 0; i < path.length - 1; i++) {
+    drawEdge(path[i], path[i+1], 4)
+  }
 }

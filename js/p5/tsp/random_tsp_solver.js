@@ -4,6 +4,6 @@ class RandomTSPSolver {
   }
 
   solve() {
-    return this.graph.nodes
+    return pickNRandomElements(this.graph.nodes, this.graph.nodes.length)
   }
 }

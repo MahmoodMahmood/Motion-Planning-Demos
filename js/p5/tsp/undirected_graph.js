@@ -66,7 +66,7 @@ function shortestPathDijkstra(node1, node2) {
       }
     }
   }
-  return null
+  return []
 }
 
 // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
