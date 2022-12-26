@@ -1,82 +1,3 @@
-//
-// Math utils
-//
-let distance_cache = {}
-
-// Get a key that indexes into the distance cache
-function nodesToKey(node1, node2) {
-  if (node1.id < node2.id) {
-    return node1.id + "" + node2.id
-  } else {
-    return node2.id + "" + node1.id
-  }
-}
-
-// Returns L2 distance between
-function calcDist(node1, node2) {
-  const key = nodesToKey(node1, node2)
-  if (key in distance_cache) {
-    return distance_cache[key]
-  }
-  const dist = Math.sqrt((node1.x-node2.x)**2 + (node1.y-node2.y)**2)
-  distance_cache[key] = dist
-  return dist
-}
-
-//
-// Draw utils
-//
-function drawEdge(node1, node2, stroke=1) {
-  strokeWeight(stroke)
-  line(node1.x, node1.y, node2.x, node2.y)
-
-  const angle = Math.atan2(node2.y-node1.y, node2.x-node1.x)
-  
-  // Prevents double drawing of distance text, only keep the right side up text
-  if (!draw_text || angle > Math.PI/2 || angle < -Math.PI/2) return
-  const dist = calcDist(node1, node2)
-  const midx = (node1.x + node2.x)/2
-  const midy = (node1.y + node2.y)/2
-  fill('black')
-  textSize(canvas_width/40)
-  
-  push()
-  translate()
-  translate(midx, midy)
-  rotate(angle)
-  text(dist.toPrecision(4), 0, 0)
-  pop()
-}
-
-function drawNode(node) {
-  strokeWeight(node.draw_config.stroke)
-  stroke('black')
-  fill(node.draw_config.color)
-  circle(node.x, node.y, node.draw_config.radius)
-  node.neighbors.forEach(neighbor => drawEdge(node, neighbor))
-}
-
-//
-// Other Utils
-//
-function generateNRandomNums(N, max) {
-  let result = []
-  while (result.length < Math.min(N, max)) {
-    const num = Math.floor(Math.random() * max)
-    if (!result.includes(num)) {
-      result.push(num)
-    }
-  }
-  return result
-}
-
-function pickNRandomElements(arr, N) {
-  if (arr.length == 0) return []
-  if (arr.length == 1) return Math.min(1,N)
-  const indices_to_pick = generateNRandomNums(N, arr.length)
-  return indices_to_pick.map(index => arr[index])
-}
-
 function isGraphFullyConnected(graph) {
   let visited_nodes = new Set()
   let cur_nodes = [graph.nodes[0]]
@@ -220,9 +141,6 @@ class UndirectedGraph {
 
   // Could be optimized with quadtrees later
   getNearestNode(x,y) {
-    function nodeSqDist(node) {
-      return (node.x-x)**2 + (node.y-y)**2
-    }
-    return this.nodes.reduce((a, b) => nodeSqDist(a) < nodeSqDist(b) ? a : b)
+    return this.nodes.reduce((a, b) => nodeSqDist(a, x, y) < nodeSqDist(b, x, y) ? a : b)
   }
 }

@@ -1,4 +1,4 @@
-const draw_text = true
+const draw_text = false
 const canvas_width = 500
 const canvas_height = 500
 let selected_node = null
@@ -27,7 +27,7 @@ function canvasMousePressed() {
   const buffer = 10
   const nearest_node = graph.getNearestNode(mouseX, mouseY)
   let prev_node = null
-  if (sqrt((nearest_node.x-mouseX)**2 + (nearest_node.y-mouseY)**2) < nearest_node.draw_config.radius + buffer) {
+  if (nodeDist(nearest_node, mouseX, mouseY) < nearest_node.draw_config.radius + buffer) {
     if (selected_node != null) {
       prev_node = selected_node
       selected_node.draw_config.stroke = 1
@@ -43,7 +43,6 @@ function canvasMousePressed() {
 function resetGraph() {
   graph = new UndirectedGraph(num_nodes)
   highlighted_path = []
-  distance_cache = {}
 }
 
 function updateNumNodes(new_num_nodes) {
