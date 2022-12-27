@@ -1,6 +1,8 @@
 const draw_text = false
 const canvas_width = 500
 const canvas_height = 500
+const myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
+
 let selected_node = null
 let num_nodes = 7
 let highlighted_path = []
@@ -62,8 +64,9 @@ function findShortestPath(node1, node2) {
 }
 
 function solveTSP(solver_class) {
-  let solver = new solver_class(graph)
-  for (let i = 0; i < 100; i++) {
-    highlighted_path = solver.solve()
+  myWorker.postMessage({"solver_class": solver_class, "graph": graph})
+  myWorker.onmessage = (e) => {
+    highlighted_path = e.data
+    console.log("updated path")
   }
 }

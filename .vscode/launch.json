@@ -10,6 +10,9 @@
             "type": "pwa-chrome",
             "url": "http://localhost:8080",
             "file": "${workspaceFolder}/tsp.html",
+            "runtimeArgs": [
+                " --allow-file-access-from-files",
+            ],
         },
         {
             "preLaunchTask": "compile emcc",
