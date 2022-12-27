@@ -27,3 +27,11 @@ function nodeSqDist(node, x, y) {
 function nodeDist(node, x, y) {
   return sqrt(nodeSqDist(node, x, y))
 }
+
+function totalWalkDist(nodes) {
+  let dist = 0
+  for (let i = 0; i < nodes.length-1; i++) {
+    dist+=calcDist(nodes[i], nodes[i+1])
+  }
+  return dist
+}

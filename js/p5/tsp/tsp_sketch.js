@@ -63,12 +63,7 @@ function findShortestPath(node1, node2) {
 
 function solveTSP(solver_class) {
   let solver = new solver_class(graph)
-  highlighted_path = solver.solve()
-
-  // TODO: remove
-  let dist = 0
-  for (let i = 0; i < highlighted_path.length-1; i++) {
-    dist+=calcDist(highlighted_path[i], highlighted_path[i+1])
+  for (let i = 0; i < 100; i++) {
+    highlighted_path = solver.solve()
   }
-  console.log(dist)
 }

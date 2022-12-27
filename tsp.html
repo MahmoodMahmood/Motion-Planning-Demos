@@ -43,14 +43,11 @@
             <div id="sketch-holder">
                 <!-- Our sketch will go here! -->
             </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button onclick="findShortestPath(graph.nodes[0], graph.nodes[1])" type="button" class="btn btn-primary"> Find Random Shortest Path </button>
-            </div>
         </div>
         <div class="col border">
             <h1>Customizations:</h1>
             <div class="p-0">
-                <div class="container mt-5" id="sliders grid">
+                <div class="container mt-5 border" id="sliders grid">
                     <form id="num-nodes" class="row">
                         <div class="col-sm-4">
                             <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
@@ -65,6 +62,11 @@
                                 oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
                         </div>
                     </form>
+
+                    <div class="btn-group mr-2 row" role="group" aria-label="Second group">
+                        <button onclick="solveTSP(RandomTSPSolver)" type="button" class="btn btn-primary"> Random TSP Solver </button>
+                    </div>
+
                     <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden" >
                         Warning: your graph is not fully connected!
                     </div>
