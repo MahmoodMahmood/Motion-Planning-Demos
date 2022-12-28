@@ -6,6 +6,7 @@ class RandomTSPSolver {
   }
 
   solve() {
+    // this ignores edges lmao
     let solve = pickNRandomElements(this.graph.nodes, this.graph.nodes.length)
     solve.push(solve[0])
 

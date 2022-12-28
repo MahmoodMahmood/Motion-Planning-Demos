@@ -1,102 +1,112 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Webpage icon -->
-    <link rel="icon" href="assets/favicon.ico">
+  <!-- Webpage icon -->
+  <link rel="icon" href="assets/favicon.ico">
 
-    <!-- Google icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Google icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    
-    <!-- P5js stuff -->
-    <script language="javascript" type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
 
-    <!-- Simulation Libraries -->
-    <script language="javascript" type="text/javascript" src="js/p5/common/heap.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/distance_utils.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/draw_utils.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/random_utils.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/undirected_graph.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/random_tsp_solver.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/solver_web_worker.js"></script>
-    <script language="javascript" type="text/javascript" src="js/p5/tsp/tsp_sketch.js"></script>
+  <!-- P5js stuff -->
+  <script language="javascript" type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
 
-    <title>Interactive RRT</title>
+  <!-- Simulation Libraries -->
+  <script language="javascript" type="text/javascript" src="js/p5/common/heap.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/distance_utils.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/draw_utils.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/random_utils.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/undirected_graph.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/random_tsp_solver.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/solver_web_worker.js"></script>
+  <script language="javascript" type="text/javascript" src="js/p5/tsp/tsp_sketch.js"></script>
+
+  <title>Interactive RRT</title>
 </head>
 
-<body data-bs-theme="dark">
-    <div class="jumbotron p-3">
-        <h1 class="display-4 p-2"> Travelling Salesman Problem </h1>
-        <p class="lead p-2"> Work in progress... </p>
+<body>
+  <div class="jumbotron p-3">
+    <h1 class="display-4 p-2"> Travelling Salesman Problem </h1>
+    <p class="lead p-2"> Work in progress... </p>
+  </div>
+
+  <div class="container-lg row">
+    <div class="col">
+      <div id="sketch-holder">
+        <!-- Our sketch will go here! -->
+      </div>
     </div>
-
-    <div class="container-lg row">
-        <div class="col">
-            <div id="sketch-holder">
-                <!-- Our sketch will go here! -->
+    <div class="col border">
+      <h1>Customizations:</h1>
+      <div class="p-0">
+        <div class="container mt-5" id="sliders grid">
+          <form id="num-nodes" class="row">
+            <div class="col-sm-4">
+              <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
             </div>
-        </div>
-        <div class="col border">
-            <h1>Customizations:</h1>
-            <div class="p-0">
-                <div class="container mt-5 border" id="sliders grid">
-                    <form id="num-nodes" class="row">
-                        <div class="col-sm-4">
-                            <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
-                        </div>
-                        <div class="col-auto">
-                            <input type="range" name="amountRange" min="3" max="20" value="7"
-                                oninput="this.form.amountInput.value=this.value; updateNumNodes(this.value);" />
-                        </div>
-                        <div class="col-auto">
-                            <input type="number" name="amountInput" min="3" max="20" value="7"
-                                class="form-control"
-                                oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
-                        </div>
-                    </form>
-
-                    <div class="btn-group mr-2 row" role="group" aria-label="Second group">
-                        <button onclick="solveTSP('random')" type="button" class="btn btn-primary"> Random TSP Solver </button>
-                    </div>
-
-                    <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden" >
-                        Warning: your graph is not fully connected!
-                    </div>
-                </div>
+            <div class="col-auto">
+              <input type="range" name="amountRange" min="3" max="20" value="7"
+                oninput="this.form.amountInput.value=this.value; updateNumNodes(this.value);" />
             </div>
+            <div class="col-auto">
+              <input type="number" name="amountInput" min="3" max="20" value="7" class="form-control"
+                oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
+            </div>
+          </form>
+
+          <div class="row py-3">
+            <div class="form-check form-switch col-5">
+              <input class="form-check-input checked-reset-with-graph" type="checkbox" role="switch"
+                onclick="solveTSP('random')" id="toggle-solver-random">
+              <label class="form-check-label" for="toggle-solver-random"> Random TSP Solver </label>
+            </div>
+            <div class="col">
+              Best path found length:
+              <span id="path-dist-random" class="text-reset-with-graph"> </span>
+            </div>
+          </div>
+
+          <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden">
+            Warning: your graph is not fully connected!
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-        </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
-        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
-        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
-        crossorigin="anonymous"></script>
-    <script>
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new
-                bootstrap.Popover(popoverTriggerEl);
-        })
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
     </script>
-    <script>
-        document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+    integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+    integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+    crossorigin="anonymous"></script>
+  <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new
+        bootstrap.Popover(popoverTriggerEl);
+    })
+  </script>
+  <script>
+    document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
+  </script>
 
 </body>
 

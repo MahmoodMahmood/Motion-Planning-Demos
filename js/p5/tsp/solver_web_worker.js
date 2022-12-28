@@ -1,7 +1,9 @@
-importScripts("distance_utils.js",
-              "random_utils.js",
-              "undirected_graph.js",
-              "random_tsp_solver.js")
+if( 'function' === typeof importScripts) {
+  importScripts("distance_utils.js",
+                "random_utils.js",
+                "undirected_graph.js",
+                "random_tsp_solver.js")
+}
 
 onmessage = (e) => {
   const solver_class = e.data.solver_class
@@ -11,15 +13,14 @@ onmessage = (e) => {
     solver = new RandomTSPSolver(graph)
   }
 
-  let highlighted_path = []
-  let prev_path = []
-  
+  let best_dist = Infinity
   while (1) {
-    prev_path = highlighted_path
-    highlighted_path = solver.solve()
-    if (prev_path != highlighted_path) {
-      postMessage(highlighted_path)
+    const path = solver.solve()
+    const dist = totalWalkDist(path)
+
+    if (dist < best_dist) {
+      best_dist = dist
+      postMessage({"path": path, "dist": dist})
     }
   }
-  console.log("done")
 }

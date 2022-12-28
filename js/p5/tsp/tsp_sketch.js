@@ -1,7 +1,7 @@
 const draw_text = false
 const canvas_width = 500
 const canvas_height = 500
-const myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
+let myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
 
 let selected_node = null
 let num_nodes = 7
@@ -47,6 +47,9 @@ function resetSelectedNode() {
 function resetGraph() {
   graph = new UndirectedGraph(num_nodes)
   highlighted_path = []
+  document.querySelectorAll(".text-reset-with-graph").forEach(el => el.innerText = "")
+  document.querySelectorAll(".checked-reset-with-graph").forEach(el => el.checked = false)
+  restartWorker()
 }
 
 function updateNumNodes(new_num_nodes) {
@@ -63,10 +66,21 @@ function findShortestPath(node1, node2) {
   resetSelectedNode()
 }
 
+function restartWorker() {
+  // terminate and restart web worker to get it ready for the next job
+  myWorker.terminate()
+  myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
+}
+
 function solveTSP(solver_class) {
-  myWorker.postMessage({"solver_class": solver_class, "graph": graph})
-  myWorker.onmessage = (e) => {
-    highlighted_path = e.data
-    console.log("updated path")
+  const enable = document.querySelector("#toggle-solver-" + solver_class).checked
+  if (enable) {
+    myWorker.postMessage({ "solver_class": solver_class, "graph": graph })
+    myWorker.onmessage = (e) => {
+      highlighted_path = e.data.path
+      document.querySelector("#path-dist-" + solver_class).innerText = e.data.dist.toFixed(2)
+    }
+  } else {
+    restartWorker()
   }
 }
