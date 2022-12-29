@@ -1,13 +1,14 @@
 const draw_text = false
 const canvas_width = 500
 const canvas_height = 500
-let myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
+let myWorker = null
 
 let selected_node = null
 let num_nodes = 7
 let highlighted_path = []
+let allow_intersections = false
 
-let graph = new UndirectedGraph(num_nodes)
+let graph = new UndirectedGraph(num_nodes, allow_intersections)
 
 function setup() {
   canvas = createCanvas(canvas_width, canvas_height)
@@ -45,7 +46,7 @@ function resetSelectedNode() {
 }
 
 function resetGraph() {
-  graph = new UndirectedGraph(num_nodes)
+  graph = new UndirectedGraph(num_nodes, allow_intersections)
   highlighted_path = []
   document.querySelectorAll(".text-reset-with-graph").forEach(el => el.innerText = "")
   document.querySelectorAll(".checked-reset-with-graph").forEach(el => el.checked = false)
@@ -68,19 +69,31 @@ function findShortestPath(node1, node2) {
 
 function restartWorker() {
   // terminate and restart web worker to get it ready for the next job
-  myWorker.terminate()
+  if (myWorker) myWorker.terminate()
   myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
 }
 
 function solveTSP(solver_class) {
-  const enable = document.querySelector("#toggle-solver-" + solver_class).checked
-  if (enable) {
-    myWorker.postMessage({ "solver_class": solver_class, "graph": graph })
-    myWorker.onmessage = (e) => {
-      highlighted_path = e.data.path
-      document.querySelector("#path-dist-" + solver_class).innerText = e.data.dist.toFixed(2)
-    }
-  } else {
-    restartWorker()
+  restartWorker()
+  const check_box_element = document.querySelector("#toggle-solver-" + solver_class)
+  if (!check_box_element.checked) {
+    return
   }
+
+  myWorker.postMessage({ "solver_class": solver_class, "graph": graph })
+  myWorker.onmessage = (e) => {
+    highlighted_path = e.data.path
+    document.querySelector("#path-dist-" + solver_class).innerText = e.data.dist.toFixed(2)
+  }
+
+  document.querySelectorAll(".solver").forEach(el => {
+    if (el != check_box_element) {
+      el.checked = false
+    }
+  })
+}
+
+function allowIntersection() {
+  allow_intersections = document.querySelector("#toggle-allow-intersections").checked
+  resetGraph()
 }

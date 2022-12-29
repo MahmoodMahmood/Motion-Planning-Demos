@@ -68,9 +68,30 @@
 
           <div class="row py-3">
             <div class="form-check form-switch col-5">
-              <input class="form-check-input checked-reset-with-graph" type="checkbox" role="switch"
+              <input class="form-check-input" type="checkbox" role="switch" onclick="allowIntersection()"
+                id="toggle-allow-intersections">
+              <label class="form-check-label" for="toggle-allow-intersections"> Allow self-intersecting edges </label>
+            </div>
+          </div>
+
+          <div class="row py-3">
+            <div class="form-check form-switch col-5">
+              <input class="form-check-input checked-reset-with-graph solver" type="checkbox" role="switch"
                 onclick="solveTSP('random')" id="toggle-solver-random">
-              <label class="form-check-label" for="toggle-solver-random"> Random TSP Solver </label>
+              <label class="form-check-label" for="toggle-solver-random"> Random Solver </label>
+            </div>
+            <div class="col">
+              Best path found length:
+              <span id="path-dist-random" class="text-reset-with-graph"> </span>
+            </div>
+          </div>
+
+          <div class="row py-3">
+            <div class="form-check form-switch col-5">
+              <input class="form-check-input checked-reset-with-graph solver" type="checkbox" role="switch"
+                onclick="solveTSP('simulated-annealing')" id="toggle-solver-simulated-annealing">
+              <label class="form-check-label" for="toggle-solver-simulated-annealing"> Simulated Annealing Solver
+              </label>
             </div>
             <div class="col">
               Best path found length:

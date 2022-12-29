@@ -71,7 +71,7 @@ function shortestPathDijkstra(node1, node2) {
 
 // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
 // returns true if the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
-function intersects(a,b,c,d,p,q,r,s) {
+function intersects(a, b, c, d, p, q, r, s) {
   var det, gamma, lambda;
   det = (c - a) * (s - q) - (r - p) * (d - b);
   if (det === 0) {
@@ -110,8 +110,8 @@ class UndirectedGraphNode {
 }
 
 class UndirectedGraph {
-  constructor(num_node) {
-    const attempted_number_of_edges = 10*num_node;
+  constructor(num_node, allow_intersections) {
+    const attempted_number_of_edges = 10 * num_node;
     this.nodes = []
     for (let i = 0; i < num_node; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
@@ -119,7 +119,7 @@ class UndirectedGraph {
 
     for (let i = 0; i < attempted_number_of_edges; i++) {
       const [node1, node2] = pickNRandomElements(this.nodes, 2)
-      if (!this.intersectsAnyEdge(node1.x, node1.y, node2.x, node2.y)) {
+      if (allow_intersections || !this.intersectsAnyEdge(node1.x, node1.y, node2.x, node2.y)) {
         node1.addNeighbor(node2)
       }
     }
@@ -140,7 +140,7 @@ class UndirectedGraph {
   }
 
   // Could be optimized with quadtrees later
-  getNearestNode(x,y) {
+  getNearestNode(x, y) {
     return this.nodes.reduce((a, b) => nodeSqDist(a, x, y) < nodeSqDist(b, x, y) ? a : b)
   }
 }
