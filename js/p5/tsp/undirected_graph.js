@@ -83,6 +83,16 @@ function intersects(a, b, c, d, p, q, r, s) {
   }
 }
 
+function isValidPath(path) {
+  if (path.length < 2) return false
+  let prev_neighbors = null
+  for (const node of path) {
+    if (prev_neighbors && !prev_neighbors.has(node)) return false
+    prev_neighbors = node.neighbors
+  }
+  return true
+}
+
 //
 // Classes
 //
@@ -126,7 +136,7 @@ class UndirectedGraph {
   }
 
   draw() {
-    this.nodes.forEach(node => drawNode(node))
+    drawNodes(this.nodes)
   }
 
   // Very inefficient, can be way optimized

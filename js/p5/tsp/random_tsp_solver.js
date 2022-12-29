@@ -19,7 +19,9 @@ class RandomTSPSolver {
     }
 
     dfs()
-    res.push(res[0])
+    if (res[res.length-1].neighbors.has(res[0])) {
+      res.push(res[0])
+    }
     return res
   }
 }

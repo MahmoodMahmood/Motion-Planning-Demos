@@ -10,8 +10,7 @@ function generateNRandomNums(N, max) {
 }
 
 function pickNRandomElements(arr, N) {
-  if (arr.length == 0) return []
-  if (arr.length == 1) return Math.min(1,N)
+  if (arr.length < 2) return arr
   const indices_to_pick = generateNRandomNums(N, arr.length)
   return indices_to_pick.map(index => arr[index])
 }

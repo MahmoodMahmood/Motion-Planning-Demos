@@ -21,6 +21,10 @@ onmessage = (e) => {
       continue
     }
 
+    if (!isValidPath(path)) {
+      continue
+    }
+
     const dist = totalWalkDist(path)
 
     if (dist < best_dist) {

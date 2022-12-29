@@ -1,4 +1,5 @@
-function drawEdge(node1, node2, stroke_weight=1) {
+function drawEdge(node1, node2, stroke_weight=1, color='grey') {
+  stroke(color)
   strokeWeight(stroke_weight)
   line(node1.x, node1.y, node2.x, node2.y)
 
@@ -25,7 +26,11 @@ function drawNode(node) {
   stroke('black')
   fill(node.draw_config.color)
   circle(node.x, node.y, node.draw_config.radius)
-  node.neighbors.forEach(neighbor => drawEdge(node, neighbor))
+}
+
+function drawNodes(nodes) {
+  nodes.forEach(node => node.neighbors.forEach(neighbor => drawEdge(node, neighbor)))
+  nodes.forEach(node => drawNode(node))
 }
 
 function drawHighlightedPath(path) {
@@ -35,6 +40,6 @@ function drawHighlightedPath(path) {
 
   // bold the current selected edge
   for (let i = 0; i < path.length - 1; i++) {
-    drawEdge(path[i], path[i+1], 4)
+    drawEdge(path[i], path[i+1], 4, 'maroon')
   }
 }
