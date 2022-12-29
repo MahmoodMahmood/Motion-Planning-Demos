@@ -15,3 +15,9 @@ function pickNRandomElements(arr, N) {
   const indices_to_pick = generateNRandomNums(N, arr.length)
   return indices_to_pick.map(index => arr[index])
 }
+
+// get random item from a Set
+function getRandomItem(set) {
+  let items = Array.from(set);
+  return items[Math.floor(Math.random() * items.length)];
+}

@@ -57,11 +57,11 @@
               <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
             </div>
             <div class="col-auto">
-              <input type="range" name="amountRange" min="3" max="20" value="7"
+              <input type="range" name="amountRange" min="3" max="200" value="7"
                 oninput="this.form.amountInput.value=this.value; updateNumNodes(this.value);" />
             </div>
             <div class="col-auto">
-              <input type="number" name="amountInput" min="3" max="20" value="7" class="form-control"
+              <input type="number" name="amountInput" min="3" max="200" value="7" class="form-control"
                 oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
             </div>
           </form>

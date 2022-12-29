@@ -1,23 +1,25 @@
 class RandomTSPSolver {
   constructor(graph) {
     this.graph = graph
-    this.best_dist = Infinity
-    this.best_solve = undefined
   }
 
   solve() {
-    // this ignores edges lmao
-    let solve = pickNRandomElements(this.graph.nodes, this.graph.nodes.length)
-    solve.push(solve[0])
+    let res = pickNRandomElements(this.graph.nodes, 1)
+    let visited = new Set(res)
 
-    const dist = totalWalkDist(solve)
-
-    if (dist < this.best_dist) {
-      this.best_solve = solve
-      this.best_dist = dist
-      return solve
+    function dfs() {
+      const last = res[res.length-1]
+      for (let neighbor of pickNRandomElements(Array.from(last.neighbors), last.neighbors.size)) {
+        if (!visited.has(neighbor)) {
+          visited.add(neighbor)
+          res.push(neighbor)
+          dfs()
+        }
+      }
     }
 
-    return this.best_solve
+    dfs()
+    res.push(res[0])
+    return res
   }
 }

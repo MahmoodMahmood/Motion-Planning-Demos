@@ -47,16 +47,22 @@ function resetSelectedNode() {
 
 function resetGraph() {
   graph = new UndirectedGraph(num_nodes, allow_intersections)
+  const is_connected = isGraphFullyConnected(graph)
   highlighted_path = []
   document.querySelectorAll(".text-reset-with-graph").forEach(el => el.innerText = "")
-  document.querySelectorAll(".checked-reset-with-graph").forEach(el => el.checked = false)
+  document.querySelectorAll(".checked-reset-with-graph").forEach(el => {
+    el.checked = false
+    el.disabled = !is_connected
+  })
+  
+  document.querySelector("#graph-connected-alert").style.visibility = is_connected ? "hidden" : "visible"
+
   restartWorker()
 }
 
 function updateNumNodes(new_num_nodes) {
   num_nodes = new_num_nodes
   resetGraph()
-  document.getElementById("graph-connected-alert").style.visibility = isGraphFullyConnected(graph) ? "hidden" : "visible"
 }
 
 function findShortestPath(node1, node2) {

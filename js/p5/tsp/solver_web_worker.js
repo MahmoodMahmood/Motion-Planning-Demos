@@ -16,6 +16,11 @@ onmessage = (e) => {
   let best_dist = Infinity
   while (1) {
     const path = solver.solve()
+
+    if (path.length < graph.nodes.length + 1) {
+      continue
+    }
+
     const dist = totalWalkDist(path)
 
     if (dist < best_dist) {

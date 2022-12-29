@@ -111,7 +111,7 @@ class UndirectedGraphNode {
 
 class UndirectedGraph {
   constructor(num_node, allow_intersections) {
-    const attempted_number_of_edges = 10 * num_node;
+    const attempted_number_of_edges = 1000 * num_node;
     this.nodes = []
     for (let i = 0; i < num_node; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
