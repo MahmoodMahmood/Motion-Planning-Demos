@@ -51,7 +51,7 @@
     <div class="col border">
       <h1>Customizations:</h1>
       <div class="p-0">
-        <div class="container mt-5" id="sliders grid">
+        <div class="container mt-5">
           <form id="num-nodes" class="row">
             <div class="col-sm-4">
               <label type="number" for="amountRange" class="form-label"> Number of nodes: </label>
@@ -63,6 +63,20 @@
             <div class="col-auto">
               <input type="number" name="amountInput" min="3" max="200" value="7" class="form-control"
                 oninput="this.form.amountRange.value=this.value; updateNumNodes(this.value);" />
+            </div>
+          </form>
+
+          <form id="num-edges" class="row">
+            <div class="col-sm-4">
+              <label type="number" for="amountRange" class="form-label"> Attempted edges per node: </label>
+            </div>
+            <div class="col-auto">
+              <input type="range" name="amountRange" min="1" max="200" value="7"
+                oninput="this.form.amountInput.value=this.value; updateNumEdges(this.value);" />
+            </div>
+            <div class="col-auto">
+              <input type="number" name="amountInput" min="1" max="200" value="7" class="form-control"
+                oninput="this.form.amountRange.value=this.value; updateNumEdges(this.value);" />
             </div>
           </form>
 
@@ -100,7 +114,7 @@
           </div>
 
           <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden">
-            Warning: your graph is not fully connected!
+            Warning: your graph is not connected!
           </div>
         </div>
       </div>

@@ -5,10 +5,11 @@ let myWorker = null
 
 let selected_node = null
 let num_nodes = 7
+let num_edges = 7
 let highlighted_path = []
 let allow_intersections = false
 
-let graph = new UndirectedGraph(num_nodes, allow_intersections)
+let graph = new UndirectedGraph(num_nodes, num_edges, allow_intersections)
 
 function setup() {
   canvas = createCanvas(canvas_width, canvas_height)
@@ -46,7 +47,7 @@ function resetSelectedNode() {
 }
 
 function resetGraph() {
-  graph = new UndirectedGraph(num_nodes, allow_intersections)
+  graph = new UndirectedGraph(num_nodes, num_edges, allow_intersections)
   const is_connected = isGraphFullyConnected(graph)
   highlighted_path = []
   document.querySelectorAll(".text-reset-with-graph").forEach(el => el.innerText = "")
@@ -62,6 +63,11 @@ function resetGraph() {
 
 function updateNumNodes(new_num_nodes) {
   num_nodes = new_num_nodes
+  resetGraph()
+}
+
+function updateNumEdges(new_num_edges) {
+  num_edges = new_num_edges
   resetGraph()
 }
 

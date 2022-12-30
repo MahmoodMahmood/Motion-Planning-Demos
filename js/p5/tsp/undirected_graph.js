@@ -120,17 +120,20 @@ class UndirectedGraphNode {
 }
 
 class UndirectedGraph {
-  constructor(num_node, allow_intersections) {
-    const attempted_number_of_edges = 1000 * num_node;
+  constructor(num_nodes, num_edges, allow_intersections) {
+    const attempted_number_of_edges = num_edges;
     this.nodes = []
-    for (let i = 0; i < num_node; i++) {
+    for (let i = 0; i < num_nodes; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
 
     for (let i = 0; i < attempted_number_of_edges; i++) {
-      const [node1, node2] = pickNRandomElements(this.nodes, 2)
-      if (allow_intersections || !this.intersectsAnyEdge(node1.x, node1.y, node2.x, node2.y)) {
-        node1.addNeighbor(node2)
+      for (let j = 0; j < num_nodes; j++) {
+        const node1 = this.nodes[j]
+        const node2 = pickNRandomElements(this.nodes, 1)[0]
+        if (allow_intersections || !this.intersectsAnyEdge(node1.x, node1.y, node2.x, node2.y)) {
+          node1.addNeighbor(node2)
+        }
       }
     }
   }
