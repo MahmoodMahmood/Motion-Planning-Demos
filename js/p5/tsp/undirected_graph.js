@@ -93,6 +93,23 @@ function isValidPath(path) {
   return true
 }
 
+function randomPathFromNode(node) {
+  function dfs(res, visited = new Set(res)) {
+    const last = res[res.length - 1]
+    for (let neighbor of pickNRandomElements(Array.from(last.neighbors), last.neighbors.size)) {
+      if (!visited.has(neighbor)) {
+        visited.add(neighbor)
+        res.push(neighbor)
+        dfs(res, visited)
+      }
+    }
+  }
+
+  let result = [node]
+  dfs(result)
+  return result
+}
+
 //
 // Classes
 //
