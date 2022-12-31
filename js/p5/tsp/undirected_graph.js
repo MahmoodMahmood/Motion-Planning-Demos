@@ -13,62 +13,6 @@ function isGraphFullyConnected(graph) {
   return graph.nodes.length == visited_nodes.size
 }
 
-function shortestPathDijkstra(node1, node2) {
-  class NodeDistObj {
-    constructor(node, dist, pred) {
-      this.node = node
-      this.dist = dist
-      this.pred = pred
-    }
-
-    getPath() {
-      let res = []
-      let cur = this
-      while (cur) {
-        res.push(cur.node)
-        cur = cur.pred
-      }
-      return res.reverse()
-    }
-  }
-
-  function nodeDistComparator(lhs, rhs) {
-    return lhs.dist < rhs.dist
-  }
-
-  const node1_node_dist = new NodeDistObj(node1, 0, null)
-  let pq = new Heap([node1_node_dist], nodeDistComparator)
-  let visited_dict = {}
-  visited_dict[node1.id] = node1_node_dist
-
-  while (!pq.empty()) {
-    const cur_node_dist_obj = pq.pop()
-    if (cur_node_dist_obj.node.id == node2.id) {
-      // found target node
-      return cur_node_dist_obj.getPath()
-    }
-    for (const neighbor of cur_node_dist_obj.node.neighbors) {
-      const cur_dist = cur_node_dist_obj.dist + calcDist(cur_node_dist_obj.node, neighbor)
-      if (!(neighbor.id in visited_dict)) {
-        // First time seeing this neighbor
-        const new_dist_obj = new NodeDistObj(neighbor, cur_dist, cur_node_dist_obj)
-        pq.push(new_dist_obj)
-        visited_dict[neighbor.id] = new_dist_obj
-      } else {
-        // Seen this neighbor before, check if we need to update the shortest path to it
-        if (visited_dict[neighbor.id].dist > cur_dist) {
-          // New path is shorter need to update existing entry in pq
-          pq.edit(visited_dict[neighbor.id], dist_obj => {
-            dist_obj.dist = cur_dist
-            dist_obj.pred = cur_node_dist_obj
-          })
-        }
-      }
-    }
-  }
-  return []
-}
-
 // https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
 // returns true if the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
 function intersects(a, b, c, d, p, q, r, s) {

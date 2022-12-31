@@ -73,7 +73,7 @@ function updateNumEdges(new_num_edges) {
 
 function findShortestPath(node1, node2) {
   // find shortest path
-  highlighted_path = shortestPathDijkstra(node1, node2)
+  highlighted_path = dijkstra(node1, node2)
 
   // reset selected node for future selections
   resetSelectedNode()
