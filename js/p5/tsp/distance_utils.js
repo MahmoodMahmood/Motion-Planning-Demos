@@ -3,9 +3,9 @@ let distance_cache = {}
 // Get a key that indexes into the distance cache
 function nodesToKey(node1, node2) {
   if (node1.x < node2.x) {
-    return node1.x + "" + node2.x + "" + node1.y + "" + node2.y
+    return node1.x + "_" + node2.x + "_" + node1.y + "_" + node2.y
   } else {
-    return node2.x + "" + node1.x + "" + node2.y + "" + node1.y
+    return node2.x + "_" + node1.x + "_" + node2.y + "_" + node1.y
   }
 }
 

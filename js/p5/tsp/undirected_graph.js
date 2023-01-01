@@ -29,20 +29,24 @@ function intersects(a, b, c, d, p, q, r, s) {
 
 function isValidPath(path) {
   if (path.length < 2) return false
-  let prev_neighbors = null
+  let prev_neighbors_id_set = null
+  let i = 0
   for (const node of path) {
-    if (prev_neighbors && !prev_neighbors.has(node)) return false
-    prev_neighbors = node.neighbors
+    i++
+    if (prev_neighbors_id_set && !prev_neighbors_id_set.has(node.id)) {
+     return false
+    }
+    prev_neighbors_id_set = node.neighbors_id_set
   }
   return true
 }
 
 function randomPathFromNode(node) {
-  function dfs(res, visited = new Set(res)) {
+  function dfs(res, visited) {
     const last = res[res.length - 1]
-    for (let neighbor of pickNRandomElements(Array.from(last.neighbors), last.neighbors.size)) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor)
+    for (let neighbor of pickNRandomElements(last.neighbors, last.neighbors.length)) {
+      if (!visited.has(neighbor.id)) {
+        visited.add(neighbor.id)
         res.push(neighbor)
         dfs(res, visited)
       }
@@ -50,8 +54,30 @@ function randomPathFromNode(node) {
   }
 
   let result = [node]
-  dfs(result)
+  dfs(result, new Set([node.id]))
   return result
+}
+
+function fixBrokenPath(path) {
+  for (let i = path.length - 2; i >= 0; i--) {
+    if (path[i + 1].id == path[i].id) { 
+      path.splice(i+1, 1)
+      continue
+    }
+      if (path[i + 1].neighbors_id_set.has(path[i].id)) {
+      continue
+    }
+    const d = dijkstra(path[i + 1], path[i])
+    // insert the path from path[i+1] to path[i] between i and i+1, but don't include the
+    // first and last elements of that path becasue they are i and i+1
+    path.splice(i + 1, 0, ...d.slice(1, d.length - 1))
+  }
+}
+
+function pathHasAllGraphNodes(graph, path) {
+  const path_set = new Set(path.map(x=>x.id))
+  const intersection = graph.nodes.filter(x => path_set.has(x.id))
+  return intersection.length == path_set.size
 }
 
 //
@@ -62,7 +88,8 @@ class UndirectedGraphNode {
     this.id = id
     this.x = x != undefined ? x : Math.random() * canvas_width
     this.y = y != undefined ? y : Math.random() * canvas_height
-    this.neighbors = new Set()
+    this.neighbors = []
+    this.neighbors_id_set = new Set() // used as an optimization
     this.draw_config = {
       color: 'blue',
       radius: 10,
@@ -75,8 +102,13 @@ class UndirectedGraphNode {
 
   // Only need to call this on one of the nodes
   addNeighbor(node) {
-    this.neighbors.add(node)
-    node.neighbors.add(this)
+    if (this.neighbors_id_set.has(node.id)) {
+      return
+    }
+    this.neighbors.push(node)
+    this.neighbors_id_set.add(node.id)
+    node.neighbors.push(this)
+    node.neighbors_id_set.add(this.id)
   }
 }
 
