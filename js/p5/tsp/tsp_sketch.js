@@ -7,7 +7,7 @@ let selected_node = null
 let num_nodes = 7
 let num_edges = 7
 let highlighted_path = []
-let allow_intersections = false
+let allow_intersections = true
 
 let graph = new UndirectedGraph(num_nodes, num_edges, allow_intersections)
 
@@ -96,6 +96,7 @@ function solveTSP(solver_class) {
   myWorker.onmessage = (e) => {
     highlighted_path = e.data.path
     document.querySelector("#path-dist-" + solver_class).innerText = e.data.dist.toFixed(2)
+    document.querySelector("#meta-" + solver_class).innerText = e.data.meta
   }
 
   document.querySelectorAll(".solver").forEach(el => {

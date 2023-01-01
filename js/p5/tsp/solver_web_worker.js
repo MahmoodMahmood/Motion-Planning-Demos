@@ -37,7 +37,7 @@ onmessage = (e) => {
 
     if (dist < best_dist) {
       best_dist = dist
-      postMessage({"path": path, "dist": dist})
+      postMessage({"path": path, "dist": dist, "meta": solver.meta})
     }
   }
 }

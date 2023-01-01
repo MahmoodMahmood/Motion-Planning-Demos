@@ -4,6 +4,7 @@ class SimulatedAnnealingSolver {
     this.solution = randomPathFromNode(pickNRandomElements(this.graph.nodes, 1)[0])
     this.best_dist = totalWalkDist(this.solution)
     this.temprature = 1.0
+    this.meta = ""
   }
 
   trimPathFwd(path) {
@@ -43,7 +44,11 @@ class SimulatedAnnealingSolver {
   }
 
   coolDownTemprature() {
-    this.temprature = this.temprature * 0.999
+    this.temprature = this.temprature * 0.9995
+  }
+
+  updateMetaString() {
+    this.meta = "Current temprature: " + this.temprature.toFixed(3)
   }
 
   solve() {
@@ -61,6 +66,7 @@ class SimulatedAnnealingSolver {
       this.solution = new_solution
     }
 
+    this.updateMetaString()
     this.coolDownTemprature()
     return this.solution
   }
