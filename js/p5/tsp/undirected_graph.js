@@ -34,7 +34,7 @@ function isValidPath(path) {
   for (const node of path) {
     i++
     if (prev_neighbors_id_set && !prev_neighbors_id_set.has(node.id)) {
-     return false
+      return false
     }
     prev_neighbors_id_set = node.neighbors_id_set
   }
@@ -60,11 +60,11 @@ function randomPathFromNode(node) {
 
 function fixBrokenPath(path) {
   for (let i = path.length - 2; i >= 0; i--) {
-    if (path[i + 1].id == path[i].id) { 
-      path.splice(i+1, 1)
+    if (path[i + 1].id == path[i].id) {
+      path.splice(i + 1, 1)
       continue
     }
-      if (path[i + 1].neighbors_id_set.has(path[i].id)) {
+    if (path[i + 1].neighbors_id_set.has(path[i].id)) {
       continue
     }
     const d = dijkstra(path[i + 1], path[i])
@@ -75,9 +75,16 @@ function fixBrokenPath(path) {
 }
 
 function pathHasAllGraphNodes(graph, path) {
-  const path_set = new Set(path.map(x=>x.id))
+  const path_set = new Set(path.map(x => x.id))
   const intersection = graph.nodes.filter(x => path_set.has(x.id))
   return intersection.length == path_set.size
+}
+
+function nearestNeighbor(node, exluded_ids = new Set()) {
+  return node.neighbors.reduce((closest, curr) =>
+    (!exluded_ids.has(curr.id) && (calcDist(node, curr) < calcDist(node, closest))) ? curr : closest,
+    new UndirectedGraphNode(-1, [], Infinity, Infinity)
+  )
 }
 
 //
@@ -102,7 +109,7 @@ class UndirectedGraphNode {
 
   // Only need to call this on one of the nodes
   addNeighbor(node) {
-    if (this.neighbors_id_set.has(node.id)) {
+    if (node.id == this.id || this.neighbors_id_set.has(node.id)) {
       return
     }
     this.neighbors.push(node)

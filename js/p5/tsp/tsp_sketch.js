@@ -85,18 +85,18 @@ function restartWorker() {
   myWorker = new Worker("js/p5/tsp/solver_web_worker.js")
 }
 
-function solveTSP(solver_class) {
+function solveTSP(solver_name) {
   restartWorker()
-  const check_box_element = document.querySelector("#toggle-solver-" + solver_class)
+  const check_box_element = document.querySelector("#toggle-solver-" + solver_name)
   if (!check_box_element.checked) {
     return
   }
 
-  myWorker.postMessage({ "solver_class": solver_class, "graph": graph })
+  myWorker.postMessage({ "solver_name": solver_name, "graph": graph })
   myWorker.onmessage = (e) => {
     highlighted_path = e.data.path
-    document.querySelector("#path-dist-" + solver_class).innerText = e.data.dist.toFixed(2)
-    document.querySelector("#meta-" + solver_class).innerText = e.data.meta
+    document.querySelector("#path-dist-" + solver_name).innerText = e.data.dist.toFixed(2)
+    document.querySelector("#meta-" + solver_name).innerText = e.data.meta
   }
 
   document.querySelectorAll(".solver").forEach(el => {
