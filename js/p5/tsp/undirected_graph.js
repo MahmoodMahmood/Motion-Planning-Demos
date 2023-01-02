@@ -120,14 +120,33 @@ class UndirectedGraphNode {
 }
 
 class UndirectedGraph {
-  constructor(num_nodes, num_edges, allow_intersections) {
-    const attempted_number_of_edges = num_edges;
+  constructor(num_nodes, attempted_num_edges, allow_intersections) {
     this.nodes = []
     for (let i = 0; i < num_nodes; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
+    
+    const fully_connected = allow_intersections && num_edges >= num_nodes;
+    if (fully_connected) {
+      this.fullyConnectGraph()
+    } else {
+      this.addRandomNEdges(attempted_num_edges, allow_intersections)
+    }
 
-    for (let i = 0; i < attempted_number_of_edges; i++) {
+  }
+
+  fullyConnectGraph() {
+    const num_nodes = this.nodes.length
+    for (let i = 0; i < num_nodes; i++) {
+      for (let j = i+1; j < num_nodes; j++) {
+        this.nodes[i].addNeighbor(this.nodes[j])
+      }
+    }
+  }
+  
+  addRandomNEdges(attempted_num_edges, allow_intersections) {
+    const num_nodes = this.nodes.length
+    for (let i = 0; i < attempted_num_edges; i++) {
       for (let j = 0; j < num_nodes; j++) {
         const node1 = this.nodes[j]
         const node2 = pickNRandomElements(this.nodes, 1)[0]
