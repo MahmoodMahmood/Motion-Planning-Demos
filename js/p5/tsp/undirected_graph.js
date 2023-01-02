@@ -126,7 +126,7 @@ class UndirectedGraph {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
     
-    const fully_connected = allow_intersections && num_edges >= num_nodes;
+    const fully_connected = allow_intersections && (attempted_num_edges >= num_nodes);
     if (fully_connected) {
       this.fullyConnectGraph()
     } else {

@@ -62,12 +62,12 @@ function resetGraph() {
 }
 
 function updateNumNodes(new_num_nodes) {
-  num_nodes = new_num_nodes
+  num_nodes = parseInt(new_num_nodes)
   resetGraph()
 }
 
 function updateNumEdges(new_num_edges) {
-  num_edges = new_num_edges
+  num_edges = parseInt(new_num_edges)
   resetGraph()
 }
 
