@@ -7,34 +7,6 @@ class SimulatedAnnealingSolver {
     this.meta = ""
   }
 
-  trimPathFwd(path) {
-    const nodes_set = new Set(this.graph.nodes.map(x => x.id))
-    for (let i = 0; i < path.length; i++) {
-      if (nodes_set.has(path[i].id)) {
-        nodes_set.delete(path[i].id)
-      }
-
-      if (nodes_set.size == 0 && path[0].neighbors_id_set.has(path[i].id)) {
-        return path.slice(0, i+1)
-      }
-    }
-    return path
-  }
-
-  trimPathRev(path) {
-    const nodes_set = new Set(this.graph.nodes.map(x => x.id))
-    for (let i = path.length-1; i >= 0; i--) {
-      if (nodes_set.has(path[i].id)) {
-        nodes_set.delete(path[i].id)
-      }
-
-      if (nodes_set.size == 0 && path[path.length-1].neighbors_id_set.has(path[i].id)) {
-        return path.slice(i, path.length)
-      }
-    }
-    return path
-  }
-
   swapRandomNodes(path) {
     const [idx1, idx2] = generateNRandomNums(2, path.length)
     const temp = path[idx2]
@@ -43,8 +15,37 @@ class SimulatedAnnealingSolver {
     fixBrokenPath(path)
   }
 
+  prev_idx(path, idx) {
+    if (idx == 0) return path.length-1
+    return idx - 1
+  }
+
+  next_idx(path, idx) {
+    if (idx == path.length-1) return 0
+    return idx+1
+  }
+
+  is_replaceable(path, idx_to_remove, idx_to_add) {
+    const prev = path[this.prev_idx(path, idx_to_remove)]
+    const next = path[this.next_idx(path, idx_to_remove)]
+    const new_node = path[idx_to_add]
+    return prev.neighbors_id_set.has(new_node.id) && next.neighbors_id_set.has(new_node.id)
+  }
+
+  nodes_are_swappable(path, idx1, idx2) {
+    return this.is_replaceable(path, idx1, idx2) && this.is_replaceable(path, idx2, idx1)
+  }
+
+  swapRandomNodesV2(path) {
+    const [idx1, idx2] = generateNRandomNums(2, path.length)
+    if (!this.nodes_are_swappable(path, idx1, idx2)) return
+    const temp = path[idx2]
+    path[idx2] = path[idx1]
+    path[idx1] = temp
+  }
+
   coolDownTemprature() {
-    this.temprature = this.temprature * 0.9995
+    this.temprature = this.temprature * 0.99995
   }
 
   updateMetaString() {
@@ -53,10 +54,9 @@ class SimulatedAnnealingSolver {
 
   solve() {
     let new_solution = structuredClone(this.solution)
-    this.swapRandomNodes(new_solution)
-    new_solution = this.trimPathFwd(new_solution)
-    new_solution = this.trimPathRev(new_solution)
-    new_solution.push(new_solution[0])
+    if (new_solution[0].id == new_solution[new_solution.length - 1].id) new_solution.pop()
+    this.swapRandomNodesV2(new_solution)
+    if (new_solution[0].id != new_solution[new_solution.length - 1].id) new_solution.push(new_solution[0])
 
     const new_dist = totalWalkDist(new_solution)
     // 500 is the width of the canvas
