@@ -5,9 +5,12 @@ if ('function' === typeof importScripts) {
     "random_tsp_solver.js",
     "simulated_annealing_solver.js",
     "nearest_neighbor_solver.js",
+    "simulated_annealing_with_nn_solver.js",
     "../common/heap.js")
 }
 
+const post_freq = 100
+let msgs_since_post = 0
 onmessage = (e) => {
   const solver_name = e.data.solver_name
   const graph = e.data.graph
@@ -22,12 +25,16 @@ onmessage = (e) => {
     case "nearest-neighbor":
       solver_class = NearestNeighborSolver
       break
+    case "simulated-annealing-with-nn":
+      solver_class = SimulatedAnnealingSolverWithNN
+      break
     default:
       console.error("unexpected solver name provided")
   }
 
   const solver = new solver_class(graph)
   let best_dist = Infinity
+  let best_path = []
   while (1) {
     const path = solver.solve()
 
@@ -47,7 +54,12 @@ onmessage = (e) => {
 
     if (dist < best_dist) {
       best_dist = dist
+      best_path = path
       postMessage({ "path": path, "dist": dist, "meta": solver.meta })
+    } else if (msgs_since_post > post_freq) {
+      msgs_since_post = 0
+      postMessage({"path": best_path, "dist": best_dist, "meta": solver.meta})
     }
+    msgs_since_post++
   }
 }

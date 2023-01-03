@@ -58,6 +58,10 @@ function randomPathFromNode(node) {
   return result
 }
 
+function randomPathFromRandomNode(graph) {
+  return randomPathFromNode(pickNRandomElements(graph.nodes, 1)[0])
+}
+
 function fixBrokenPath(path) {
   for (let i = path.length - 2; i >= 0; i--) {
     if (path[i + 1].id == path[i].id) {
@@ -85,6 +89,36 @@ function nearestNeighbor(node, exluded_ids = new Set()) {
     (!exluded_ids.has(curr.id) && (calcDist(node, curr) < calcDist(node, closest))) ? curr : closest,
     new UndirectedGraphNode(-1, [], Infinity, Infinity)
   )
+}
+
+function greedyPathFromNode(graph, node) {
+  let visited = new Set([node.id])
+  let res = [node]
+  while (res.length < graph.nodes.length) {
+    const nn = nearestNeighbor(res[res.length - 1], visited)
+    if (nn.id == -1) {
+      return res
+    }
+    visited.add(nn.id)
+    res.push(nn)
+  }
+
+  if (res[res.length - 1].neighbors_id_set.has(node.id)) {
+    res.push(node)
+  }
+
+  return res
+}
+
+function bestGreedyPathFromAnyNode(graph) {
+  return graph.nodes.reduce(([best_path, best_dist], node) => {
+    const path = greedyPathFromNode(graph, node)
+    const dist = totalWalkDist(path)
+    if (path.length == graph.nodes.length+1 && dist < best_dist) {
+      return [path, dist]
+    }
+    return [best_path, best_dist]
+  }, [[], Infinity])[0]
 }
 
 //

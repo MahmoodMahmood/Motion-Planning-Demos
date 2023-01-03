@@ -1,10 +1,11 @@
 class SimulatedAnnealingSolver {
-  constructor(graph) {
+  constructor(graph, initializer = randomPathFromRandomNode, gamma = 0.99995) {
     this.graph = graph
-    this.solution = randomPathFromNode(pickNRandomElements(this.graph.nodes, 1)[0])
+    this.solution = initializer(this.graph)
     this.best_dist = totalWalkDist(this.solution)
     this.temprature = 1.0
     this.meta = ""
+    this.gamma = gamma
   }
 
   swapRandomNodes(path) {
@@ -45,7 +46,7 @@ class SimulatedAnnealingSolver {
   }
 
   coolDownTemprature() {
-    this.temprature = this.temprature * 0.99995
+    this.temprature = this.temprature * this.gamma
   }
 
   updateMetaString() {

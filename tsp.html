@@ -134,6 +134,23 @@
             </div>
           </div>
 
+          <div class="row py-3">
+            <div class="form-check form-switch col-5">
+              <input class="form-check-input checked-reset-with-graph solver" type="checkbox" role="switch"
+                onclick="solveTSP('simulated-annealing-with-nn')" id="toggle-solver-simulated-annealing-with-nn">
+              <label class="form-check-label" for="toggle-solver-simulated-annealing-with-nn"> Simulated Annealing
+                Solver with Nearest Neighbor Initialization
+              </label>
+            </div>
+            <div class="col">
+              Best path found length:
+              <span id="path-dist-simulated-annealing-with-nn" class="text-reset-with-graph"> </span>
+            </div>
+            <div class="col">
+              <span id="meta-simulated-annealing-with-nn" class="text-reset-with-graph"></span>
+            </div>
+          </div>
+
           <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden">
             Warning: your graph is not connected!
           </div>
