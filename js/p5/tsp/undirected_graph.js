@@ -144,7 +144,7 @@ function nodes_are_swappable(path, idx1, idx2) {
 
 function swapRandomNodes(path) {
   const [idx1, idx2] = generateNRandomNums(2, path.length)
-  if (!nodes_are_swappable(path, idx1, idx2)) return
+  if (!nodes_are_swappable(path, idx1, idx2)) return path
   const temp = path[idx2]
   path[idx2] = path[idx1]
   path[idx1] = temp

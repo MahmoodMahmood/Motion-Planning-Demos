@@ -7,6 +7,7 @@ if ('function' === typeof importScripts) {
     "nearest_neighbor_solver.js",
     "simulated_annealing_with_nn_solver.js",
     "random_two_opt_solver.js",
+    "simulated_annealing_two_opt_solver.js",
     "../common/heap.js")
 }
 
@@ -19,10 +20,10 @@ onmessage = (e) => {
   switch (solver_name) {
     case "random":
       solver_class = RandomTSPSolver
-      break;
+      break
     case "simulated-annealing":
       solver_class = SimulatedAnnealingSolver
-      break;
+      break
     case "nearest-neighbor":
       solver_class = NearestNeighborSolver
       break
@@ -31,7 +32,10 @@ onmessage = (e) => {
       break
     case "random-two-opt":
       solver_class = RandomTwoOptSolver
-      break;
+      break
+    case "simulated-annealing-two-opt":
+      solver_class = SimulatedAnnealingTwoOptSolver
+      break
     default:
       console.error("unexpected solver name provided")
   }

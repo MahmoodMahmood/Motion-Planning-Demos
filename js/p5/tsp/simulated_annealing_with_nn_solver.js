@@ -1,6 +1,6 @@
 class SimulatedAnnealingSolverWithNN {
   constructor(graph) {
-    this.solver = new SimulatedAnnealingSolver(graph, bestGreedyPathFromAnyNode, 0.999)
+    this.solver = new SimulatedAnnealingSolver(graph, bestGreedyPathFromAnyNode, swapRandomNodes, 0.999)
     this.meta = this.solver.meta
   }
 

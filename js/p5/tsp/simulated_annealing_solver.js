@@ -3,6 +3,7 @@ class SimulatedAnnealingSolver {
     this.graph = graph
     this.solution = initializer(this.graph)
     this.best_dist = totalWalkDist(this.solution)
+    this.randomIter = randomIter
     this.temprature = 1.0
     this.meta = ""
     this.gamma = gamma
@@ -19,7 +20,7 @@ class SimulatedAnnealingSolver {
   solve() {
     let new_solution = structuredClone(this.solution)
     if (new_solution[0].id == new_solution[new_solution.length - 1].id) new_solution.pop()
-    new_solution = randomIter(new_solution)
+    new_solution = this.randomIter(new_solution)
     if (new_solution[0].id != new_solution[new_solution.length - 1].id) new_solution.push(new_solution[0])
 
     const new_dist = totalWalkDist(new_solution)
