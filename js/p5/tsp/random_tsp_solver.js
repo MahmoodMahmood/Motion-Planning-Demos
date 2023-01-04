@@ -1,6 +1,7 @@
 class RandomTSPSolver {
-  constructor(graph) {
+  constructor(graph, post_process_func=(x => x)) {
     this.graph = graph
+    this.post_process_func = post_process_func
     this.num_iters = 0
     this.meta = ""
   }
@@ -17,6 +18,7 @@ class RandomTSPSolver {
       res.push(res[0])
     }
 
+    res = this.post_process_func(res)
     this.updateMetaString()
     return res
   }

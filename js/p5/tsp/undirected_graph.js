@@ -114,11 +114,93 @@ function bestGreedyPathFromAnyNode(graph) {
   return graph.nodes.reduce(([best_path, best_dist], node) => {
     const path = greedyPathFromNode(graph, node)
     const dist = totalWalkDist(path)
-    if (path.length == graph.nodes.length+1 && dist < best_dist) {
+    if (path.length == graph.nodes.length + 1 && dist < best_dist) {
       return [path, dist]
     }
     return [best_path, best_dist]
   }, [[], Infinity])[0]
+}
+
+function prev_idx(path, idx) {
+  if (idx == 0) return path.length - 1
+  return idx - 1
+}
+
+function next_idx(path, idx) {
+  if (idx == path.length - 1) return 0
+  return idx + 1
+}
+
+function is_replaceable(path, idx_to_remove, idx_to_add) {
+  const prev = path[prev_idx(path, idx_to_remove)]
+  const next = path[next_idx(path, idx_to_remove)]
+  const new_node = path[idx_to_add]
+  return prev.neighbors_id_set.has(new_node.id) && next.neighbors_id_set.has(new_node.id)
+}
+
+function nodes_are_swappable(path, idx1, idx2) {
+  return is_replaceable(path, idx1, idx2) && is_replaceable(path, idx2, idx1)
+}
+
+function swapRandomNodes(path) {
+  const [idx1, idx2] = generateNRandomNums(2, path.length)
+  if (!nodes_are_swappable(path, idx1, idx2)) return
+  const temp = path[idx2]
+  path[idx2] = path[idx1]
+  path[idx1] = temp
+  return path
+}
+
+function twoOpt(path, idx1, idx2) {
+  if (idx1 > idx2) {
+    const temp = idx1
+    idx1 = idx2
+    idx2 = temp
+  }
+  if (idx1 <= 0 || idx2 <= 0 || idx1 >= path.length-1 || idx2 >= path.length-1) {
+    // I'm too lazy to deal with these confusing edge cases
+    return path
+  }
+
+  const node1 = path[idx1]
+  const node2 = path[idx2]
+  const next1 = path[idx1+1]
+  const next2 = path[idx2+1]
+  if (node1.neighbors_id_set.has(node2.id) && next1.neighbors_id_set.has(next2.id)) {
+    return path.slice(0, idx1+1).concat(path.slice(idx1+1, idx2+1).reverse()).concat(path.slice(idx2+1))
+  }
+  return path
+}
+
+function twoOptRandomNodes(path) {
+  const [idx1, idx2] = generateNRandomNums(2, path.length)
+  return twoOpt(path, idx1, idx2)
+}
+
+function twoOptPath(path) {
+  let best_dist = totalWalkDist(path)
+  for (let i = 1; i < path.length-1; i++) {
+    for (let j = i+1; j < path.length-1; j++) {
+      const test = twoOpt(path, i, j)
+      const dist = totalWalkDist(test)
+      if (dist < best_dist) {
+        best_dist = dist
+        path = test
+      }
+    }
+  }
+  return path
+}
+
+function fullTwoOptPath(path) {
+  let old_dist = Infinity
+  let new_dist = totalWalkDist(path)
+  while (new_dist < old_dist) {
+    path = twoOptPath(path)
+    old_dist = new_dist
+    new_dist = totalWalkDist(path)
+  }
+  return path
 }
 
 //
@@ -159,7 +241,7 @@ class UndirectedGraph {
     for (let i = 0; i < num_nodes; i++) {
       this.nodes.push(new UndirectedGraphNode(i, []))
     }
-    
+
     const fully_connected = allow_intersections && (attempted_num_edges >= num_nodes);
     if (fully_connected) {
       this.fullyConnectGraph()
@@ -172,12 +254,12 @@ class UndirectedGraph {
   fullyConnectGraph() {
     const num_nodes = this.nodes.length
     for (let i = 0; i < num_nodes; i++) {
-      for (let j = i+1; j < num_nodes; j++) {
+      for (let j = i + 1; j < num_nodes; j++) {
         this.nodes[i].addNeighbor(this.nodes[j])
       }
     }
   }
-  
+
   addRandomNEdges(attempted_num_edges, allow_intersections) {
     const num_nodes = this.nodes.length
     for (let i = 0; i < attempted_num_edges; i++) {

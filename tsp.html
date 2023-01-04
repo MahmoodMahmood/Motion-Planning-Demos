@@ -151,6 +151,23 @@
             </div>
           </div>
 
+          <div class="row py-3">
+            <div class="form-check form-switch col-5">
+              <input class="form-check-input checked-reset-with-graph solver" type="checkbox" role="switch"
+                onclick="solveTSP('random-two-opt')" id="toggle-solver-random-two-opt">
+              <label class="form-check-label" for="toggle-solver-random-two-opt"> Simulated Annealing
+                Random solver with two-opt
+              </label>
+            </div>
+            <div class="col">
+              Best path found length:
+              <span id="path-dist-random-two-opt" class="text-reset-with-graph"> </span>
+            </div>
+            <div class="col">
+              <span id="meta-random-two-opt" class="text-reset-with-graph"></span>
+            </div>
+          </div>
+
           <div id="graph-connected-alert" class="alert alert-warning" role="alert" visibility="hidden">
             Warning: your graph is not connected!
           </div>

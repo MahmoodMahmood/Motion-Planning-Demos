@@ -1,6 +1,6 @@
-class SimulatedAnnealingSolverWithNN {
+class RandomTwoOptSolver {
   constructor(graph) {
-    this.solver = new SimulatedAnnealingSolver(graph, bestGreedyPathFromAnyNode, 0.999)
+    this.solver = new RandomTSPSolver(graph, fullTwoOptPath)
     this.meta = this.solver.meta
   }
 

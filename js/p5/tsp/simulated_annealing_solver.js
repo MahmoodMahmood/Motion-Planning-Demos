@@ -1,48 +1,11 @@
 class SimulatedAnnealingSolver {
-  constructor(graph, initializer = randomPathFromRandomNode, gamma = 0.99995) {
+  constructor(graph, initializer = randomPathFromRandomNode, randomIter = swapRandomNodes, gamma = 0.99995   ) {
     this.graph = graph
     this.solution = initializer(this.graph)
     this.best_dist = totalWalkDist(this.solution)
     this.temprature = 1.0
     this.meta = ""
     this.gamma = gamma
-  }
-
-  swapRandomNodes(path) {
-    const [idx1, idx2] = generateNRandomNums(2, path.length)
-    const temp = path[idx2]
-    path[idx2] = path[idx1]
-    path[idx1] = temp
-    fixBrokenPath(path)
-  }
-
-  prev_idx(path, idx) {
-    if (idx == 0) return path.length-1
-    return idx - 1
-  }
-
-  next_idx(path, idx) {
-    if (idx == path.length-1) return 0
-    return idx+1
-  }
-
-  is_replaceable(path, idx_to_remove, idx_to_add) {
-    const prev = path[this.prev_idx(path, idx_to_remove)]
-    const next = path[this.next_idx(path, idx_to_remove)]
-    const new_node = path[idx_to_add]
-    return prev.neighbors_id_set.has(new_node.id) && next.neighbors_id_set.has(new_node.id)
-  }
-
-  nodes_are_swappable(path, idx1, idx2) {
-    return this.is_replaceable(path, idx1, idx2) && this.is_replaceable(path, idx2, idx1)
-  }
-
-  swapRandomNodesV2(path) {
-    const [idx1, idx2] = generateNRandomNums(2, path.length)
-    if (!this.nodes_are_swappable(path, idx1, idx2)) return
-    const temp = path[idx2]
-    path[idx2] = path[idx1]
-    path[idx1] = temp
   }
 
   coolDownTemprature() {
@@ -56,7 +19,7 @@ class SimulatedAnnealingSolver {
   solve() {
     let new_solution = structuredClone(this.solution)
     if (new_solution[0].id == new_solution[new_solution.length - 1].id) new_solution.pop()
-    this.swapRandomNodesV2(new_solution)
+    new_solution = randomIter(new_solution)
     if (new_solution[0].id != new_solution[new_solution.length - 1].id) new_solution.push(new_solution[0])
 
     const new_dist = totalWalkDist(new_solution)

@@ -6,10 +6,11 @@ if ('function' === typeof importScripts) {
     "simulated_annealing_solver.js",
     "nearest_neighbor_solver.js",
     "simulated_annealing_with_nn_solver.js",
+    "random_two_opt_solver.js",
     "../common/heap.js")
 }
 
-const post_freq = 100
+const post_freq = 10
 let msgs_since_post = 0
 onmessage = (e) => {
   const solver_name = e.data.solver_name
@@ -28,6 +29,9 @@ onmessage = (e) => {
     case "simulated-annealing-with-nn":
       solver_class = SimulatedAnnealingSolverWithNN
       break
+    case "random-two-opt":
+      solver_class = RandomTwoOptSolver
+      break;
     default:
       console.error("unexpected solver name provided")
   }
