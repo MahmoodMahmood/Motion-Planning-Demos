@@ -8,7 +8,7 @@ class PathNode {
 
 class Path {
   constructor(w = canvas_width, h = canvas_height, cell_point_limit = 200) {
-    this.head = new PathNode(0, 0, null)
+    this.head = null
     this.tail = this.head
     this.length = 0
     this.boundary = new Rectangle(w / 2, h / 2, w / 2, h / 2)
@@ -16,14 +16,24 @@ class Path {
   }
 
   add(x, y) {
-    this.tail.next = new PathNode(x, y, null)
-    this.tail = this.tail.next
+    if (this.head == null) {
+      this.head = new PathNode(x, y, null)
+      this.tail = this.head
+    } else {
+      this.tail.next = new PathNode(x, y, null)
+      this.tail = this.tail.next
+    }
     this.length++
     this.qtree.insert(this.tail)
   }
 
+  getNearbyNodes(x, y, radius) {
+    let range = new Circle(x, y, radius)
+    return this.qtree.query(range)
+  }
+
   [Symbol.iterator]() {
-    let node = this.head.next
+    let node = this.head
     return {
       next() {
         if (node) {
@@ -36,4 +46,12 @@ class Path {
       }
     }
   }
+}
+
+function nodeSqDist(node, x, y) {
+  return (node.x - x) ** 2 + (node.y - y) ** 2
+}
+
+function nodeDist(node, x, y) {
+  return sqrt(nodeSqDist(node, x, y))
 }
