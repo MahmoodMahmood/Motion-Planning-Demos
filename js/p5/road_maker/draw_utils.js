@@ -9,29 +9,26 @@ function drawPath(path) {
 
   if (path.length < 2) { return }
   noFill()
-  stroke(0)
+  stroke("black")
   strokeWeight(path.radius * 2)
   beginShape()
   for (node of path) {
     vertex(node.x, node.y)
   }
   endShape()
+
+  setLineDash([10, 30])
+  noFill()
+  stroke("white")
+  strokeWeight(1)
+  beginShape()
+  for (node of path) {
+    vertex(node.x, node.y)
+  }
+  endShape()
+  setLineDash([])
 }
 
-
-function drawCar(car) {
-  if (car == null) { return }
-  push()
-  strokeWeight(1)
-  stroke('grey')
-  fill(car.config.color)
-  rectMode(CORNER)
-  translate(car.x, car.y)
-  rotate(car.theta + Math.PI / 2)
-  // our car has x and y at rear axle, rectMode(CORNER) assumes x and y are top left coordinates,
-  // also theta is the angle from the horizon
-  rect(-car.config.W / 2, -car.config.L * 0.9, car.config.W, car.config.L)
-  fill('grey')
-  circle(0, 0, 2)
-  pop()
+function setLineDash(list) {
+  drawingContext.setLineDash(list);
 }

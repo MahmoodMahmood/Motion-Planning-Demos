@@ -1,7 +1,7 @@
 const [canvas_width, canvas_height] = [500, 500]
 const car_config = {
-  L: 10,
-  W: 5,
+  L: 14,
+  W: 7,
   color: 'red',
   stroke: 'grey',
   min_delta: -Math.PI / 4,
