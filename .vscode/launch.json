@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch tsp.html",
+            "name": "Launch road_maker.html",
             "request": "launch",
-            "type": "pwa-chrome",
+            "type": "chrome",
             "url": "http://localhost:8080",
-            "file": "${workspaceFolder}/tsp.html",
+            "file": "${workspaceFolder}/road_maker.html",
             "runtimeArgs": [
                 " --allow-file-access-from-files",
             ],
@@ -17,7 +17,7 @@
         {
             "preLaunchTask": "compile emcc",
             "name": "Launch slam.html",
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "file": "${workspaceFolder}/slam.html",
             "runtimeArgs": [
