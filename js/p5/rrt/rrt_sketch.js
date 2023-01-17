@@ -72,6 +72,7 @@ const car_config = {
   L: 30,
   W: 15,
   color: 'blue',
+  stroke: 'black',
   min_delta: -Math.PI / 4,
   max_delta: Math.PI / 4
 }

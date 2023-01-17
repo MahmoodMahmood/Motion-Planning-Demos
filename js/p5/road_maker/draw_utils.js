@@ -4,21 +4,18 @@ function drawPath(path) {
   for (node of path) {
     strokeWeight(0)
     fill(0)
-    circle(node.x, node.y, roadWidth)
+    circle(node.x, node.y, path.radius * 2)
   }
 
   if (path.length < 2) { return }
   noFill()
   stroke(0)
-  strokeWeight(roadWidth)
+  strokeWeight(path.radius * 2)
   beginShape()
-  curveVertex(path.head.x, path.head.y)
   for (node of path) {
-    curveVertex(node.x, node.y)
+    vertex(node.x, node.y)
   }
-  curveVertex(path.tail.x, path.tail.y)
   endShape()
-
 }
 
 

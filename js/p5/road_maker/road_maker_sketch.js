@@ -1,4 +1,13 @@
 const [canvas_width, canvas_height] = [500, 500]
+const car_config = {
+  L: 10,
+  W: 5,
+  color: 'red',
+  stroke: 'grey',
+  min_delta: -Math.PI / 4,
+  max_delta: Math.PI / 4
+}
+
 let path = new Path()
 let car = null
 
@@ -10,14 +19,14 @@ function setup() {
 function draw() {
   background(160)
   drawPath(path)
-  drawCar(car)
+  drawCar()
   handleMouseEvents()
   checkAddCar()
   allignCarToPath()
 }
 
 function handleMouseEvents() {
-  const queryRadius = 100
+  const queryRadius = 10
   if (mouseIsPressed && (path.tail == null || nodeDist(path.tail, mouseX, mouseY) > queryRadius)) {
     path.add(mouseX, mouseY)
   }
@@ -44,6 +53,11 @@ function allignCarToPath() {
 
 function checkAddCar() {
   if (car == null && path.length > 1) {
-    car = new Car({ x: path.head.x, y: path.head.y, theta: 0 }, { color: 'red', L: 10, W: 5 })
+    car = new CarNode({ x: path.head.x, y: path.head.y, theta: 0 }, { ...car_config }, null)
   }
+}
+
+function drawCar() {
+  if (car == null) { return }
+  car.draw()
 }

@@ -7,9 +7,10 @@ class PathNode {
 }
 
 class Path {
-  constructor(w = canvas_width, h = canvas_height, cell_point_limit = 200) {
+  constructor(w = canvas_width, h = canvas_height, radius = 30, cell_point_limit = 200) {
     this.head = null
     this.tail = this.head
+    this.radius = radius
     this.length = 0
     this.boundary = new Rectangle(w / 2, h / 2, w / 2, h / 2)
     this.qtree = new Quad(this.boundary, cell_point_limit)
@@ -54,4 +55,9 @@ function nodeSqDist(node, x, y) {
 
 function nodeDist(node, x, y) {
   return sqrt(nodeSqDist(node, x, y))
+}
+
+function inPath(path, x, y) {
+  let nearbyNodes = path.getNearbyNodes(x, y, path.radius * 2)
+  return nearbyNodes.some(node => nodeDist(node, x, y) < path.radius)
 }

@@ -88,9 +88,9 @@ class CarNode extends AbstractTreeNode {
     this.theta = mod2pi(this.theta)
   }
 
-  inCollision(obstacles) {
+  getVertices() {
     // front right, front left, back right, back left corners in that order
-    let vertices = [{
+    const vertices = [{
       x: this.x + this.config.L * Math.cos(this.theta) - this.config.W / 2 * sin(this.theta),
       y: this.y + this.config.L * Math.sin(this.theta) + this.config.W / 2 * cos(this.theta)
     },
@@ -110,7 +110,17 @@ class CarNode extends AbstractTreeNode {
       y: this.y - this.config.W / 2 * cos(this.theta)
     }]
 
+    return vertices
+  }
+
+  inCollision(obstacles) {
+    const vertices = this.getVertices()
     return vertices.some(v => obstacles.some(o => o.inObstacle(v.x, v.y)));
+  }
+
+  onPath(path) {
+    const vertices = this.getVertices()
+    return vertices.every(v => inPath(path, v.x, v.y))
   }
 
   copy() {
@@ -120,7 +130,7 @@ class CarNode extends AbstractTreeNode {
   draw() {
     push()
     strokeWeight(1)
-    stroke('black')
+    stroke(this.config.stroke)
     fill(this.config.color)
     rectMode(CORNER)
     translate(this.x, this.y)
@@ -128,8 +138,8 @@ class CarNode extends AbstractTreeNode {
     // our car has x and y at rear axle, rectMode(CORNER) assumes x and y are top left coordinates,
     // also theta is the angle from the horizon
     rect(-this.config.W / 2, -this.config.L * 0.9, this.config.W, this.config.L)
-    fill('black')
-    circle(0, 0, 5)
+    fill(this.config.stroke)
+    circle(0, 0, this.config.L / 5)
     pop()
   }
 
