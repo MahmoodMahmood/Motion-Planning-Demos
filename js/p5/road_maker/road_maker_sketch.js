@@ -25,10 +25,31 @@ function draw() {
   allignCarToPath()
 }
 
+function selectedTool() {
+  // We only care about the selected tool if there is only one disabled
+  if (document.querySelectorAll('button.draw-tool:disabled').length == 0) { return null }
+  return document.querySelector('button.draw-tool:disabled').innerText
+}
+
+function mouseOnCanvas() {
+  return mouseX >= 0 && mouseX <= canvas_width && mouseY >= 0 && mouseY <= canvas_height
+}
+
 function handleMouseEvents() {
-  const queryRadius = 10
-  if (mouseIsPressed && (path.tail == null || nodeDist(path.tail, mouseX, mouseY) > queryRadius)) {
-    path.add(mouseX, mouseY)
+  if (!mouseIsPressed) {
+    return
+  }
+  if (!mouseOnCanvas()) {
+    unclickAllTools()
+    return
+  }
+  if (selectedTool() == "Road") {
+    const queryRadius = 10
+    if (mouseIsPressed && mouseOnCanvas() && (path.tail == null || nodeDist(path.tail, mouseX, mouseY) > queryRadius)) {
+      path.add(mouseX, mouseY)
+    }
+  } else if (selectedTool() == "Obstacle") {
+
   }
 }
 
@@ -60,4 +81,15 @@ function checkAddCar() {
 function drawCar() {
   if (car == null) { return }
   car.draw()
+}
+
+function handleToolClicked(btn) {
+  const tools = document.querySelectorAll('button.draw-tool')
+  tools.forEach(t => t.disabled = false)
+  btn.disabled = true
+}
+
+function unclickAllTools() {
+  const tools = document.querySelectorAll('button.draw-tool')
+  tools.forEach(t => t.disabled = false)
 }

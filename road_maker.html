@@ -48,11 +48,15 @@
     </div>
     <div class="col border">
       <h1>Customizations:</h1>
-      <div class="p-0">
-        <div class="container mt-5">
-          <div class="row">
-            <button type="button" class="btn btn-primary" id="clear-button"> Clear </button>
-          </div>
+      <div class="row">
+        <h3> Drawing Tools </h3>
+        <div class="container col my-3">
+          <button type="button" class="btn btn-primary draw-tool" onclick="handleToolClicked(this)" id="road-draw-btn"
+            disabled>
+            Road
+          </button>
+          <button type="button" class="btn btn-primary draw-tool" onclick="handleToolClicked(this)"
+            id="obstacle-draw-btn"> Obstacle </button>
         </div>
       </div>
     </div>
