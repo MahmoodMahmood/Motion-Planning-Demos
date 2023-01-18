@@ -27,19 +27,19 @@ target.config.color = 'green'
 let root = new PointNode({ x: 30, y: 50 }, { ...point_config }, null)
 root.config.color = 'orange'
 
-let f = new PotentialField(target, obstacles, step_size=10)
+let f = new PotentialField(target, obstacles, step_size = 10)
 
 function setup() {
     canvas = createCanvas(canvas_width, canvas_height)
     canvas.parent('sketch-holder');
 
-    obstacles = [new Obstacle(-100, -100, canvas_width, 5), // top wall
-    new Obstacle(-100, -100, 5, canvas_height), // left wall
-    new Obstacle(canvas_width + 100, canvas_height + 100, 5, canvas_height - 5), // bottom wall
-    new Obstacle(canvas_width + 100, canvas_height + 100, canvas_width - 5, 5) // right wall
+    obstacles = [new RectangularObstacle(-100, -100, canvas_width, 5), // top wall
+    new RectangularObstacle(-100, -100, 5, canvas_height), // left wall
+    new RectangularObstacle(canvas_width + 100, canvas_height + 100, 5, canvas_height - 5), // bottom wall
+    new RectangularObstacle(canvas_width + 100, canvas_height + 100, canvas_width - 5, 5) // right wall
     ]
     f.obstacles = obstacles
-    
+
     // mouse click event handlers for canvas
     canvas.mousePressed(canvasMousePressed)
     canvas.mouseReleased(canvasMouseReleased)
@@ -93,7 +93,7 @@ function canvasMousePressed() {
 
 function canvasMouseReleased() {
     if (!targetReposition && !rootReposition) {
-        obstacles.push(new Obstacle(clickLoc[0], clickLoc[1], mouseX, mouseY))
+        obstacles.push(new RectangularObstacle(clickLoc[0], clickLoc[1], mouseX, mouseY))
     }
     clickLoc = null
     targetReposition = false

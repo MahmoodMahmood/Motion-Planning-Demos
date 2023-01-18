@@ -1,4 +1,4 @@
-class Obstacle {
+class RectangularObstacle {
   constructor(x1, y1, x2, y2) {
     const minL = 20
     this.x1 = x1
@@ -55,5 +55,42 @@ class Obstacle {
     rectMode(CORNERS)
     fill(this.color)
     rect(this.x1, this.y1, this.x2, this.y2)
+  }
+}
+
+class CircularObstacle {
+  constructor(x, y, r, color = 'green') {
+    this.x = x
+    this.y = y
+    this.r = r
+    this.color = color
+  }
+
+  inObstacle(x, y) {
+    return this.dist(x, y) < this.r * 2
+  }
+
+  distSquared(x, y) {
+    let dx = x - this.x
+    let dy = y - this.y
+    return dx * dx + dy * dy
+  }
+
+  dist(x, y) {
+    return Math.sqrt(this.distSquared(x, y))
+  }
+
+  getNearestPt(x, y) {
+    let dx = x - this.x
+    let dy = y - this.y
+    let d = Math.sqrt(dx * dx + dy * dy)
+    return [this.x + dx * this.r / d, this.y + dy * this.r / d]
+  }
+
+  draw() {
+    strokeWeight(1)
+    stroke('black')
+    fill(this.color)
+    circle(this.x, this.y, this.r * 2)
   }
 }
